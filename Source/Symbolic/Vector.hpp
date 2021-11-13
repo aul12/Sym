@@ -44,7 +44,7 @@ namespace sym {
 
         template<typename T, typename... Bindings>
         auto resolveAs(Bindings... bindings) -> T {
-            return std::apply([this](auto... args) { return T{args...}; }, resolve(bindings...));
+            return std::apply([](auto... args) { return T{args...}; }, resolve(bindings...));
         }
 
       private:

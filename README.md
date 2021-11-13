@@ -16,12 +16,12 @@ auto f = a*a + b - a * b;
 // with .resolve the actual value can be calculated when all values are given
 std::cout << f.resolve(a=1, b=2) << std::endl;
 
-// Gradients/Derivatives can be calculated symbolically:
+// Gradients/Derivatives can be calculated symbolically during compile time:
 auto da_f = sym::gradient(f, a);
 auto db_f = sym::gradient(f, b);
 
 // Printing of functions is supported (but not very pretty):
-std::cout << da_f << std::endl;
+std::cout << sym::toString(da_f) << std::endl;
 
 // The derivative is once again an expression which can be evaluated
 std::cout << db_f.resolve(a=3, b=2) << std::endl;
