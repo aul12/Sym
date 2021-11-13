@@ -17,7 +17,6 @@ else ()
 endif ()
 
 set(SOURCES
-        ${CMAKE_SOURCE_DIR}/Source/Integration/Euler.hpp
         ${CMAKE_SOURCE_DIR}/Source/Symbolic/Constant.hpp
         ${CMAKE_SOURCE_DIR}/Source/Symbolic/Expression.hpp
         ${CMAKE_SOURCE_DIR}/Source/Symbolic/Operations/Add.hpp

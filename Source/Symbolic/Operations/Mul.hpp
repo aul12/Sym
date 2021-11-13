@@ -21,16 +21,14 @@ namespace sym {
     template<Expression Lhs, Expression Rhs>
     class Mul {
       public:
-        using type = decltype(std::declval<Lhs>().resolve() * std::declval<Rhs>().resolve());
-
         constexpr Mul(Lhs lhs, Rhs rhs);
 
         template<typename... Bindings>
-        constexpr auto resolve(Bindings... bindings) const -> type;
+        constexpr auto resolve(Bindings... bindings) const;
 
         template<typename mul, std::size_t ID>
         requires(impl::IsMul<mul>::val) friend auto constexpr gradient(const mul &x,
-                                                                       const Variable<typename mul::type, ID> &d);
+                                                                       const Variable<ID> &d);
 
         template<typename mul>
         requires(impl::IsMul<mul>::val) friend auto toString(const mul &x) -> std::string;
@@ -53,12 +51,12 @@ namespace sym {
 
     template<Expression Lhs, Expression Rhs>
     template<typename... Bindings>
-    constexpr auto Mul<Lhs, Rhs>::resolve(Bindings... bindings) const -> type {
+    constexpr auto Mul<Lhs, Rhs>::resolve(Bindings... bindings) const {
         return lhs.resolve(bindings...) * rhs.resolve(bindings...);
     }
 
     template<typename mul, std::size_t ID>
-    requires(impl::IsMul<mul>::val) constexpr auto gradient(const mul &x, const Variable<typename mul::type, ID> &d) {
+    requires(impl::IsMul<mul>::val) constexpr auto gradient(const mul &x, const Variable<ID> &d) {
         using lgrad = decltype(gradient(x.lhs, d));
         using rgrad = decltype(gradient(x.rhs, d));
         using lsum = Mul<lgrad, decltype(x.rhs)>;

@@ -17,7 +17,7 @@ TEST(Sin, Resolve) {
 }
 
 TEST(Sin, Gradient) {
-    sym::Variable<double, 'a'> x;
+    sym::Variable<'a'> x;
     sym::Sin<decltype(x)> y{x};
     EXPECT_DOUBLE_EQ(sym::gradient(y, x).resolve(x=0), 1);
 }

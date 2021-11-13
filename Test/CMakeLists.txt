@@ -6,7 +6,6 @@ if (GTest_FOUND)
     include_directories(${GTEST_INCLUDE_DIR})
 
     set(TEST_SOURCES
-            Integration/Euler.cpp
             Symbolic/Constant.cpp
             Symbolic/Operations/Add.cpp
             Symbolic/Operations/Div.cpp

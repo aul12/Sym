@@ -21,15 +21,13 @@ namespace sym {
     template<Expression Expr>
     class Sin {
       public:
-        using type = typename Expr::type;
-
         explicit Sin(Expr expr);
 
         template<typename... Bindings>
-        auto resolve(Bindings... bindings) const -> type;
+        auto resolve(Bindings... bindings) const;
 
         template<Expression Expr_, std::size_t ID>
-        friend auto gradient(const Sin<Expr_> &x, const Variable<typename Expr_::type, ID> &d);
+        friend auto gradient(const Sin<Expr_> &x, const Variable<ID> &d);
 
         template<Expression Expr_>
         friend auto toString(const Sin<Expr_> &x) -> std::string;
@@ -44,12 +42,12 @@ namespace sym {
 
     template<Expression Expr>
     template<typename... Bindings>
-    auto Sin<Expr>::resolve(Bindings... bindings) const -> type {
+    auto Sin<Expr>::resolve(Bindings... bindings) const {
         return std::sin(expr.resolve(bindings...));
     }
 
     template<Expression Expr_, std::size_t ID>
-    auto gradient(const Sin<Expr_> &x, const Variable<typename Expr_::type, ID> &d) {
+    auto gradient(const Sin<Expr_> &x, const Variable<ID> &d) {
         return Mul{Cos{x.expr}, gradient(x.expr, d)};
     }
 

@@ -22,16 +22,14 @@ namespace sym {
     template<Expression Lhs, Expression Rhs>
     class Div {
       public:
-        using type = decltype(std::declval<Lhs>().resolve() / std::declval<Rhs>().resolve());
-
         constexpr Div(Lhs lhs, Rhs rhs);
 
         template<typename... Bindings>
-        constexpr auto resolve(Bindings... bindings) const -> type;
+        constexpr auto resolve(Bindings... bindings) const;
 
         template<typename div, std::size_t ID>
         requires(impl::IsDiv<div>::val) friend constexpr auto gradient(const div &x,
-                                                                       const Variable<typename div::type, ID> &d);
+                                                                       const Variable<ID> &d);
 
         template<typename div>
         requires(impl::IsDiv<div>::val) friend auto toString(const div &x) -> std::string;
@@ -54,13 +52,13 @@ namespace sym {
 
     template<Expression Lhs, Expression Rhs>
     template<typename... Bindings>
-    constexpr auto Div<Lhs, Rhs>::resolve(Bindings... bindings) const -> type {
+    constexpr auto Div<Lhs, Rhs>::resolve(Bindings... bindings) const {
         return lhs.resolve(bindings...) / rhs.resolve(bindings...);
     }
 
     template<typename div, std::size_t ID>
-    requires(impl::IsDiv<div>::val) constexpr auto gradient(const div &x, const Variable<typename div::type, ID> &d) {
-        auto neg = Constant<typename div::type>{-1};
+    requires(impl::IsDiv<div>::val) constexpr auto gradient(const div &x, const Variable<ID> &d) {
+        auto neg = Constant{-1};
         return Div{Add{Mul{gradient(x.lhs, d), x.rhs}, Mul{Mul{x.lhs, gradient(x.rhs, d)}, neg}}, Mul{x.rhs, x.rhs}};
     }
 

@@ -22,16 +22,14 @@ namespace sym {
     template<Expression Lhs, Expression Rhs>
     class Sub {
       public:
-        using type = decltype(std::declval<Lhs>().resolve() - std::declval<Rhs>().resolve());
-
         constexpr Sub(Lhs lhs, Rhs rhs);
 
         template<typename... Bindings>
-        constexpr auto resolve(Bindings... bindings) const -> type;
+        constexpr auto resolve(Bindings... bindings) const;
 
         template<typename sub, std::size_t ID>
         requires(impl::IsSub<sub>::val) friend constexpr auto gradient(const sub &x,
-                                                                       const Variable<typename sub::type, ID> &d);
+                                                                       const Variable<ID> &d);
 
         template<typename sub>
         requires(impl::IsSub<sub>::val) friend auto toString(const sub &x) -> std::string;
@@ -54,12 +52,12 @@ namespace sym {
 
     template<Expression Lhs, Expression Rhs>
     template<typename... Bindings>
-    constexpr auto Sub<Lhs, Rhs>::resolve(Bindings... bindings) const -> type {
+    constexpr auto Sub<Lhs, Rhs>::resolve(Bindings... bindings) const {
         return lhs.resolve(bindings...) - rhs.resolve(bindings...);
     }
 
     template<typename sub, std::size_t ID>
-    requires(impl::IsSub<sub>::val) constexpr auto gradient(const sub &x, const Variable<typename sub::type, ID> &d) {
+    requires(impl::IsSub<sub>::val) constexpr auto gradient(const sub &x, const Variable<ID> &d) {
         using ldiff = decltype(gradient(x.lhs, d));
         using rdiff = decltype(gradient(x.rhs, d));
         using dtype = Sub<ldiff, rdiff>;

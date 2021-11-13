@@ -23,16 +23,14 @@ namespace sym {
     template<Expression Lhs, Expression Rhs>
     class Add {
       public:
-        using type = decltype(std::declval<Lhs>().resolve() + std::declval<Rhs>().resolve());
-
         constexpr Add(Lhs lhs, Rhs rhs);
 
         template<typename... Bindings>
-        constexpr auto resolve(Bindings... bindings) const -> type;
+        constexpr auto resolve(Bindings... bindings) const;
 
         template<typename add, std::size_t ID>
         requires(impl::IsAdd<add>::val) friend constexpr auto gradient(const add &x,
-                                                                       const Variable<typename add::type, ID> &d);
+                                                                       const Variable<ID> &d);
 
         template<typename add>
         requires(impl::IsAdd<add>::val) friend auto toString(const add &x) -> std::string;
@@ -55,12 +53,12 @@ namespace sym {
 
     template<Expression Lhs, Expression Rhs>
     template<typename... Bindings>
-    constexpr auto Add<Lhs, Rhs>::resolve(Bindings... bindings) const -> type {
+    constexpr auto Add<Lhs, Rhs>::resolve(Bindings... bindings) const {
         return lhs.resolve(bindings...) + rhs.resolve(bindings...);
     }
 
     template<typename add, std::size_t ID>
-    requires(impl::IsAdd<add>::val) constexpr auto gradient(const add &x, const Variable<typename add::type, ID> &d) {
+    requires(impl::IsAdd<add>::val) constexpr auto gradient(const add &x, const Variable<ID> &d) {
         using ldiff = decltype(gradient(x.lhs, d));
         using rdiff = decltype(gradient(x.rhs, d));
         using dtype = Add<ldiff, rdiff>;

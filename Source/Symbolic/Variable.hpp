@@ -16,12 +16,12 @@ namespace sym {
     template<typename T>
     class Constant;
 
-    template<typename T, std::size_t ID>
+    template<std::size_t ID>
     class Variable;
 
     template<typename T, std::size_t ID_>
     class Binding {
-        friend Variable<T, ID_>;
+        friend Variable<ID_>;
 
       public:
         static constexpr auto ID = ID_;
@@ -42,41 +42,38 @@ namespace sym {
         }
     }
 
-    template<typename T, std::size_t ID>
+    template<std::size_t ID>
     class Variable {
-        friend Binding<T, ID>;
-
       public:
-        using type = T;
+        template<std::size_t ID0, std::size_t ID1>
+        friend constexpr auto gradient(const Variable<ID0> &x, const Variable<ID1> &d);
 
-        template<typename T_, std::size_t ID0, std::size_t ID1>
-        friend constexpr auto gradient(const Variable<T_, ID0> &x, const Variable<T_, ID1> &d);
-
-        template<typename T_, std::size_t ID_>
-        friend auto toString(const Variable<T_, ID_> &x) -> std::string;
+        template<std::size_t ID_>
+        friend auto toString(const Variable<ID_> &x) -> std::string;
 
         template<typename... Bindings>
-        constexpr auto resolve(Bindings... bindings) const -> T;
+        constexpr auto resolve(Bindings... bindings) const;
 
+        template<typename T>
         [[nodiscard]] auto operator=(T val) -> Binding<T, ID> {
             return Binding<T, ID>{val};
         }
     };
 
-    template<typename T, std::size_t ID>
+    template<std::size_t ID>
     template<typename... Bindings>
-    constexpr auto Variable<T, ID>::resolve(Bindings... bindings) const -> T {
+    constexpr auto Variable<ID>::resolve(Bindings... bindings) const {
         static_assert(sizeof...(Bindings) > 0, "No bindings specified!");
         return findBinding<ID, Bindings...>(bindings...).val;
     }
 
-    template<typename T_, std::size_t ID0, std::size_t ID1>
-    constexpr auto gradient(const Variable<T_, ID0> & /*x*/, const Variable<T_, ID1> & /*d*/) {
-        return Constant<T_>(ID0 == ID1 ? 1 : 0);
+    template<std::size_t ID0, std::size_t ID1>
+    constexpr auto gradient(const Variable<ID0> & /*x*/, const Variable<ID1> & /*d*/) {
+        return Constant(ID0 == ID1 ? 1 : 0);
     }
 
-    template<typename T_, std::size_t ID>
-    auto toString(const Variable<T_, ID> &x) -> std::string {
+    template<std::size_t ID>
+    auto toString(const Variable<ID> &x) -> std::string {
         return "{" + std::to_string(ID) + "}";
     }
 } // namespace sym

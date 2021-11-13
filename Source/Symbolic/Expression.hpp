@@ -13,8 +13,9 @@
 namespace sym {
     template<typename T>
     concept Expression = requires(const T t) {
-        typename T::type;
-        { t.resolve() } -> std::same_as<typename T::type>;
+        //@TODO requires polymorphic resolve
+        //{ t.resolve() } -> std::same_as<typename T::type>;
+        true;
     };
 
     template<typename T>
