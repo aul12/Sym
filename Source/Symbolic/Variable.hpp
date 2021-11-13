@@ -4,8 +4,8 @@
  * @date 28.08.20
  * Description here TODO
  */
-#ifndef GRADIENTOPTIMIZATION_VARIABLE_HPP
-#define GRADIENTOPTIMIZATION_VARIABLE_HPP
+#ifndef SYM_VARIABLE_HPP
+#define SYM_VARIABLE_HPP
 
 #include <memory>
 
@@ -78,4 +78,4 @@ namespace sym {
     }
 } // namespace sym
 
-#endif // GRADIENTOPTIMIZATION_VARIABLE_HPP
+#endif // SYM_VARIABLE_HPP

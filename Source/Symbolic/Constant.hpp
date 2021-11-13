@@ -4,8 +4,8 @@
  * @date 25.08.20
  * Description here TODO
  */
-#ifndef GRADIENTOPTIMIZATION_CONSTANT_HPP
-#define GRADIENTOPTIMIZATION_CONSTANT_HPP
+#ifndef SYM_CONSTANT_HPP
+#define SYM_CONSTANT_HPP
 
 #include "Expression.hpp"
 #include "Variable.hpp"
@@ -17,8 +17,6 @@ namespace sym {
     template<typename T>
     class Constant {
       public:
-        using type = T;
-
         explicit constexpr Constant(T val);
 
         template<typename... Bindings>
@@ -55,4 +53,4 @@ namespace sym {
     }
 } // namespace sym
 
-#endif // GRADIENTOPTIMIZATION_CONSTANT_HPP
+#endif // SYM_CONSTANT_HPP

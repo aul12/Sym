@@ -4,8 +4,8 @@
  * @date 05.09.20
  * Description here TODO
  */
-#ifndef GRADIENTOPTIMIZATION_MUL_HPP
-#define GRADIENTOPTIMIZATION_MUL_HPP
+#ifndef SYM_MUL_HPP
+#define SYM_MUL_HPP
 
 #include "../Expression.hpp"
 #include "Add.hpp"
@@ -71,4 +71,4 @@ namespace sym {
     }
 } // namespace sym
 
-#endif // GRADIENTOPTIMIZATION_MUL_HPP
+#endif // SYM_MUL_HPP

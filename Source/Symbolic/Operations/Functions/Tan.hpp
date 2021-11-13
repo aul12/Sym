@@ -4,8 +4,8 @@
  * @date 21.10.20
  * Description here TODO
  */
-#ifndef GRADIENTOPTIMIZATION_TAN_HPP
-#define GRADIENTOPTIMIZATION_TAN_HPP
+#ifndef SYM_TAN_HPP
+#define SYM_TAN_HPP
 
 #include "../../Expression.hpp"
 #include "../Div.hpp"
@@ -51,4 +51,4 @@ namespace sym {
     }
 } // namespace sym
 
-#endif // GRADIENTOPTIMIZATION_TAN_HPP
+#endif // SYM_TAN_HPP

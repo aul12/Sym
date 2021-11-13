@@ -4,8 +4,8 @@
  * @date 05.09.20
  * Description here TODO
  */
-#ifndef GRADIENTOPTIMIZATION_OPERATORS_HPP
-#define GRADIENTOPTIMIZATION_OPERATORS_HPP
+#ifndef SYM_OPERATORS_HPP
+#define SYM_OPERATORS_HPP
 
 #include "Operations/Add.hpp"
 #include "Operations/Div.hpp"
@@ -34,7 +34,7 @@ namespace sym {
         return Sub<Lhs, Rhs>{lhs, rhs};
     }
 
-    // Expr op T
+    // T op Expr
     template<typename Lhs, Expression Rhs>
     constexpr auto operator+(Lhs lhs, Rhs rhs) -> Add<Constant<Lhs>, Rhs> {
         return Add<Constant<Lhs>, Rhs>{Constant<Lhs>{lhs}, rhs};
@@ -55,7 +55,7 @@ namespace sym {
         return Sub<Constant<Lhs>, Rhs>{Constant<Lhs>{lhs}, rhs};
     }
 
-    // T op Expr
+    // Expr op T
     template<Expression Lhs, typename Rhs>
     constexpr auto operator+(Lhs lhs, Rhs rhs) -> Add<Lhs, Constant<Rhs>> {
         return Add<Lhs, Constant<Rhs>>{lhs, Constant<Rhs>{rhs}};
@@ -77,4 +77,4 @@ namespace sym {
     }
 } // namespace sym
 
-#endif // GRADIENTOPTIMIZATION_OPERATORS_HPP
+#endif // SYM_OPERATORS_HPP

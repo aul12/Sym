@@ -4,8 +4,8 @@
  * @date 15.01.21
  * Description here TODO
  */
-#ifndef GRADIENTOPTIMIZATION_FUNCTIONS_HPP
-#define GRADIENTOPTIMIZATION_FUNCTIONS_HPP
+#ifndef SYM_FUNCTIONS_HPP
+#define SYM_FUNCTIONS_HPP
 
 #include "Cos.hpp"
 #include "Sin.hpp"
@@ -28,4 +28,4 @@ namespace std { // NOLINT everything is fine specialization for custom types is 
     }
 } // namespace std
 
-#endif // GRADIENTOPTIMIZATION_FUNCTIONS_HPP
+#endif // SYM_FUNCTIONS_HPP

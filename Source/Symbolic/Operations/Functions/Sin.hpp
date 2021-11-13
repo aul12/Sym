@@ -4,8 +4,8 @@
  * @date 21.10.20
  * Description here TODO
  */
-#ifndef GRADIENTOPTIMIZATION_SIN_HPP
-#define GRADIENTOPTIMIZATION_SIN_HPP
+#ifndef SYM_SIN_HPP
+#define SYM_SIN_HPP
 
 #include <cmath>
 
@@ -57,4 +57,4 @@ namespace sym {
     }
 } // namespace sym
 
-#endif // GRADIENTOPTIMIZATION_SIN_HPP
+#endif // SYM_SIN_HPP

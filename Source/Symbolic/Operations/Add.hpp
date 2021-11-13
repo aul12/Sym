@@ -4,8 +4,8 @@
  * @date 25.08.20
  * Description here TODO
  */
-#ifndef GRADIENTOPTIMIZATION_ADD_HPP
-#define GRADIENTOPTIMIZATION_ADD_HPP
+#ifndef SYM_ADD_HPP
+#define SYM_ADD_HPP
 
 #include "../Expression.hpp"
 #include "../Variable.hpp"
@@ -71,4 +71,4 @@ namespace sym {
     }
 } // namespace sym
 
-#endif // GRADIENTOPTIMIZATION_ADD_HPP
+#endif // SYM_ADD_HPP
