@@ -20,7 +20,7 @@ if (GTest_FOUND)
 
     add_executable(${PROJECT_NAME} main.cpp ${TEST_SOURCES})
 
-    target_link_libraries(${PROJECT_NAME} Symbolic++ gmock gtest pthread)
+    target_link_libraries(${PROJECT_NAME} Sym++ gmock gtest pthread)
 
     add_test(
             NAME ${PROJECT_NAME}

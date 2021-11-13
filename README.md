@@ -1,8 +1,8 @@
-# Symbolic++
+# Sym++
 
 Framework for efficient symbolic calculations using C++ zero cost abstractions
 
-Fancy stuff:
+## Demo
 ```c++
 Variable<'a'> a;
 Variable<'b'> b;
