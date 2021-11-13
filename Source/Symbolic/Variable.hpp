@@ -73,7 +73,7 @@ namespace sym {
     }
 
     template<std::size_t ID>
-    auto toString(const Variable<ID> &x) -> std::string {
+    auto toString(const Variable<ID> & /*x*/) -> std::string {
         return "{" + std::to_string(ID) + "}";
     }
 } // namespace sym

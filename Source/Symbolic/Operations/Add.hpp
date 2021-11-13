@@ -29,11 +29,10 @@ namespace sym {
         constexpr auto resolve(Bindings... bindings) const;
 
         template<typename add, std::size_t ID>
-        requires(impl::IsAdd<add>::val) friend constexpr auto gradient(const add &x,
-                                                                       const Variable<ID> &d);
+        requires(impl::IsAdd<add>::val) friend constexpr auto gradient(const add &x, const Variable<ID> &d);
 
-        template<typename add>
-        requires(impl::IsAdd<add>::val) friend auto toString(const add &x) -> std::string;
+        template<Expression Lhs_, Expression Rhs_>
+        friend auto toString(const Add<Lhs_, Rhs_> &x) -> std::string;
 
       private:
         Lhs lhs;
@@ -66,9 +65,9 @@ namespace sym {
         return dtype{gradient(x.lhs, d), gradient(x.rhs, d)};
     }
 
-    template<typename add>
-    requires(impl::IsAdd<add>::val) auto toString(const add &x) {
-        return "(" + x.toString() + "+" + x.toString() + ")";
+    template<Expression Lhs_, Expression Rhs_>
+    auto toString(const Add<Lhs_, Rhs_> &x) -> std::string {
+        return "(" + toString(x.lhs) + "+" + toString(x.rhs) + ")";
     }
 } // namespace sym
 

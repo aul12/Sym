@@ -28,11 +28,10 @@ namespace sym {
         constexpr auto resolve(Bindings... bindings) const;
 
         template<typename sub, std::size_t ID>
-        requires(impl::IsSub<sub>::val) friend constexpr auto gradient(const sub &x,
-                                                                       const Variable<ID> &d);
+        requires(impl::IsSub<sub>::val) friend constexpr auto gradient(const sub &x, const Variable<ID> &d);
 
-        template<typename sub>
-        requires(impl::IsSub<sub>::val) friend auto toString(const sub &x) -> std::string;
+        template<Expression Lhs_, Expression Rhs_>
+        friend auto toString(const Sub<Lhs_, Rhs_> &x) -> std::string;
 
       private:
         Lhs lhs;
@@ -65,9 +64,9 @@ namespace sym {
         return dtype{gradient(x.lhs, d), gradient(x.rhs, d)};
     }
 
-    template<typename sub>
-    requires(impl::IsSub<sub>::val) auto toString(const sub &x) -> std::string {
-        return "(" + x.lhs.toString() + "-" + x.rhs.toString() + ")";
+    template<Expression Lhs_, Expression Rhs_>
+    auto toString(const Sub<Lhs_, Rhs_> &x) -> std::string {
+        return "(" + toString(x.lhs) + "-" + toString(x.rhs) + ")";
     }
 } // namespace sym
 
