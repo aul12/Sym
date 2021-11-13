@@ -27,7 +27,8 @@ namespace sym {
 
         constexpr Add(Lhs lhs, Rhs rhs);
 
-        constexpr auto resolve() const -> type;
+        template<typename... Bindings>
+        constexpr auto resolve(Bindings... bindings) const -> type;
 
         template<typename add, std::size_t ID>
         requires(impl::IsAdd<add>::val) friend constexpr auto gradient(const add &x,
@@ -53,8 +54,9 @@ namespace sym {
     }
 
     template<Expression Lhs, Expression Rhs>
-    constexpr auto Add<Lhs, Rhs>::resolve() const -> type {
-        return lhs.resolve() + rhs.resolve();
+    template<typename... Bindings>
+    constexpr auto Add<Lhs, Rhs>::resolve(Bindings... bindings) const -> type {
+        return lhs.resolve(bindings...) + rhs.resolve(bindings...);
     }
 
     template<typename add, std::size_t ID>

@@ -17,7 +17,7 @@ TEST(Cos, Resolve) {
 }
 
 TEST(Cos, Gradient) {
-    sym::Variable<double, 'x'> x{0};
+    sym::Variable<double, 'x'> x;
     sym::Cos<decltype(x)> y{x};
-    EXPECT_DOUBLE_EQ(sym::gradient(y, x).resolve(), 0);
+    EXPECT_DOUBLE_EQ(sym::gradient(y, x).resolve(x=0), 0);
 }

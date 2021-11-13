@@ -21,7 +21,8 @@ namespace sym {
 
         explicit constexpr Constant(T val);
 
-        constexpr auto resolve() const -> T;
+        template<typename... Bindings>
+        constexpr auto resolve(Bindings...) const -> T;
 
         template<typename T_, std::size_t ID>
         friend constexpr auto gradient(const Constant<T_> &, const Variable<T_, ID> &);
@@ -38,7 +39,8 @@ namespace sym {
     }
 
     template<typename T>
-    constexpr auto Constant<T>::resolve() const -> T {
+    template<typename... Bindings>
+    constexpr auto Constant<T>::resolve(Bindings...) const -> T {
         return val;
     }
 

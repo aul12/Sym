@@ -17,29 +17,29 @@ TEST(Mul, Resolve) {
 }
 
 TEST(Mul, GradA) {
-    sym::Variable<int, 'a'> a{17};
-    sym::Variable<int, 'b'> b{42};
+    sym::Variable<int, 'a'> a;
+    sym::Variable<int, 'b'> b;
     sym::Mul<decltype(a), decltype(b)> mul{a, b};
-    EXPECT_EQ(sym::gradient(mul, a).resolve(), 42);
+    EXPECT_EQ(sym::gradient(mul, a).resolve(a=17, b=42), 42);
 }
 
 TEST(Mul, GradB) {
-    sym::Variable<int, 'a'> a{17};
-    sym::Variable<int, 'b'> b{42};
+    sym::Variable<int, 'a'> a;
+    sym::Variable<int, 'b'> b;
     sym::Mul<decltype(a), decltype(b)> mul{a, b};
-    EXPECT_EQ(sym::gradient(mul, b).resolve(), 17);
+    EXPECT_EQ(sym::gradient(mul, b).resolve(a=17, b=42), 17);
 }
 
 TEST(Mul, GradNone) {
-    sym::Variable<int, 'a'> a{17};
-    sym::Variable<int, 'b'> b{42};
-    sym::Variable<int, 'c'> c{42};
+    sym::Variable<int, 'a'> a;
+    sym::Variable<int, 'b'> b;
+    sym::Variable<int, 'c'> c;
     sym::Mul<decltype(a), decltype(b)> mul{a, b};
-    EXPECT_EQ(sym::gradient(mul, c).resolve(), 0);
+    EXPECT_EQ(sym::gradient(mul, c).resolve(a=17, b=42, c=42), 0);
 }
 
 TEST(Mul, GradBoth) {
-    sym::Variable<int, 'a'> a{17};
+    sym::Variable<int, 'a'> a;
     sym::Mul<decltype(a), decltype(a)> mul{a, a};
-    EXPECT_EQ(sym::gradient(mul, a).resolve(), 2 * 17);
+    EXPECT_EQ(sym::gradient(mul, a).resolve(a=17), 2 * 17);
 }

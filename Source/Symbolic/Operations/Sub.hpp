@@ -26,7 +26,8 @@ namespace sym {
 
         constexpr Sub(Lhs lhs, Rhs rhs);
 
-        constexpr auto resolve() const -> type;
+        template<typename... Bindings>
+        constexpr auto resolve(Bindings... bindings) const -> type;
 
         template<typename sub, std::size_t ID>
         requires(impl::IsSub<sub>::val) friend constexpr auto gradient(const sub &x,
@@ -52,8 +53,9 @@ namespace sym {
     }
 
     template<Expression Lhs, Expression Rhs>
-    constexpr auto Sub<Lhs, Rhs>::resolve() const -> type {
-        return lhs.resolve() - rhs.resolve();
+    template<typename... Bindings>
+    constexpr auto Sub<Lhs, Rhs>::resolve(Bindings... bindings) const -> type {
+        return lhs.resolve(bindings...) - rhs.resolve(bindings...);
     }
 
     template<typename sub, std::size_t ID>

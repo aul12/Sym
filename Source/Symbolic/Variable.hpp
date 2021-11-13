@@ -17,14 +17,37 @@ namespace sym {
     class Constant;
 
     template<typename T, std::size_t ID>
+    class Variable;
+
+    template<typename T, std::size_t ID_>
+    class Binding {
+        friend Variable<T, ID_>;
+
+      public:
+        static constexpr auto ID = ID_;
+
+      private:
+        explicit Binding(T val) : val{val} {
+        }
+        T val;
+    };
+
+    template<std::size_t ID, typename FirstBinding, typename... Bindings>
+    static constexpr auto findBinding(const FirstBinding &firstBinding, Bindings... bindings) {
+        if constexpr (FirstBinding::ID == ID) {
+            return firstBinding;
+        } else {
+            static_assert(sizeof...(Bindings) > 0, "ID not found");
+            return findBinding<ID, Bindings...>(bindings...);
+        }
+    }
+
+    template<typename T, std::size_t ID>
     class Variable {
+        friend Binding<T, ID>;
+
       public:
         using type = T;
-
-        T t;
-
-        explicit Variable(T t) : t{t} {
-        }
 
         template<typename T_, std::size_t ID0, std::size_t ID1>
         friend constexpr auto gradient(const Variable<T_, ID0> &x, const Variable<T_, ID1> &d);
@@ -32,12 +55,19 @@ namespace sym {
         template<typename T_, std::size_t ID_>
         friend auto toString(const Variable<T_, ID_> &x) -> std::string;
 
-        constexpr auto resolve() const -> T;
+        template<typename... Bindings>
+        constexpr auto resolve(Bindings... bindings) const -> T;
+
+        [[nodiscard]] auto operator=(T val) -> Binding<T, ID> {
+            return Binding<T, ID>{val};
+        }
     };
 
     template<typename T, std::size_t ID>
-    constexpr auto Variable<T, ID>::resolve() const -> T {
-        return t;
+    template<typename... Bindings>
+    constexpr auto Variable<T, ID>::resolve(Bindings... bindings) const -> T {
+        static_assert(sizeof...(Bindings) > 0, "No bindings specified!");
+        return findBinding<ID, Bindings...>(bindings...).val;
     }
 
     template<typename T_, std::size_t ID0, std::size_t ID1>

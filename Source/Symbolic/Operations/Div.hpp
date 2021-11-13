@@ -26,7 +26,8 @@ namespace sym {
 
         constexpr Div(Lhs lhs, Rhs rhs);
 
-        constexpr auto resolve() const -> type;
+        template<typename... Bindings>
+        constexpr auto resolve(Bindings... bindings) const -> type;
 
         template<typename div, std::size_t ID>
         requires(impl::IsDiv<div>::val) friend constexpr auto gradient(const div &x,
@@ -52,8 +53,9 @@ namespace sym {
     }
 
     template<Expression Lhs, Expression Rhs>
-    constexpr auto Div<Lhs, Rhs>::resolve() const -> type {
-        return lhs.resolve() / rhs.resolve();
+    template<typename... Bindings>
+    constexpr auto Div<Lhs, Rhs>::resolve(Bindings... bindings) const -> type {
+        return lhs.resolve(bindings...) / rhs.resolve(bindings...);
     }
 
     template<typename div, std::size_t ID>
