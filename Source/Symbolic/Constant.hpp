@@ -11,7 +11,7 @@
 #include "Variable.hpp"
 
 namespace sym {
-    template<typename>
+    template<typename T, std::size_t ID>
     class Variable;
 
     template<typename T>
@@ -23,13 +23,11 @@ namespace sym {
 
         constexpr auto resolve() const -> T;
 
-        template<typename T_>
-        friend constexpr auto gradient(const Constant<T_> &, const Variable<T_> &);
+        template<typename T_, std::size_t ID>
+        friend constexpr auto gradient(const Constant<T_> &, const Variable<T_, ID> &);
 
         template<typename T_>
         friend auto toString(const Constant<T_> &x) -> std::string;
-
-        static constexpr auto isConstant() -> bool;
 
       private:
         T val;
@@ -44,8 +42,8 @@ namespace sym {
         return val;
     }
 
-    template<typename T_>
-    constexpr auto gradient(const Constant<T_> &, const Variable<T_> &) {
+    template<typename T_, std::size_t ID>
+    constexpr auto gradient(const Constant<T_> &, const Variable<T_, ID> &) {
         return Constant<T_>{0};
     }
 
@@ -53,12 +51,6 @@ namespace sym {
     auto toString(const Constant<T_> &x) -> std::string {
         return std::to_string(x.val);
     }
-
-    template<typename T>
-    constexpr auto Constant<T>::isConstant() -> bool {
-        return true;
-    }
-
 } // namespace sym
 
 #endif // GRADIENTOPTIMIZATION_CONSTANT_HPP

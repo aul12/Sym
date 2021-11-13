@@ -7,13 +7,13 @@
 #ifndef GRADIENTOPTIMIZATION_COS_HPP
 #define GRADIENTOPTIMIZATION_COS_HPP
 
-#include <Symbolic/Mul.hpp>
 #include <cmath>
 
-#include "../Constant.hpp"
-#include "../Expression.hpp"
-#include "../Variable.hpp"
+#include "../../Constant.hpp"
+#include "../../Expression.hpp"
+#include "../../Variable.hpp"
 #include "Sin.hpp"
+#include "Symbolic/Operations//Mul.hpp"
 
 namespace sym {
     template<Expression Expr>
@@ -28,13 +28,11 @@ namespace sym {
 
         auto resolve() const -> type;
 
-        template<Expression Expr_>
-        friend auto gradient(const Cos<Expr_> &x, const Variable<typename Expr_::type> &d);
+        template<Expression Expr_, std::size_t ID>
+        friend auto gradient(const Cos<Expr_> &x, const Variable<typename Expr_::type, ID> &d);
 
         template<Expression Expr_>
         friend auto toString(const Cos<Expr_> &x) -> std::string;
-
-        static constexpr auto isConstant() -> bool;
 
       private:
         Expr expr;
@@ -49,19 +47,14 @@ namespace sym {
         return std::cos(expr.resolve());
     }
 
-    template<Expression Expr_>
-    auto gradient(const Cos<Expr_> &x, const Variable<typename Expr_::type> &d) {
+    template<Expression Expr_, std::size_t ID>
+    auto gradient(const Cos<Expr_> &x, const Variable<typename Expr_::type, ID> &d) {
         return Mul{Mul{Constant<typename Expr_::type>{-1}, Sin{x.expr}}, gradient(x.expr, d)};
     }
 
     template<Expression Expr_>
     auto toString(const Cos<Expr_> &x) -> std::string {
         return "cos(" + toString(x.expr) + ")";
-    }
-
-    template<Expression Expr>
-    constexpr auto Cos<Expr>::isConstant() -> bool {
-        return Expr::isConstant();
     }
 } // namespace sym
 

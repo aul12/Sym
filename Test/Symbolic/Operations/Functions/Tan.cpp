@@ -1,4 +1,4 @@
-#include "Symbolic/Functions/Tan.hpp"
+#include "Symbolic/Operations/Functions/Tan.hpp"
 
 #include <cmath>
 #include <gtest/gtest.h>
@@ -17,17 +17,7 @@ TEST(Tan, Resolve) {
 }
 
 TEST(Tan, Gradient) {
-    sym::Variable<double> x{0};
+    sym::Variable<double, 'x'> x{0};
     sym::Tan<decltype(x)> y{x};
     EXPECT_DOUBLE_EQ(sym::gradient(y, x).resolve(), 1);
-}
-
-TEST(Tan, IsConstantC) {
-    using C = sym::Constant<int>;
-    EXPECT_TRUE((sym::Tan<C>::isConstant()));
-}
-
-TEST(Tan, IsConstantV) {
-    using V = sym::Variable<int>;
-    EXPECT_FALSE((sym::Tan<V>::isConstant()));
 }

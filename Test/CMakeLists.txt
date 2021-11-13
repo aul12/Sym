@@ -7,16 +7,17 @@ if (GTest_FOUND)
 
     set(TEST_SOURCES
             Integration/Euler.cpp
-            Symbolic/Add.cpp
             Symbolic/Constant.cpp
-            Symbolic/Div.cpp
-            Symbolic/Mul.cpp
+            Symbolic/Operations/Add.cpp
+            Symbolic/Operations/Div.cpp
+            Symbolic/Operations/Functions/Cos.cpp
+            Symbolic/Operations/Functions/Sin.cpp
+            Symbolic/Operations/Functions/Tan.cpp
+            Symbolic/Operations/Mul.cpp
             Symbolic/Operators.cpp
             Symbolic/Sum.cpp
             Symbolic/Variable.cpp
-            Symbolic/Functions/Sin.cpp
-            Symbolic/Functions/Cos.cpp
-            Symbolic/Functions/Tan.cpp)
+            )
 
     add_executable(${PROJECT_NAME} main.cpp ${TEST_SOURCES})
 

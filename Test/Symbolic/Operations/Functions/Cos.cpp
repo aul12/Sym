@@ -1,4 +1,4 @@
-#include "Symbolic/Functions/Cos.hpp"
+#include "Symbolic/Operations/Functions/Cos.hpp"
 
 #include <cmath>
 #include <gtest/gtest.h>
@@ -17,17 +17,7 @@ TEST(Cos, Resolve) {
 }
 
 TEST(Cos, Gradient) {
-    sym::Variable<double> x{0};
+    sym::Variable<double, 'x'> x{0};
     sym::Cos<decltype(x)> y{x};
     EXPECT_DOUBLE_EQ(sym::gradient(y, x).resolve(), 0);
-}
-
-TEST(Cos, IsConstantC) {
-    using C = sym::Constant<int>;
-    EXPECT_TRUE((sym::Cos<C>::isConstant()));
-}
-
-TEST(Cos, IsConstantV) {
-    using V = sym::Variable<int>;
-    EXPECT_FALSE((sym::Cos<V>::isConstant()));
 }

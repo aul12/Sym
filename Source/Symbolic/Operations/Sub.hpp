@@ -7,8 +7,8 @@
 #ifndef GRADIENTOPTIMIZATION_SUB_HPP
 #define GRADIENTOPTIMIZATION_SUB_HPP
 
-#include "Expression.hpp"
-#include "Variable.hpp"
+#include "../Expression.hpp"
+#include "../Variable.hpp"
 
 
 namespace sym {
@@ -28,14 +28,12 @@ namespace sym {
 
         constexpr auto resolve() const -> type;
 
-        template<typename sub>
+        template<typename sub, std::size_t ID>
         requires(impl::IsSub<sub>::val) friend constexpr auto gradient(const sub &x,
-                                                                       const Variable<typename sub::type> &d);
+                                                                       const Variable<typename sub::type, ID> &d);
 
         template<typename sub>
         requires(impl::IsSub<sub>::val) friend auto toString(const sub &x) -> std::string;
-
-        static constexpr auto isConstant() -> bool;
 
       private:
         Lhs lhs;
@@ -58,8 +56,8 @@ namespace sym {
         return lhs.resolve() - rhs.resolve();
     }
 
-    template<typename sub>
-    requires(impl::IsSub<sub>::val) constexpr auto gradient(const sub &x, const Variable<typename sub::type> &d) {
+    template<typename sub, std::size_t ID>
+    requires(impl::IsSub<sub>::val) constexpr auto gradient(const sub &x, const Variable<typename sub::type, ID> &d) {
         using ldiff = decltype(gradient(x.lhs, d));
         using rdiff = decltype(gradient(x.rhs, d));
         using dtype = Sub<ldiff, rdiff>;
@@ -70,11 +68,6 @@ namespace sym {
     template<typename sub>
     requires(impl::IsSub<sub>::val) auto toString(const sub &x) -> std::string {
         return "(" + x.lhs.toString() + "-" + x.rhs.toString() + ")";
-    }
-
-    template<Expression Lhs, Expression Rhs>
-    constexpr auto Sub<Lhs, Rhs>::isConstant() -> bool {
-        return Lhs::isConstant() and Rhs::isConstant();
     }
 } // namespace sym
 

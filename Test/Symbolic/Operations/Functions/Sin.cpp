@@ -1,4 +1,4 @@
-#include "Symbolic/Functions/Sin.hpp"
+#include "Symbolic/Operations/Functions/Sin.hpp"
 
 #include <cmath>
 #include <gtest/gtest.h>
@@ -17,17 +17,7 @@ TEST(Sin, Resolve) {
 }
 
 TEST(Sin, Gradient) {
-    sym::Variable<double> x{0};
+    sym::Variable<double, 'a'> x{0};
     sym::Sin<decltype(x)> y{x};
     EXPECT_DOUBLE_EQ(sym::gradient(y, x).resolve(), 1);
-}
-
-TEST(Sin, IsConstantC) {
-    using C = sym::Constant<int>;
-    EXPECT_TRUE((sym::Sin<C>::isConstant()));
-}
-
-TEST(Sin, IsConstantV) {
-    using V = sym::Variable<int>;
-    EXPECT_FALSE((sym::Sin<V>::isConstant()));
 }

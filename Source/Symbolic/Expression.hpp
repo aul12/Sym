@@ -15,7 +15,6 @@ namespace sym {
     concept Expression = requires(const T t) {
         typename T::type;
         { t.resolve() } -> std::same_as<typename T::type>;
-        { T::isConstant() } -> std::same_as<bool>;
     };
 
     template<typename T>

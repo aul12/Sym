@@ -16,56 +16,38 @@ namespace sym {
     template<typename T>
     class Constant;
 
-    template<typename T>
+    template<typename T, std::size_t ID>
     class Variable {
       public:
         using type = T;
 
-        explicit constexpr Variable(T val = {});
+        T t;
+
+        explicit Variable(T t) : t{t} {
+        }
+
+        template<typename T_, std::size_t ID0, std::size_t ID1>
+        friend constexpr auto gradient(const Variable<T_, ID0> &x, const Variable<T_, ID1> &d);
+
+        template<typename T_, std::size_t ID_>
+        friend auto toString(const Variable<T_, ID_> &x) -> std::string;
 
         constexpr auto resolve() const -> T;
-
-        constexpr void set(T t);
-
-        template<typename T_>
-        friend constexpr auto gradient(const Variable<T_> &x, const Variable<T_> &d);
-
-        template<typename T_>
-        friend auto toString(const Variable<T_> &x) -> std::string;
-
-        static constexpr auto isConstant() -> bool;
-
-      private:
-        std::shared_ptr<T> val;
     };
 
-    template<typename T>
-    constexpr Variable<T>::Variable(T val) : val{std::make_shared<T>(std::move(val))} {
+    template<typename T, std::size_t ID>
+    constexpr auto Variable<T, ID>::resolve() const -> T {
+        return t;
     }
 
-    template<typename T>
-    constexpr auto Variable<T>::resolve() const -> T {
-        return *val;
+    template<typename T_, std::size_t ID0, std::size_t ID1>
+    constexpr auto gradient(const Variable<T_, ID0> & /*x*/, const Variable<T_, ID1> & /*d*/) {
+        return Constant<T_>(ID0 == ID1 ? 1 : 0);
     }
 
-    template<typename T>
-    constexpr void Variable<T>::set(T t) {
-        *(this->val) = t;
-    }
-
-    template<typename T_>
-    constexpr auto gradient(const Variable<T_> &x, const Variable<T_> &d) {
-        return Constant<T_>(x.val.get() == d.val.get() ? 1 : 0);
-    }
-
-    template<typename T_>
-    auto toString(const Variable<T_> &x) -> std::string {
-        return "{" + std::to_string(x->val) + "}";
-    }
-
-    template<typename T>
-    constexpr auto Variable<T>::isConstant() -> bool {
-        return false;
+    template<typename T_, std::size_t ID>
+    auto toString(const Variable<T_, ID> &x) -> std::string {
+        return "{" + std::to_string(ID) + "}";
     }
 } // namespace sym
 

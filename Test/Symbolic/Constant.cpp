@@ -22,9 +22,5 @@ TEST(Constant, Resolve) {
 TEST(Constant, GradResolve) {
     sym::Constant<int> c{42};
 
-    EXPECT_EQ(sym::gradient(c, sym::Variable<int>{0}).resolve(), 0);
-}
-
-TEST(Constant, IsConstant) {
-    EXPECT_TRUE(sym::Constant<int>::isConstant());
+    EXPECT_EQ(sym::gradient(c, sym::Variable<int, 'a'>{0}).resolve(), 0);
 }

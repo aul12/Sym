@@ -7,8 +7,8 @@
 #ifndef GRADIENTOPTIMIZATION_MUL_HPP
 #define GRADIENTOPTIMIZATION_MUL_HPP
 
+#include "../Expression.hpp"
 #include "Add.hpp"
-#include "Expression.hpp"
 
 namespace sym {
     namespace impl {
@@ -27,14 +27,12 @@ namespace sym {
 
         constexpr auto resolve() const -> type;
 
-        template<typename mul>
+        template<typename mul, std::size_t ID>
         requires(impl::IsMul<mul>::val) friend auto constexpr gradient(const mul &x,
-                                                                       const Variable<typename mul::type> &d);
+                                                                       const Variable<typename mul::type, ID> &d);
 
         template<typename mul>
         requires(impl::IsMul<mul>::val) friend auto toString(const mul &x) -> std::string;
-
-        static constexpr auto isConstant() -> bool;
 
       private:
         Lhs lhs;
@@ -57,8 +55,8 @@ namespace sym {
         return lhs.resolve() * rhs.resolve();
     }
 
-    template<typename mul>
-    requires(impl::IsMul<mul>::val) constexpr auto gradient(const mul &x, const Variable<typename mul::type> &d) {
+    template<typename mul, std::size_t ID>
+    requires(impl::IsMul<mul>::val) constexpr auto gradient(const mul &x, const Variable<typename mul::type, ID> &d) {
         using lgrad = decltype(gradient(x.lhs, d));
         using rgrad = decltype(gradient(x.rhs, d));
         using lsum = Mul<lgrad, decltype(x.rhs)>;
@@ -72,12 +70,6 @@ namespace sym {
     requires(impl::IsMul<mul>::val) auto toString(const mul &x) -> std::string {
         return x.lhs.toString() + "*" + x.rhs.toString();
     }
-
-    template<Expression Lhs, Expression Rhs>
-    constexpr auto Mul<Lhs, Rhs>::isConstant() -> bool {
-        return Lhs::isConstant() and Rhs::isConstant();
-    }
-
 } // namespace sym
 
 #endif // GRADIENTOPTIMIZATION_MUL_HPP

@@ -7,10 +7,10 @@
 #ifndef GRADIENTOPTIMIZATION_OPERATORS_HPP
 #define GRADIENTOPTIMIZATION_OPERATORS_HPP
 
-#include "Add.hpp"
-#include "Div.hpp"
-#include "Mul.hpp"
-#include "Sub.hpp"
+#include "Operations/Add.hpp"
+#include "Operations/Div.hpp"
+#include "Operations/Mul.hpp"
+#include "Operations/Sub.hpp"
 
 namespace sym {
     // Expr op Expr

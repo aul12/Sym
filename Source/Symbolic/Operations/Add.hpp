@@ -7,9 +7,9 @@
 #ifndef GRADIENTOPTIMIZATION_ADD_HPP
 #define GRADIENTOPTIMIZATION_ADD_HPP
 
-#include "Expression.hpp"
+#include "../Expression.hpp"
+#include "../Variable.hpp"
 #include "Sub.hpp"
-#include "Variable.hpp"
 
 
 namespace sym {
@@ -29,14 +29,12 @@ namespace sym {
 
         constexpr auto resolve() const -> type;
 
-        template<typename add>
+        template<typename add, std::size_t ID>
         requires(impl::IsAdd<add>::val) friend constexpr auto gradient(const add &x,
-                                                                       const Variable<typename add::type> &d);
+                                                                       const Variable<typename add::type, ID> &d);
 
         template<typename add>
         requires(impl::IsAdd<add>::val) friend auto toString(const add &x) -> std::string;
-
-        static constexpr auto isConstant() -> bool;
 
       private:
         Lhs lhs;
@@ -59,8 +57,8 @@ namespace sym {
         return lhs.resolve() + rhs.resolve();
     }
 
-    template<typename add>
-    requires(impl::IsAdd<add>::val) constexpr auto gradient(const add &x, const Variable<typename add::type> &d) {
+    template<typename add, std::size_t ID>
+    requires(impl::IsAdd<add>::val) constexpr auto gradient(const add &x, const Variable<typename add::type, ID> &d) {
         using ldiff = decltype(gradient(x.lhs, d));
         using rdiff = decltype(gradient(x.rhs, d));
         using dtype = Add<ldiff, rdiff>;
@@ -72,12 +70,6 @@ namespace sym {
     requires(impl::IsAdd<add>::val) auto toString(const add &x) {
         return "(" + x.toString() + "+" + x.toString() + ")";
     }
-    template<Expression Lhs, Expression Rhs>
-    constexpr auto Add<Lhs, Rhs>::isConstant() -> bool {
-        return Lhs::isConstant() and Rhs::isConstant();
-    }
-
-
 } // namespace sym
 
 #endif // GRADIENTOPTIMIZATION_ADD_HPP

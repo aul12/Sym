@@ -9,9 +9,9 @@
 
 #include <cmath>
 
-#include "../Expression.hpp"
+#include "../../Expression.hpp"
+#include "../../Variable.hpp"
 #include "../Mul.hpp"
-#include "../Variable.hpp"
 #include "Cos.hpp"
 
 namespace sym {
@@ -27,13 +27,11 @@ namespace sym {
 
         auto resolve() const -> type;
 
-        template<Expression Expr_>
-        friend auto gradient(const Sin<Expr_> &x, const Variable<typename Expr_::type> &d);
+        template<Expression Expr_, std::size_t ID>
+        friend auto gradient(const Sin<Expr_> &x, const Variable<typename Expr_::type, ID> &d);
 
         template<Expression Expr_>
         friend auto toString(const Sin<Expr_> &x) -> std::string;
-
-        static constexpr auto isConstant() -> bool;
 
       private:
         Expr expr;
@@ -48,19 +46,14 @@ namespace sym {
         return std::sin(expr.resolve());
     }
 
-    template<Expression Expr_>
-    auto gradient(const Sin<Expr_> &x, const Variable<typename Expr_::type> &d) {
+    template<Expression Expr_, std::size_t ID>
+    auto gradient(const Sin<Expr_> &x, const Variable<typename Expr_::type, ID> &d) {
         return Mul{Cos{x.expr}, gradient(x.expr, d)};
     }
 
     template<Expression Expr_>
     auto toString(const Sin<Expr_> &x) -> std::string {
         return "cos(" + toString(x.expr) + ")";
-    }
-
-    template<Expression Expr>
-    constexpr auto Sin<Expr>::isConstant() -> bool {
-        return Expr::isConstant();
     }
 } // namespace sym
 

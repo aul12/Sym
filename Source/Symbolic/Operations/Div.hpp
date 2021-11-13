@@ -7,8 +7,8 @@
 #ifndef GRADIENTOPTIMIZATION_DIV_HPP
 #define GRADIENTOPTIMIZATION_DIV_HPP
 
+#include "../Constant.hpp"
 #include "Add.hpp"
-#include "Constant.hpp"
 #include "Mul.hpp"
 
 namespace sym {
@@ -28,14 +28,12 @@ namespace sym {
 
         constexpr auto resolve() const -> type;
 
-        template<typename div>
+        template<typename div, std::size_t ID>
         requires(impl::IsDiv<div>::val) friend constexpr auto gradient(const div &x,
-                                                                       const Variable<typename div::type> &d);
+                                                                       const Variable<typename div::type, ID> &d);
 
         template<typename div>
         requires(impl::IsDiv<div>::val) friend auto toString(const div &x) -> std::string;
-
-        static constexpr auto isConstant() -> bool;
 
       private:
         Lhs lhs;
@@ -58,8 +56,8 @@ namespace sym {
         return lhs.resolve() / rhs.resolve();
     }
 
-    template<typename div>
-    requires(impl::IsDiv<div>::val) constexpr auto gradient(const div &x, const Variable<typename div::type> &d) {
+    template<typename div, std::size_t ID>
+    requires(impl::IsDiv<div>::val) constexpr auto gradient(const div &x, const Variable<typename div::type, ID> &d) {
         auto neg = Constant<typename div::type>{-1};
         return Div{Add{Mul{gradient(x.lhs, d), x.rhs}, Mul{Mul{x.lhs, gradient(x.rhs, d)}, neg}}, Mul{x.rhs, x.rhs}};
     }
@@ -67,11 +65,6 @@ namespace sym {
     template<typename div>
     requires(impl::IsDiv<div>::val) auto toString(const div &x) -> std::string {
         return "(" + x.lhs.toString() + "/" + x.rhs.toString() + ")";
-    }
-
-    template<Expression Lhs, Expression Rhs>
-    constexpr auto Div<Lhs, Rhs>::isConstant() -> bool {
-        return Lhs::isConstant() and Rhs::isConstant();
     }
 } // namespace sym
 

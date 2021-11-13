@@ -18,19 +18,20 @@ endif ()
 
 set(SOURCES
         ${CMAKE_SOURCE_DIR}/Source/Integration/Euler.hpp
-        ${CMAKE_SOURCE_DIR}/Source/Symbolic/Functions/Cos.hpp
-        ${CMAKE_SOURCE_DIR}/Source/Symbolic/Functions/Functions.hpp
-        ${CMAKE_SOURCE_DIR}/Source/Symbolic/Functions/Sin.hpp
-        ${CMAKE_SOURCE_DIR}/Source/Symbolic/Functions/Tan.hpp
-        ${CMAKE_SOURCE_DIR}/Source/Symbolic/Add.hpp
         ${CMAKE_SOURCE_DIR}/Source/Symbolic/Constant.hpp
-        ${CMAKE_SOURCE_DIR}/Source/Symbolic/Div.hpp
         ${CMAKE_SOURCE_DIR}/Source/Symbolic/Expression.hpp
-        ${CMAKE_SOURCE_DIR}/Source/Symbolic/Mul.hpp
+        ${CMAKE_SOURCE_DIR}/Source/Symbolic/Operations/Add.hpp
+        ${CMAKE_SOURCE_DIR}/Source/Symbolic/Operations/Div.hpp
+        ${CMAKE_SOURCE_DIR}/Source/Symbolic/Operations/Functions/Cos.hpp
+        ${CMAKE_SOURCE_DIR}/Source/Symbolic/Operations/Functions/Functions.hpp
+        ${CMAKE_SOURCE_DIR}/Source/Symbolic/Operations/Functions/Sin.hpp
+        ${CMAKE_SOURCE_DIR}/Source/Symbolic/Operations/Functions/Tan.hpp
+        ${CMAKE_SOURCE_DIR}/Source/Symbolic/Operations/Mul.hpp
+        ${CMAKE_SOURCE_DIR}/Source/Symbolic/Operations/Sub.hpp
         ${CMAKE_SOURCE_DIR}/Source/Symbolic/Operators.hpp
-        ${CMAKE_SOURCE_DIR}/Source/Symbolic/Sub.hpp
         ${CMAKE_SOURCE_DIR}/Source/Symbolic/Sum.hpp
-        ${CMAKE_SOURCE_DIR}/Source/Symbolic/Variable.hpp)
+        ${CMAKE_SOURCE_DIR}/Source/Symbolic/Variable.hpp
+        )
 
 set(LIBS)
 

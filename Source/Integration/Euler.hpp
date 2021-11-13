@@ -7,8 +7,8 @@
 #ifndef GRADIENTOPTIMIZATION_EULER_HPP
 #define GRADIENTOPTIMIZATION_EULER_HPP
 
-#include "../Symbolic/Add.hpp"
 #include "../Symbolic/Expression.hpp"
+#include "../Symbolic/Operations/Add.hpp"
 #include "../Symbolic/Operators.hpp"
 #include "../Symbolic/Variable.hpp"
 
