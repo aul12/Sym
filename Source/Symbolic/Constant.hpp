@@ -29,7 +29,7 @@ namespace sym {
         friend auto toString(const Constant<T_> &x) -> std::string;
 
       private:
-        T val;
+        const T val;
     };
 
     template<typename T>

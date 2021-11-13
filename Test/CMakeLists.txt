@@ -16,6 +16,7 @@ if (GTest_FOUND)
             Symbolic/Operators.cpp
             Symbolic/Sum.cpp
             Symbolic/Variable.cpp
+            Symbolic/Vector.cpp
             )
 
     add_executable(${PROJECT_NAME} main.cpp ${TEST_SOURCES})

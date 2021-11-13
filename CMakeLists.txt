@@ -30,6 +30,7 @@ set(SOURCES
         ${CMAKE_SOURCE_DIR}/Source/Symbolic/Operators.hpp
         ${CMAKE_SOURCE_DIR}/Source/Symbolic/Sum.hpp
         ${CMAKE_SOURCE_DIR}/Source/Symbolic/Variable.hpp
+        ${CMAKE_SOURCE_DIR}/Source/Symbolic/Vector.hpp
         )
 
 set(LIBS)
