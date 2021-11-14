@@ -20,7 +20,7 @@ TEST(Add, GradA) {
     sym::Variable<'a'> a;
     sym::Variable<'b'> b;
     sym::Add<decltype(a), decltype(b)> add{a, b};
-    EXPECT_EQ(sym::gradient(a, a).resolve(a=17, b=42), 1);
+    EXPECT_EQ(sym::gradient(add, a).resolve(a=17, b=42), 1);
 }
 
 TEST(Add, GradB) {

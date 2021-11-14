@@ -69,7 +69,7 @@ namespace sym {
 
     template<std::size_t ID0, std::size_t ID1>
     constexpr auto gradient(const Variable<ID0> & /*x*/, const Variable<ID1> & /*d*/) {
-        return Constant(ID0 == ID1 ? 1 : 0);
+        return Constant<int>(ID0 == ID1 ? 1 : 0);
     }
 
     template<std::size_t ID>

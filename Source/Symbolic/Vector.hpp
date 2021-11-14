@@ -19,7 +19,8 @@ namespace sym {
     auto mapTupleImpl(const std::tuple<Ts...> &tuple, F f) {
         if constexpr (index < sizeof...(Ts)) {
             auto &elem = std::get<index>(tuple);
-            return std::tuple_cat(std::tuple(f(elem)), mapTupleImpl<index + 1>(tuple, f));
+            return std::apply([&elem, &f](auto &&...args) { return std::make_tuple(f(elem), args...); },
+                              mapTupleImpl<index + 1>(tuple, f));
         } else {
             return std::tuple<>{};
         }
@@ -30,6 +31,26 @@ namespace sym {
         return mapTupleImpl<0>(tuple, f);
     }
 
+    template<std::size_t index, typename T>
+    auto flattenTupleImpl(const T &t) {
+        return std::make_tuple(t);
+    }
+
+    template<std::size_t index, typename... Ts>
+    auto flattenTupleImpl(const std::tuple<Ts...> &tuple) {
+        if constexpr (index < sizeof...(Ts)) {
+            auto elem = std::get<index>(tuple);
+            return std::tuple_cat(flattenTupleImpl<0>(elem), flattenTupleImpl<index + 1>(tuple));
+        } else {
+            return std::tuple<>{};
+        }
+    }
+
+    template<typename... Ts>
+    auto flattenTuple(const std::tuple<Ts...> &tuple) {
+        return flattenTupleImpl<0>(tuple);
+    }
+
     template<Expression... Expressions>
     class Vector {
       public:
@@ -38,18 +59,69 @@ namespace sym {
 
         template<typename... Bindings>
         auto resolve(Bindings... bindings) {
-            return mapTuple(expressions,
-                            [bindings...](Expression auto expression) { return expression.resolve(bindings...); });
+            return mapTuple(expressions, [bindings...](Expression auto expression) {
+                auto innerResult = expression.resolve(bindings...);
+                return innerResult;
+            });
         }
 
         template<typename T, typename... Bindings>
         auto resolveAs(Bindings... bindings) -> T {
-            return std::apply([](auto... args) { return T{args...}; }, resolve(bindings...));
+            auto resolved = resolve(bindings...);
+            auto flattened = flattenTuple(resolved);
+            return std::apply([](auto... args) { return T{args...}; }, flattened);
         }
 
+        template<Expression... Expressions_>
+        friend auto toString(const Vector<Expressions_...> &vec) -> std::string;
+
+        template<std::size_t ID, Expression... Expressions_>
+        friend auto gradient(const Vector<Expressions_...> &vec, const sym::Variable<ID> &d);
+
+        template<Expression Expr, std::size_t... IDs>
+        friend auto gradient(const Expr &expr, const Vector<Variable<IDs>...> &ds);
+
       private:
+        explicit Vector(const std::tuple<Expressions...> &expressions) : expressions{expressions} {
+        }
+
         std::tuple<Expressions...> expressions;
     };
+
+    template<typename T>
+    struct IsVector {
+        static constexpr auto val = false;
+    };
+
+    template<Expression... Expressions>
+    struct IsVector<Vector<Expressions...>> {
+        static constexpr auto val = true;
+    };
+
+    template<Expression Expr, std::size_t... IDs>
+    auto gradient(const Expr &expr, const Vector<Variable<IDs>...> &ds) {
+        if constexpr (IsVector<Expr>::val) {
+            return Vector{mapTuple(expr.expressions, [&ds](auto &&expr) { return gradient(expr, ds); })};
+        } else {
+            return Vector{mapTuple(ds.expressions, [&expr](auto &&d) { return gradient(expr, d); })};
+        }
+    }
+
+
+    template<Expression... Expressions_>
+    auto toString(const Vector<Expressions_...> &vec) -> std::string {
+        auto strings = mapTuple(vec.expressions, [](Expression auto expression) { return toString(expression); });
+        std::string result = "[";
+        std::apply([&result](auto &&...strings) { ((result += strings + ","), ...); }, strings);
+        result[result.size() - 1] = ']';
+        return result;
+    }
+
+    template<std::size_t ID, Expression... Expressions_>
+    auto gradient(const Vector<Expressions_...> &vec, const sym::Variable<ID> &d) {
+        auto grads = mapTuple(vec.expressions, [&d](Expression auto expression) { return gradient(expression, d); });
+        return Vector{grads};
+    }
 } // namespace sym
 
 #endif // SYM_VECTOR_HPP
