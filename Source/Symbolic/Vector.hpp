@@ -86,23 +86,9 @@ namespace sym {
         std::tuple<Expressions...> expressions;
     };
 
-    template<typename T>
-    struct IsVector {
-        static constexpr auto val = false;
-    };
-
-    template<Expression... Expressions>
-    struct IsVector<Vector<Expressions...>> {
-        static constexpr auto val = true;
-    };
-
     template<Expression Expr, std::size_t... IDs>
     constexpr auto gradient(const Expr &expr, const Vector<Variable<IDs>...> &ds) {
-        if constexpr (IsVector<Expr>::val) {
-            return Vector{mapTuple(expr.expressions, [&ds](auto &&expr) { return gradient(expr, ds); })};
-        } else {
-            return Vector{mapTuple(ds.expressions, [&expr](auto &&d) { return gradient(expr, d); })};
-        }
+        return Vector{mapTuple(ds.expressions, [&expr](auto &&d) { return gradient(expr, d); })};
     }
 
 

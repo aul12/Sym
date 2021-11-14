@@ -19,9 +19,11 @@ if (GTest_FOUND)
             Symbolic/Vector.cpp
             )
 
+    find_package (Eigen3 3.3 REQUIRED NO_MODULE)
+
     add_executable(${PROJECT_NAME} main.cpp ${TEST_SOURCES})
 
-    target_link_libraries(${PROJECT_NAME} Sym++ gmock gtest pthread)
+    target_link_libraries(${PROJECT_NAME} Sym++ gmock gtest pthread Eigen3::Eigen)
 
     add_test(
             NAME ${PROJECT_NAME}

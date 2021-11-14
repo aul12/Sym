@@ -1,5 +1,6 @@
 #include "Symbolic/Vector.hpp"
 
+#include <Eigen/Dense>
 #include <Symbolic/Operators.hpp>
 #include <Symbolic/Variable.hpp>
 #include <gtest/gtest.h>
@@ -43,19 +44,20 @@ TEST(Vector, Gradients) {
     auto grad = sym::gradient(f, sym::Vector{a, b});
     auto res = grad.resolve(a = 17, b = 42);
     EXPECT_EQ(std::get<0>(std::get<0>(res)), 42);
-    EXPECT_EQ(std::get<0>(std::get<1>(res)), 1);
-    EXPECT_EQ(std::get<1>(std::get<0>(res)), 17);
+    EXPECT_EQ(std::get<1>(std::get<0>(res)), 1);
+    EXPECT_EQ(std::get<0>(std::get<1>(res)), 17);
     EXPECT_EQ(std::get<1>(std::get<1>(res)), 1);
 }
 
-TEST(Vector, GradientsResolveAs) {
+TEST(Vector, GradientsResolveAsEigen) {
     sym::Variable<'a'> a;
     sym::Variable<'b'> b;
     sym::Vector f{a * b, a + b};
     auto grad = sym::gradient(f, sym::Vector{a, b});
-    auto res = grad.resolveAs<std::vector<int>>(a = 17, b = 42);
-    EXPECT_EQ(res[0], 42);
-    EXPECT_EQ(res[1], 17);
-    EXPECT_EQ(res[2], 1);
-    EXPECT_EQ(res[3], 1);
+    auto vec = grad.resolveAs<Eigen::Matrix<int, 4, 1>>(a = 17, b = 42);
+    Eigen::Map<Eigen::Matrix<int, 2, 2>> res(vec.data(), 2, 2);
+    EXPECT_EQ(res(0, 0), 42);
+    EXPECT_EQ(res(0, 1), 17);
+    EXPECT_EQ(res(1, 0), 1);
+    EXPECT_EQ(res(1, 1), 1);
 }
