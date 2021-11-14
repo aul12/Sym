@@ -17,7 +17,8 @@ else ()
 endif ()
 
 set(SOURCES
-        ${CMAKE_SOURCE_DIR}/Source/Symbolic/Constant.hpp
+        ${CMAKE_SOURCE_DIR}/Source/Symbolic/RuntimeConstant.hpp
+        ${CMAKE_SOURCE_DIR}/Source/Symbolic/CompiletimeConstant.hpp
         ${CMAKE_SOURCE_DIR}/Source/Symbolic/Expression.hpp
         ${CMAKE_SOURCE_DIR}/Source/Symbolic/Operations/Add.hpp
         ${CMAKE_SOURCE_DIR}/Source/Symbolic/Operations/Div.hpp

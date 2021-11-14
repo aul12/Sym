@@ -13,7 +13,8 @@ TEST(Variable, Resolve) {
 
 TEST(Variable, GradEqual) {
     sym::Variable<'a'> a;
-    EXPECT_EQ(sym::gradient(a, a).resolve(), 1);
+    auto grad = sym::gradient(a, a);
+    EXPECT_EQ(grad.resolve(), 1);
 }
 
 TEST(Variable, GradNEqual) {

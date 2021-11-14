@@ -7,7 +7,7 @@
 #ifndef SYM_DIV_HPP
 #define SYM_DIV_HPP
 
-#include "../Constant.hpp"
+#include "../RuntimeConstant.hpp"
 #include "Add.hpp"
 #include "Mul.hpp"
 
@@ -43,7 +43,7 @@ namespace sym {
 
     template<Expression Lhs_, Expression Rhs_, std::size_t ID>
     constexpr auto gradient(const Div<Lhs_, Rhs_> &x, const Variable<ID> &d) {
-        auto neg = Constant{-1};
+        auto neg = RuntimeConstant{-1};
         return Div{Add{Mul{gradient(x.lhs, d), x.rhs}, Mul{Mul{x.lhs, gradient(x.rhs, d)}, neg}}, Mul{x.rhs, x.rhs}};
     }
 

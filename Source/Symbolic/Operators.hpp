@@ -36,44 +36,44 @@ namespace sym {
 
     // T op Expr
     template<typename Lhs, Expression Rhs>
-    constexpr auto operator+(Lhs lhs, Rhs rhs) -> Add<Constant<Lhs>, Rhs> {
-        return Add<Constant<Lhs>, Rhs>{Constant<Lhs>{lhs}, rhs};
+    constexpr auto operator+(Lhs lhs, Rhs rhs) -> Add<RuntimeConstant<Lhs>, Rhs> {
+        return Add<RuntimeConstant<Lhs>, Rhs>{RuntimeConstant<Lhs>{lhs}, rhs};
     }
 
     template<typename Lhs, Expression Rhs>
-    constexpr auto operator*(Lhs lhs, Rhs rhs) -> Mul<Constant<Lhs>, Rhs> {
-        return Mul<Constant<Lhs>, Rhs>{Constant<Lhs>{lhs}, rhs};
+    constexpr auto operator*(Lhs lhs, Rhs rhs) -> Mul<RuntimeConstant<Lhs>, Rhs> {
+        return Mul<RuntimeConstant<Lhs>, Rhs>{RuntimeConstant<Lhs>{lhs}, rhs};
     }
 
     template<typename Lhs, Expression Rhs>
-    constexpr auto operator/(Lhs lhs, Rhs rhs) -> Div<Constant<Lhs>, Rhs> {
-        return Div<Constant<Lhs>, Rhs>{Constant<Lhs>{lhs}, rhs};
+    constexpr auto operator/(Lhs lhs, Rhs rhs) -> Div<RuntimeConstant<Lhs>, Rhs> {
+        return Div<RuntimeConstant<Lhs>, Rhs>{RuntimeConstant<Lhs>{lhs}, rhs};
     }
 
     template<typename Lhs, Expression Rhs>
-    constexpr auto operator-(Lhs lhs, Rhs rhs) -> Sub<Constant<Lhs>, Rhs> {
-        return Sub<Constant<Lhs>, Rhs>{Constant<Lhs>{lhs}, rhs};
+    constexpr auto operator-(Lhs lhs, Rhs rhs) -> Sub<RuntimeConstant<Lhs>, Rhs> {
+        return Sub<RuntimeConstant<Lhs>, Rhs>{RuntimeConstant<Lhs>{lhs}, rhs};
     }
 
     // Expr op T
     template<Expression Lhs, typename Rhs>
-    constexpr auto operator+(Lhs lhs, Rhs rhs) -> Add<Lhs, Constant<Rhs>> {
-        return Add<Lhs, Constant<Rhs>>{lhs, Constant<Rhs>{rhs}};
+    constexpr auto operator+(Lhs lhs, Rhs rhs) -> Add<Lhs, RuntimeConstant<Rhs>> {
+        return Add<Lhs, RuntimeConstant<Rhs>>{lhs, RuntimeConstant<Rhs>{rhs}};
     }
 
     template<Expression Lhs, typename Rhs>
-    constexpr auto operator*(Lhs lhs, Rhs rhs) -> Mul<Lhs, Constant<Rhs>> {
-        return Mul<Lhs, Constant<Rhs>>{lhs, Constant<Rhs>{rhs}};
+    constexpr auto operator*(Lhs lhs, Rhs rhs) -> Mul<Lhs, RuntimeConstant<Rhs>> {
+        return Mul<Lhs, RuntimeConstant<Rhs>>{lhs, RuntimeConstant<Rhs>{rhs}};
     }
 
     template<Expression Lhs, typename Rhs>
-    constexpr auto operator/(Lhs lhs, Rhs rhs) -> Div<Lhs, Constant<Rhs>> {
-        return Div<Lhs, Constant<Rhs>>{lhs, Constant<Rhs>{rhs}};
+    constexpr auto operator/(Lhs lhs, Rhs rhs) -> Div<Lhs, RuntimeConstant<Rhs>> {
+        return Div<Lhs, RuntimeConstant<Rhs>>{lhs, RuntimeConstant<Rhs>{rhs}};
     }
 
     template<Expression Lhs, typename Rhs>
-    constexpr auto operator-(Lhs lhs, Rhs rhs) -> Sub<Lhs, Constant<Rhs>> {
-        return Sub<Lhs, Constant<Rhs>>{lhs, Constant<Rhs>{rhs}};
+    constexpr auto operator-(Lhs lhs, Rhs rhs) -> Sub<Lhs, RuntimeConstant<Rhs>> {
+        return Sub<Lhs, RuntimeConstant<Rhs>>{lhs, RuntimeConstant<Rhs>{rhs}};
     }
 } // namespace sym
 

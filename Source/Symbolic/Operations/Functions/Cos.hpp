@@ -9,7 +9,7 @@
 
 #include <cmath>
 
-#include "../../Constant.hpp"
+#include "../../CompiletimeConstant.hpp"
 #include "../../Expression.hpp"
 #include "../../Variable.hpp"
 #include "Sin.hpp"
@@ -49,7 +49,7 @@ namespace sym {
 
     template<Expression Expr_, std::size_t ID>
     constexpr auto gradient(const Cos<Expr_> &x, const Variable<ID> &d) {
-        return Mul{Mul{Constant{-1}, Sin{x.expr}}, gradient(x.expr, d)};
+        return Mul{Mul{CompiletimeConstant<int, -1>{}, Sin{x.expr}}, gradient(x.expr, d)};
     }
 
     template<Expression Expr_>

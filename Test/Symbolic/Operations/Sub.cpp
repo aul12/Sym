@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-#include "Symbolic/Constant.hpp"
+#include "Symbolic/RuntimeConstant.hpp"
 
 TEST(Sub, Expression) {
     using Const = sym::Constant<int>;

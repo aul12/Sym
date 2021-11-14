@@ -17,7 +17,7 @@ namespace sym {
         if constexpr (max < min) {
             return make_sum<max, min>(f) * (-1);
         } else if constexpr (min == max) {
-            return Constant{0};
+            return CompiletimeConstant<int, 0>{};
         } else {
             return f(min) + make_sum<min + 1, max>(f);
         }

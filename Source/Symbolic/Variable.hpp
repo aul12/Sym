@@ -9,12 +9,12 @@
 
 #include <memory>
 
-#include "Constant.hpp"
 #include "Expression.hpp"
+#include "CompiletimeConstant.hpp"
 
 namespace sym {
-    template<typename T>
-    class Constant;
+    template<typename T, T val>
+    class CompiletimeConstant;
 
     template<std::size_t ID>
     class Variable;
@@ -69,7 +69,7 @@ namespace sym {
 
     template<std::size_t ID0, std::size_t ID1>
     constexpr auto gradient(const Variable<ID0> & /*x*/, const Variable<ID1> & /*d*/) {
-        return Constant<int>(ID0 == ID1 ? 1 : 0);
+        return CompiletimeConstant<int, ID0 == ID1 ? 1 : 0>{};
     }
 
     template<std::size_t ID>

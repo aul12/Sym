@@ -3,15 +3,15 @@
 #include <cmath>
 #include <gtest/gtest.h>
 
-#include "Symbolic/Constant.hpp"
+#include "Symbolic/RuntimeConstant.hpp"
 
 TEST(Tan, Expression) {
-    using Const = sym::Constant<int>;
+    using Const = sym::RuntimeConstant<int>;
     EXPECT_TRUE((sym::IsExpression<sym::Tan<Const>>::val));
 }
 
 TEST(Tan, Resolve) {
-    sym::Constant<double> a{17};
+    sym::RuntimeConstant<double> a{17};
     sym::Tan<decltype(a)> tan{a};
     EXPECT_DOUBLE_EQ(tan.resolve(), std::tan(17));
 }

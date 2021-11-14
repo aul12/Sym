@@ -3,15 +3,15 @@
 #include <cmath>
 #include <gtest/gtest.h>
 
-#include "Symbolic/Constant.hpp"
+#include "Symbolic/RuntimeConstant.hpp"
 
 TEST(Cos, Expression) {
-    using Const = sym::Constant<int>;
+    using Const = sym::RuntimeConstant<int>;
     EXPECT_TRUE((sym::IsExpression<sym::Cos<Const>>::val));
 }
 
 TEST(Cos, Resolve) {
-    sym::Constant<double> a{17};
+    sym::RuntimeConstant<double> a{17};
     sym::Cos<decltype(a)> cos{a};
     EXPECT_DOUBLE_EQ(cos.resolve(), std::cos(17));
 }

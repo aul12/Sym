@@ -4,9 +4,10 @@
  * @date 25.08.20
  * Description here TODO
  */
-#ifndef SYM_CONSTANT_HPP
-#define SYM_CONSTANT_HPP
+#ifndef SYM_RUNTIMECONSTANT_HPP
+#define SYM_RUNTIMECONSTANT_HPP
 
+#include "CompiletimeConstant.hpp"
 #include "Expression.hpp"
 #include "Variable.hpp"
 
@@ -15,42 +16,42 @@ namespace sym {
     class Variable;
 
     template<typename T>
-    class Constant {
+    class RuntimeConstant {
       public:
-        explicit constexpr Constant(T val);
+        explicit constexpr RuntimeConstant(T val);
 
         template<typename... Bindings>
         constexpr auto resolve(Bindings...) const -> T;
 
         template<typename T_, std::size_t ID>
-        friend constexpr auto gradient(const Constant<T_> &, const Variable<ID> &);
+        friend constexpr auto gradient(const RuntimeConstant<T_> &, const Variable<ID> &);
 
         template<typename T_>
-        friend auto toString(const Constant<T_> &x) -> std::string;
+        friend auto toString(const RuntimeConstant<T_> &x) -> std::string;
 
       private:
         const T val;
     };
 
     template<typename T>
-    constexpr Constant<T>::Constant(T val) : val{val} {
+    constexpr RuntimeConstant<T>::RuntimeConstant(T val) : val{val} {
     }
 
     template<typename T>
     template<typename... Bindings>
-    constexpr auto Constant<T>::resolve(Bindings...) const -> T {
+    constexpr auto RuntimeConstant<T>::resolve(Bindings...) const -> T {
         return val;
     }
 
     template<typename T_, std::size_t ID>
-    constexpr auto gradient(const Constant<T_> &, const Variable<ID> &) {
-        return Constant<T_>{0};
+    constexpr auto gradient(const RuntimeConstant<T_> &, const Variable<ID> &) {
+        return CompiletimeConstant<T_, 0>{};
     }
 
     template<typename T_>
-    auto toString(const Constant<T_> &x) -> std::string {
+    auto toString(const RuntimeConstant<T_> &x) -> std::string {
         return std::to_string(x.val);
     }
 } // namespace sym
 
-#endif // SYM_CONSTANT_HPP
+#endif // SYM_RUNTIMECONSTANT_HPP

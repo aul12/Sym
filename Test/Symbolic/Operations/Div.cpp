@@ -2,16 +2,16 @@
 
 #include <gtest/gtest.h>
 
-#include "Symbolic/Constant.hpp"
+#include "Symbolic/RuntimeConstant.hpp"
 
 TEST(Div, Expression) {
-    using Const = sym::Constant<int>;
+    using Const = sym::RuntimeConstant<int>;
     EXPECT_TRUE((sym::IsExpression<sym::Div<Const, Const>>::val));
 }
 
 TEST(Div, Resolve) {
-    sym::Constant<int> a{42};
-    sym::Constant<int> b{2};
+    sym::RuntimeConstant<int> a{42};
+    sym::RuntimeConstant<int> b{2};
     sym::Div<decltype(a), decltype(b)> div{a, b};
     EXPECT_EQ(div.resolve(), 21);
 }
