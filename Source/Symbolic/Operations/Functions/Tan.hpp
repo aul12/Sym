@@ -18,10 +18,10 @@ namespace sym {
         explicit Tan(Expr expr);
 
         template<typename... Bindings>
-        auto resolve(Bindings... bindings) const;
+        constexpr auto resolve(Bindings... bindings) const;
 
         template<Expression Expr_, std::size_t ID>
-        friend auto gradient(const Tan<Expr_> &x, const Variable<ID> &d);
+        constexpr friend auto gradient(const Tan<Expr_> &x, const Variable<ID> &d);
 
         template<Expression Expr_>
         friend auto toString(const Tan<Expr_> &x) -> std::string;
@@ -36,12 +36,12 @@ namespace sym {
 
     template<Expression Expr>
     template<typename... Bindings>
-    auto Tan<Expr>::resolve(Bindings... bindings) const {
+    constexpr auto Tan<Expr>::resolve(Bindings... bindings) const {
         return std::tan(expr.resolve(bindings...));
     }
 
     template<Expression Expr_, std::size_t ID>
-    auto gradient(const Tan<Expr_> &x, const Variable<ID> &d) {
+    constexpr auto gradient(const Tan<Expr_> &x, const Variable<ID> &d) {
         return Div{gradient(x.expr, d), Mul{Cos{x}, Cos{x}}};
     }
 

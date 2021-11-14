@@ -13,13 +13,6 @@
 
 
 namespace sym {
-    namespace impl {
-        template<typename T>
-        struct IsAdd {
-            static constexpr auto val = false;
-        };
-    } // namespace impl
-
     template<Expression Lhs, Expression Rhs>
     class Add {
       public:
@@ -28,8 +21,8 @@ namespace sym {
         template<typename... Bindings>
         constexpr auto resolve(Bindings... bindings) const;
 
-        template<typename add, std::size_t ID>
-        requires(impl::IsAdd<add>::val) friend constexpr auto gradient(const add &x, const Variable<ID> &d);
+        template<Expression Lhs_, Expression Rhs_, std::size_t ID>
+        friend constexpr auto gradient(const Add<Lhs_, Rhs_> &x, const Variable<ID> &d);
 
         template<Expression Lhs_, Expression Rhs_>
         friend auto toString(const Add<Lhs_, Rhs_> &x) -> std::string;
@@ -38,13 +31,6 @@ namespace sym {
         Lhs lhs;
         Rhs rhs;
     };
-
-    namespace impl {
-        template<Expression lhs, Expression rhs>
-        struct IsAdd<Add<lhs, rhs>> {
-            static constexpr auto val = true;
-        };
-    } // namespace impl
 
     template<Expression Lhs, Expression Rhs>
     constexpr Add<Lhs, Rhs>::Add(Lhs lhs, Rhs rhs) : lhs{lhs}, rhs{rhs} {
@@ -56,8 +42,8 @@ namespace sym {
         return lhs.resolve(bindings...) + rhs.resolve(bindings...);
     }
 
-    template<typename add, std::size_t ID>
-    requires(impl::IsAdd<add>::val) constexpr auto gradient(const add &x, const Variable<ID> &d) {
+    template<Expression Lhs_, Expression Rhs_, std::size_t ID>
+    constexpr auto gradient(const Add<Lhs_, Rhs_> &x, const Variable<ID> &d) {
         using ldiff = decltype(gradient(x.lhs, d));
         using rdiff = decltype(gradient(x.rhs, d));
         using dtype = Add<ldiff, rdiff>;

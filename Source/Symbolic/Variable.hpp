@@ -21,13 +21,13 @@ namespace sym {
 
     template<typename T, std::size_t ID_>
     class Binding {
-        friend Variable<ID_>;
-
       public:
         static constexpr auto ID = ID_;
 
       private:
-        explicit Binding(T val) : val{val} {
+        friend Variable<ID_>;
+
+        constexpr explicit Binding(T val) : val{val} {
         }
         T val;
     };
@@ -55,7 +55,7 @@ namespace sym {
         constexpr auto resolve(Bindings... bindings) const;
 
         template<typename T>
-        [[nodiscard]] auto operator=(T val) -> Binding<T, ID> {
+        [[nodiscard]] auto operator=(T val) const -> Binding<T, ID> {
             return Binding<T, ID>{val};
         }
     };

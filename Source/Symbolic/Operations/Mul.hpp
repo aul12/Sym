@@ -11,13 +11,6 @@
 #include "Add.hpp"
 
 namespace sym {
-    namespace impl {
-        template<typename T>
-        struct IsMul {
-            static constexpr auto val = false;
-        };
-    } // namespace impl
-
     template<Expression Lhs, Expression Rhs>
     class Mul {
       public:
@@ -26,8 +19,8 @@ namespace sym {
         template<typename... Bindings>
         constexpr auto resolve(Bindings... bindings) const;
 
-        template<typename mul, std::size_t ID>
-        requires(impl::IsMul<mul>::val) friend auto constexpr gradient(const mul &x, const Variable<ID> &d);
+        template<Expression Lhs_, Expression Rhs_, std::size_t ID>
+        friend auto constexpr gradient(const Mul<Lhs_, Rhs_> &x, const Variable<ID> &d);
 
         template<Expression Lhs_, Expression Rhs_>
         friend auto toString(const Mul<Lhs_, Rhs_> &x) -> std::string;
@@ -36,13 +29,6 @@ namespace sym {
         Lhs lhs;
         Rhs rhs;
     };
-
-    namespace impl {
-        template<Expression lhs, Expression rhs>
-        struct IsMul<Mul<lhs, rhs>> {
-            static constexpr auto val = true;
-        };
-    } // namespace impl
 
     template<Expression Lhs, Expression Rhs>
     constexpr Mul<Lhs, Rhs>::Mul(Lhs lhs, Rhs rhs) : lhs{lhs}, rhs{rhs} {
@@ -54,8 +40,8 @@ namespace sym {
         return lhs.resolve(bindings...) * rhs.resolve(bindings...);
     }
 
-    template<typename mul, std::size_t ID>
-    requires(impl::IsMul<mul>::val) constexpr auto gradient(const mul &x, const Variable<ID> &d) {
+    template<Expression Lhs_, Expression Rhs_, std::size_t ID>
+    constexpr auto gradient(const Mul<Lhs_, Rhs_> &x, const Variable<ID> &d) {
         using lgrad = decltype(gradient(x.lhs, d));
         using rgrad = decltype(gradient(x.rhs, d));
         using lsum = Mul<lgrad, decltype(x.rhs)>;

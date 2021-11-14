@@ -13,10 +13,8 @@
 #include "Variable.hpp"
 
 namespace sym {
-
-
     template<std::size_t index, typename F, typename... Ts>
-    auto mapTupleImpl(const std::tuple<Ts...> &tuple, F f) {
+    constexpr auto mapTupleImpl(const std::tuple<Ts...> &tuple, F f) {
         if constexpr (index < sizeof...(Ts)) {
             auto &elem = std::get<index>(tuple);
             return std::apply([&elem, &f](auto &&...args) { return std::make_tuple(f(elem), args...); },
@@ -27,17 +25,17 @@ namespace sym {
     }
 
     template<typename F, typename... Ts>
-    auto mapTuple(const std::tuple<Ts...> &tuple, F f) {
+    constexpr auto mapTuple(const std::tuple<Ts...> &tuple, F f) {
         return mapTupleImpl<0>(tuple, f);
     }
 
     template<std::size_t index, typename T>
-    auto flattenTupleImpl(const T &t) {
+    constexpr auto flattenTupleImpl(const T &t) {
         return std::make_tuple(t);
     }
 
     template<std::size_t index, typename... Ts>
-    auto flattenTupleImpl(const std::tuple<Ts...> &tuple) {
+    constexpr auto flattenTupleImpl(const std::tuple<Ts...> &tuple) {
         if constexpr (index < sizeof...(Ts)) {
             auto elem = std::get<index>(tuple);
             return std::tuple_cat(flattenTupleImpl<0>(elem), flattenTupleImpl<index + 1>(tuple));
@@ -47,7 +45,7 @@ namespace sym {
     }
 
     template<typename... Ts>
-    auto flattenTuple(const std::tuple<Ts...> &tuple) {
+    constexpr auto flattenTuple(const std::tuple<Ts...> &tuple) {
         return flattenTupleImpl<0>(tuple);
     }
 
@@ -58,7 +56,7 @@ namespace sym {
         }
 
         template<typename... Bindings>
-        auto resolve(Bindings... bindings) {
+        constexpr auto resolve(Bindings... bindings) const {
             return mapTuple(expressions, [bindings...](Expression auto expression) {
                 auto innerResult = expression.resolve(bindings...);
                 return innerResult;
@@ -66,7 +64,7 @@ namespace sym {
         }
 
         template<typename T, typename... Bindings>
-        auto resolveAs(Bindings... bindings) -> T {
+        constexpr auto resolveAs(Bindings... bindings) const -> T {
             auto resolved = resolve(bindings...);
             auto flattened = flattenTuple(resolved);
             return std::apply([](auto... args) { return T{args...}; }, flattened);
@@ -76,10 +74,10 @@ namespace sym {
         friend auto toString(const Vector<Expressions_...> &vec) -> std::string;
 
         template<std::size_t ID, Expression... Expressions_>
-        friend auto gradient(const Vector<Expressions_...> &vec, const sym::Variable<ID> &d);
+        constexpr friend auto gradient(const Vector<Expressions_...> &vec, const sym::Variable<ID> &d);
 
         template<Expression Expr, std::size_t... IDs>
-        friend auto gradient(const Expr &expr, const Vector<Variable<IDs>...> &ds);
+        constexpr friend auto gradient(const Expr &expr, const Vector<Variable<IDs>...> &ds);
 
       private:
         explicit Vector(const std::tuple<Expressions...> &expressions) : expressions{expressions} {
@@ -99,7 +97,7 @@ namespace sym {
     };
 
     template<Expression Expr, std::size_t... IDs>
-    auto gradient(const Expr &expr, const Vector<Variable<IDs>...> &ds) {
+    constexpr auto gradient(const Expr &expr, const Vector<Variable<IDs>...> &ds) {
         if constexpr (IsVector<Expr>::val) {
             return Vector{mapTuple(expr.expressions, [&ds](auto &&expr) { return gradient(expr, ds); })};
         } else {
@@ -118,7 +116,7 @@ namespace sym {
     }
 
     template<std::size_t ID, Expression... Expressions_>
-    auto gradient(const Vector<Expressions_...> &vec, const sym::Variable<ID> &d) {
+    constexpr auto gradient(const Vector<Expressions_...> &vec, const sym::Variable<ID> &d) {
         auto grads = mapTuple(vec.expressions, [&d](Expression auto expression) { return gradient(expression, d); });
         return Vector{grads};
     }
