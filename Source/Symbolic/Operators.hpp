@@ -75,6 +75,12 @@ namespace sym {
     constexpr auto operator-(Lhs lhs, Rhs rhs) -> Sub<Lhs, RuntimeConstant<Rhs>> {
         return Sub<Lhs, RuntimeConstant<Rhs>>{lhs, RuntimeConstant<Rhs>{rhs}};
     }
+
+    // Unary
+    template<Expression Expr>
+    constexpr auto operator-(Expr expr) {
+        return CompiletimeConstant<int, -1>{} * expr;
+    }
 } // namespace sym
 
 #endif // SYM_OPERATORS_HPP
