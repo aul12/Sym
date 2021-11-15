@@ -14,17 +14,17 @@
 namespace std { // NOLINT everything is fine specialization for custom types is allowed.
     template<sym::Expression Expr>
     auto sin(Expr expr) {
-        return grad::sym::Sin<Expr>{expr};
+        return sym::Sin<Expr>{expr};
     }
 
     template<sym::Expression Expr>
     auto cos(Expr expr) {
-        return grad::sym::Cos<Expr>{expr};
+        return sym::Cos<Expr>{expr};
     }
 
     template<sym::Expression Expr>
     auto tan(Expr expr) {
-        return grad::sym::Tan<Expr>{expr};
+        return sym::Tan<Expr>{expr};
     }
 } // namespace std
 
