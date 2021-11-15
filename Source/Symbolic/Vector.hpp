@@ -70,6 +70,11 @@ namespace sym {
             return std::apply([](auto... args) { return T{args...}; }, flattened);
         }
 
+        template<typename T, typename... Bindings>
+        constexpr void resolveTo(T &t, Bindings... bindings) const {
+            t = resolveAs<T>(bindings...);
+        }
+
         template<Expression... Expressions_>
         friend auto toString(const Vector<Expressions_...> &vec) -> std::string;
 
