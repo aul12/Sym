@@ -45,7 +45,7 @@ namespace sym {
 
     template<typename T_, std::size_t ID>
     constexpr auto gradient(const RuntimeConstant<T_> &, const Variable<ID> &) {
-        return CompiletimeConstant<T_, 0>{};
+        return CompiletimeConstant<int, 0>{};
     }
 
     template<typename T_>
