@@ -67,7 +67,10 @@ namespace sym {
         constexpr auto resolveAs(Bindings... bindings) const -> T {
             auto resolved = resolve(bindings...);
             auto flattened = flattenTuple(resolved);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnarrowing"
             return std::apply([](auto... args) { return T{args...}; }, flattened);
+#pragma GCC diagnostic pop
         }
 
         template<typename T, typename... Bindings>
