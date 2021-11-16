@@ -11,6 +11,7 @@
 #include "Sin.hpp"
 #include "Tan.hpp"
 #include "Sqrt.hpp"
+#include "Exp.hpp"
 
 namespace std { // NOLINT everything is fine specialization for custom types is allowed.
     template<sym::Expression Expr>
@@ -31,6 +32,11 @@ namespace std { // NOLINT everything is fine specialization for custom types is 
     template<sym::Expression Expr>
     auto sqrt(Expr expr) {
         return sym::Sqrt<Expr>{expr};
+    }
+
+    template<sym::Expression Expr>
+    auto exp(Expr expr) {
+        return sym::Exp<Expr>{expr};
     }
 } // namespace std
 
