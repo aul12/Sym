@@ -17,7 +17,6 @@ else ()
 endif ()
 
 set(SOURCES
-        Source/Symbolic/RuntimeConstant.hpp
         Source/Symbolic/CompiletimeConstant.hpp
         Source/Symbolic/Expression.hpp
         Source/Symbolic/Operations/Add.hpp
@@ -29,7 +28,9 @@ set(SOURCES
         Source/Symbolic/Operations/Functions/Tan.hpp
         Source/Symbolic/Operations/Mul.hpp
         Source/Symbolic/Operations/Sub.hpp
+        Source/Symbolic/Operations/Ternary.hpp
         Source/Symbolic/Operators.hpp
+        Source/Symbolic/RuntimeConstant.hpp
         Source/Symbolic/Sum.hpp
         Source/Symbolic/Variable.hpp
         Source/Symbolic/Vector.hpp

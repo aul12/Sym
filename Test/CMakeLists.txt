@@ -6,7 +6,6 @@ if (GTest_FOUND)
     include_directories(${GTEST_INCLUDE_DIR})
 
     set(TEST_SOURCES
-            Symbolic/RuntimeConstant.cpp
             Symbolic/CompiletimeConstant.cpp
             Symbolic/Operations/Add.cpp
             Symbolic/Operations/Div.cpp
@@ -15,7 +14,9 @@ if (GTest_FOUND)
             Symbolic/Operations/Functions/Sqrt.cpp
             Symbolic/Operations/Functions/Tan.cpp
             Symbolic/Operations/Mul.cpp
+            Symbolic/Operations/Ternary.cpp
             Symbolic/Operators.cpp
+            Symbolic/RuntimeConstant.cpp
             Symbolic/Sum.cpp
             Symbolic/Variable.cpp
             Symbolic/Vector.cpp
