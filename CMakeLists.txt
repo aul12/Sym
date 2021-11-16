@@ -25,6 +25,7 @@ set(SOURCES
         Source/Symbolic/Operations/Functions/Cos.hpp
         Source/Symbolic/Operations/Functions/Functions.hpp
         Source/Symbolic/Operations/Functions/Sin.hpp
+        Source/Symbolic/Operations/Functions/Sqrt.hpp
         Source/Symbolic/Operations/Functions/Tan.hpp
         Source/Symbolic/Operations/Mul.hpp
         Source/Symbolic/Operations/Sub.hpp

@@ -12,6 +12,7 @@ if (GTest_FOUND)
             Symbolic/Operations/Div.cpp
             Symbolic/Operations/Functions/Cos.cpp
             Symbolic/Operations/Functions/Sin.cpp
+            Symbolic/Operations/Functions/Sqrt.cpp
             Symbolic/Operations/Functions/Tan.cpp
             Symbolic/Operations/Mul.cpp
             Symbolic/Operators.cpp
