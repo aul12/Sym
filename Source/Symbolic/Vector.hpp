@@ -114,6 +114,22 @@ namespace sym {
         auto grads = mapTuple(vec.expressions, [&d](Expression auto expression) { return gradient(expression, d); });
         return Vector{grads};
     }
+
+    template<std::size_t index, typename Container, std::size_t id, std::size_t... ids>
+    constexpr auto bindVectorFromContainerImpl(const Container &container) {
+        auto binding = std::make_tuple(sym::Variable<id>{} = container[index]);
+        if constexpr (sizeof...(ids) > 0) {
+            return std::tuple_cat(binding, bindVectorFromContainerImpl<index+1, Container, ids...>(container));
+        } else {
+            return binding;
+        }
+    }
+
+    template<typename Container, std::size_t... ids>
+    constexpr auto bindVectorFromContainer(const Vector<Variable<ids>...> &/*sym*/, const Container &container) {
+        return bindVectorFromContainerImpl<0, Container, ids...>(container);
+        }
+
 } // namespace sym
 
 #endif // SYM_VECTOR_HPP

@@ -61,3 +61,16 @@ TEST(Vector, GradientsResolveAsEigen) {
     EXPECT_EQ(res(1, 0), 1);
     EXPECT_EQ(res(1, 1), 1);
 }
+
+TEST(Vector, ResolveFromEigen) {
+    sym::Variable<'a'> a;
+    sym::Variable<'b'> b;
+    sym::Variable<'c'> c;
+    sym::Vector sym{a, b, c};
+    Eigen::Vector3d vec{17, 38, 42};
+    auto resolved = std::apply([=](auto &&...params) { return sym.resolve(params...); },
+                               sym::bindVectorFromContainer(sym, vec));
+    EXPECT_EQ(std::get<0>(resolved), vec[0]);
+    EXPECT_EQ(std::get<1>(resolved), vec[1]);
+    EXPECT_EQ(std::get<2>(resolved), vec[2]);
+}
