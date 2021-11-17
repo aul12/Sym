@@ -16,9 +16,8 @@ namespace sym {
     template<std::size_t index, typename F, typename... Ts>
     constexpr auto mapTupleImpl(const std::tuple<Ts...> &tuple, F f) {
         if constexpr (index < sizeof...(Ts)) {
-            auto &elem = std::get<index>(tuple);
-            return std::apply([&elem, &f](auto &&...args) { return std::make_tuple(f(elem), args...); },
-                              mapTupleImpl<index + 1>(tuple, f));
+            auto mapped = f(std::get<index>(tuple));
+            return std::tuple_cat(std::make_tuple(mapped), mapTupleImpl<index + 1>(tuple, f));
         } else {
             return std::tuple<>{};
         }
@@ -119,16 +118,16 @@ namespace sym {
     constexpr auto bindVectorFromContainerImpl(const Container &container) {
         auto binding = std::make_tuple(sym::Variable<id>{} = container[index]);
         if constexpr (sizeof...(ids) > 0) {
-            return std::tuple_cat(binding, bindVectorFromContainerImpl<index+1, Container, ids...>(container));
+            return std::tuple_cat(binding, bindVectorFromContainerImpl<index + 1, Container, ids...>(container));
         } else {
             return binding;
         }
     }
 
     template<typename Container, std::size_t... ids>
-    constexpr auto bindVectorFromContainer(const Vector<Variable<ids>...> &/*sym*/, const Container &container) {
+    constexpr auto bindVectorFromContainer(const Vector<Variable<ids>...> & /*sym*/, const Container &container) {
         return bindVectorFromContainerImpl<0, Container, ids...>(container);
-        }
+    }
 
 } // namespace sym
 

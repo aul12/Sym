@@ -9,8 +9,8 @@
 
 #include <memory>
 
-#include "Expression.hpp"
 #include "CompiletimeConstant.hpp"
+#include "Expression.hpp"
 
 namespace sym {
     template<typename T, T val>
@@ -32,9 +32,22 @@ namespace sym {
         T val;
     };
 
+    template<typename T>
+    struct IsTuple {
+        static constexpr auto val = false;
+    };
+
+    template<typename... Ts>
+    struct IsTuple<std::tuple<Ts...>> {
+        static constexpr auto val = true;
+    };
+
+
     template<std::size_t ID, typename FirstBinding, typename... Bindings>
-    static constexpr auto findBinding(const FirstBinding &firstBinding, Bindings... bindings) {
-        if constexpr (FirstBinding::ID == ID) {
+    constexpr auto findBinding(const FirstBinding &firstBinding, Bindings... bindings) {
+        if constexpr (IsTuple<FirstBinding>::val) {
+            return std::apply([&](auto &&...params) { return findBinding<ID>(params..., bindings...); }, firstBinding);
+        } else if constexpr (FirstBinding::ID == ID) {
             return firstBinding;
         } else {
             static_assert(sizeof...(Bindings) > 0, "ID not found");
@@ -69,7 +82,7 @@ namespace sym {
 
     template<std::size_t ID0, std::size_t ID1>
     constexpr auto gradient(const Variable<ID0> & /*x*/, const Variable<ID1> & /*d*/) {
-        return CompiletimeConstant<int, ID0 == ID1 ? 1 : 0>{};
+        return CompiletimeConstant < int, ID0 == ID1 ? 1 : 0 > {};
     }
 
     template<std::size_t ID>
