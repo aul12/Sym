@@ -14,7 +14,7 @@
 
 namespace sym {
     template<typename F, typename Tuple, std::size_t... indices>
-    constexpr auto mapTupleImpl(const Tuple &&tuple, F &&f, std::integer_sequence<std::size_t, indices...> /*seq*/) {
+    constexpr auto mapTupleImpl(Tuple &&tuple, F &&f, std::integer_sequence<std::size_t, indices...> /*seq*/) {
         return std::make_tuple(f(std::get<indices>(tuple))...);
     }
 

@@ -44,14 +44,15 @@ namespace sym {
 
 
     template<std::size_t ID, typename FirstBinding, typename... Bindings>
-    constexpr auto findBinding(const FirstBinding &firstBinding, Bindings... bindings) {
-        if constexpr (IsTuple<FirstBinding>::val) {
-            return std::apply([&](auto &&...params) { return findBinding<ID>(params..., bindings...); }, firstBinding);
-        } else if constexpr (FirstBinding::ID == ID) {
-            return firstBinding;
+    constexpr auto findBinding(FirstBinding &&firstBinding, Bindings &&...bindings) {
+        if constexpr (IsTuple<std::remove_cvref_t<FirstBinding>>::val) {
+            return std::apply([&bindings...](auto &&...params) { return findBinding<ID>(params..., bindings...); },
+                              firstBinding);
+        } else if constexpr (std::remove_cvref_t<FirstBinding>::ID == ID) {
+            return std::forward<FirstBinding>(firstBinding);
         } else {
             static_assert(sizeof...(Bindings) > 0, "ID not found");
-            return findBinding<ID, Bindings...>(bindings...);
+            return findBinding<ID, Bindings...>(std::forward<Bindings>(bindings)...);
         }
     }
 
@@ -65,7 +66,7 @@ namespace sym {
         friend auto toString(const Variable<ID_> &x) -> std::string;
 
         template<typename... Bindings>
-        constexpr auto resolve(Bindings... bindings) const;
+        constexpr auto resolve(Bindings &&...bindings) const;
 
         template<typename T>
         [[nodiscard]] auto operator=(T val) const -> Binding<T, ID> {
@@ -75,9 +76,9 @@ namespace sym {
 
     template<std::size_t ID>
     template<typename... Bindings>
-    constexpr auto Variable<ID>::resolve(Bindings... bindings) const {
+    constexpr auto Variable<ID>::resolve(Bindings &&...bindings) const {
         static_assert(sizeof...(Bindings) > 0, "No bindings specified!");
-        return findBinding<ID, Bindings...>(bindings...).val;
+        return findBinding<ID, Bindings...>(std::forward<Bindings>(bindings)...).val;
     }
 
     template<std::size_t ID0, std::size_t ID1>

@@ -18,7 +18,7 @@ namespace sym {
         }
 
         template<typename... Bindings>
-        constexpr auto resolve(Bindings... bindings) const {
+        constexpr auto resolve(const Bindings &...bindings) const {
             return cond.resolve(bindings...) ? trueVal.resolve(bindings...) : falseVal.resolve(bindings...);
         }
 

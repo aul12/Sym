@@ -18,7 +18,7 @@ namespace sym {
         constexpr Div(Lhs lhs, Rhs rhs);
 
         template<typename... Bindings>
-        constexpr auto resolve(Bindings... bindings) const;
+        constexpr auto resolve(const Bindings &...bindings) const;
 
         template<Expression Lhs_, Expression Rhs_, std::size_t ID>
         friend constexpr auto gradient(const Div<Lhs_, Rhs_> &x, const Variable<ID> &d);
@@ -37,7 +37,7 @@ namespace sym {
 
     template<Expression Lhs, Expression Rhs>
     template<typename... Bindings>
-    constexpr auto Div<Lhs, Rhs>::resolve(Bindings... bindings) const {
+    constexpr auto Div<Lhs, Rhs>::resolve(const Bindings &...bindings) const {
         return lhs.resolve(bindings...) / rhs.resolve(bindings...);
     }
 

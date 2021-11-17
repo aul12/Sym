@@ -20,7 +20,9 @@ namespace sym {
 
       public:
         template<typename... Bindings>
-        constexpr auto resolve(Bindings...) const -> T;
+        static constexpr auto resolve(Bindings...) -> T {
+            return val_;
+        }
 
         template<typename T_, T_ val0, std::size_t ID>
         friend constexpr auto gradient(const CompiletimeConstant<T_, val0> &, const Variable<ID> &);
@@ -28,12 +30,6 @@ namespace sym {
         template<typename T_, T_ val0>
         friend auto toString(const CompiletimeConstant<T_, val0> &x) -> std::string;
     };
-
-    template<typename T, T val>
-    template<typename... Bindings>
-    constexpr auto CompiletimeConstant<T, val>::resolve(Bindings...) const -> T {
-        return val;
-    }
 
     template<typename T_, T_ val0, std::size_t ID>
     constexpr auto gradient(const CompiletimeConstant<T_, val0> &, const Variable<ID> &) {

@@ -21,8 +21,8 @@ namespace sym {
         }
 
         template<typename... Bindings>
-        constexpr auto resolve(Bindings... bindings) const {
-            return std::sqrt(expr.resolve(bindings...));
+        constexpr auto resolve(Bindings &&...bindings) const {
+            return std::sqrt(expr.resolve(std::forward<Bindings>(bindings)...));
         }
 
         template<Expression Expr_, std::size_t ID>

@@ -24,7 +24,7 @@ namespace sym {
         explicit Sin(Expr expr);
 
         template<typename... Bindings>
-        constexpr auto resolve(Bindings... bindings) const;
+        constexpr auto resolve(Bindings &&...bindings) const;
 
         template<Expression Expr_, std::size_t ID>
         constexpr friend auto gradient(const Sin<Expr_> &x, const Variable<ID> &d);
@@ -42,8 +42,8 @@ namespace sym {
 
     template<Expression Expr>
     template<typename... Bindings>
-    constexpr auto Sin<Expr>::resolve(Bindings... bindings) const {
-        return std::sin(expr.resolve(bindings...));
+    constexpr auto Sin<Expr>::resolve(Bindings &&...bindings) const {
+        return std::sin(expr.resolve(std::forward<Bindings>(bindings)...));
     }
 
     template<Expression Expr_, std::size_t ID>
