@@ -44,6 +44,14 @@ namespace sym {
         return flattenTupleImpl<0>(tuple);
     }
 
+    template<std::size_t index, typename T, typename Tuple>
+    constexpr auto resolveToImpl(T &t, Tuple &&tuple) {
+        t[index] = std::get<index>(tuple);
+        if constexpr (index + 1 < std::tuple_size_v<Tuple>) {
+            resolveToImpl<index + 1>(t, std::forward<Tuple>(tuple));
+        }
+    }
+
     template<Expression... Expressions>
     class Vector {
       public:
@@ -51,26 +59,25 @@ namespace sym {
         }
 
         template<typename... Bindings>
-        constexpr auto resolve(Bindings... bindings) const {
-            return mapTuple(expressions, [bindings...](Expression auto expression) {
+        constexpr auto resolve(const Bindings &...bindings) const {
+            return mapTuple(expressions, [&bindings...](Expression auto expression) {
                 auto innerResult = expression.resolve(bindings...);
                 return innerResult;
             });
         }
 
         template<typename T, typename... Bindings>
-        constexpr auto resolveAs(Bindings... bindings) const -> T {
-            auto resolved = resolve(bindings...);
-            auto flattened = flattenTuple(resolved);
+        constexpr auto resolveAs(Bindings &&...bindings) const -> T {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wnarrowing"
-            return std::apply([](auto... args) { return T{args...}; }, flattened);
+            return std::apply([](auto... args) { return T{args...}; },
+                              flattenTuple(resolve(std::forward<Bindings>(bindings)...)));
 #pragma GCC diagnostic pop
         }
 
         template<typename T, typename... Bindings>
-        constexpr void resolveTo(T &t, Bindings... bindings) const {
-            t = resolveAs<T>(bindings...);
+        constexpr void resolveTo(T &t, Bindings &&...bindings) const {
+            resolveToImpl<0>(t, flattenTuple(resolve(std::forward<Bindings>(bindings)...)));
         }
 
         template<Expression... Expressions_>
