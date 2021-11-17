@@ -13,19 +13,15 @@
 #include "Variable.hpp"
 
 namespace sym {
-    template<std::size_t index, typename F, typename... Ts>
-    constexpr auto mapTupleImpl(const std::tuple<Ts...> &tuple, F f) {
-        if constexpr (index < sizeof...(Ts)) {
-            auto mapped = f(std::get<index>(tuple));
-            return std::tuple_cat(std::make_tuple(mapped), mapTupleImpl<index + 1>(tuple, f));
-        } else {
-            return std::tuple<>{};
-        }
+    template<typename F, typename Tuple, std::size_t... indices>
+    constexpr auto mapTupleImpl(const Tuple &&tuple, F &&f, std::integer_sequence<std::size_t, indices...> /*seq*/) {
+        return std::make_tuple(f(std::get<indices>(tuple))...);
     }
 
     template<typename F, typename... Ts>
-    constexpr auto mapTuple(const std::tuple<Ts...> &tuple, F f) {
-        return mapTupleImpl<0>(tuple, f);
+    constexpr auto mapTuple(const std::tuple<Ts...> &tuple, F &&f) {
+        using IndexSequence = std::make_index_sequence<sizeof...(Ts)>;
+        return mapTupleImpl<F>(tuple, std::forward<F>(f), IndexSequence{});
     }
 
     template<std::size_t index, typename T>
