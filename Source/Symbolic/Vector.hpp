@@ -118,18 +118,19 @@ namespace sym {
     }
 
     template<std::size_t index, typename Container, std::size_t id, std::size_t... ids>
-    constexpr auto bindVectorFromContainerImpl(const Container &container) {
+    constexpr auto bindVectorFromContainerImpl(Container &&container) {
         auto binding = std::make_tuple(sym::Variable<id>{} = container[index]);
         if constexpr (sizeof...(ids) > 0) {
-            return std::tuple_cat(binding, bindVectorFromContainerImpl<index + 1, Container, ids...>(container));
+            return std::tuple_cat(binding, bindVectorFromContainerImpl<index + 1, Container, ids...>(
+                                                   std::forward<Container>(container)));
         } else {
             return binding;
         }
     }
 
     template<typename Container, std::size_t... ids>
-    constexpr auto bindVectorFromContainer(const Vector<Variable<ids>...> & /*sym*/, const Container &container) {
-        return bindVectorFromContainerImpl<0, Container, ids...>(container);
+    constexpr auto bindVectorFromContainer(Vector<Variable<ids>...> /*sym*/, Container container) {
+        return bindVectorFromContainerImpl<0, Container, ids...>(std::forward<Container>(container));
     }
 
 } // namespace sym
