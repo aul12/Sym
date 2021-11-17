@@ -14,6 +14,7 @@ if (GTest_FOUND)
             Symbolic/Operations/Functions/Sin.cpp
             Symbolic/Operations/Functions/Sqrt.cpp
             Symbolic/Operations/Functions/Tan.cpp
+            Symbolic/Operations/Greater.cpp
             Symbolic/Operations/Mul.cpp
             Symbolic/Operations/Ternary.cpp
             Symbolic/Operators.cpp
