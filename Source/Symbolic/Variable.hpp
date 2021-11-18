@@ -32,29 +32,27 @@ namespace sym {
         T val;
     };
 
+    template<std::size_t index, std::size_t ID, typename T>
+    struct findBinding {
+        static constexpr std::size_t val = -1;
+    };
+
+    template<std::size_t index, std::size_t ID, typename FirstBinding, typename... Bindings>
+    struct findBinding<index, ID, std::tuple<FirstBinding, Bindings...>> {
+        static constexpr std::size_t val =
+                FirstBinding::ID == ID ? index : findBinding<index + 1, ID, std::tuple<Bindings...>>::val;
+    };
+
+
     template<typename T>
-    struct IsTuple {
-        static constexpr auto val = false;
+    struct WrapIfNotTuple {
+        using type = std::tuple<T>;
     };
 
     template<typename... Ts>
-    struct IsTuple<std::tuple<Ts...>> {
-        static constexpr auto val = true;
+    struct WrapIfNotTuple<std::tuple<Ts...>> {
+        using type = std::tuple<Ts...>;
     };
-
-
-    template<std::size_t ID, typename FirstBinding, typename... Bindings>
-    constexpr auto findBinding(FirstBinding &&firstBinding, Bindings &&...bindings) {
-        if constexpr (IsTuple<std::remove_cvref_t<FirstBinding>>::val) {
-            return std::apply([&bindings...](auto &&...params) { return findBinding<ID>(params..., bindings...); },
-                              firstBinding);
-        } else if constexpr (std::remove_cvref_t<FirstBinding>::ID == ID) {
-            return std::forward<FirstBinding>(firstBinding);
-        } else {
-            static_assert(sizeof...(Bindings) > 0, "ID not found");
-            return findBinding<ID, Bindings...>(std::forward<Bindings>(bindings)...);
-        }
-    }
 
     template<std::size_t ID>
     class Variable {
@@ -77,8 +75,10 @@ namespace sym {
     template<std::size_t ID>
     template<typename... Bindings>
     constexpr auto Variable<ID>::resolve(Bindings &&...bindings) const {
-        static_assert(sizeof...(Bindings) > 0, "No bindings specified!");
-        return findBinding<ID, Bindings...>(std::forward<Bindings>(bindings)...).val;
+        auto tuple = std::tuple_cat(typename WrapIfNotTuple<std::remove_cvref_t<Bindings>>::type{bindings}...);
+        constexpr auto index = findBinding<0, ID, decltype(tuple)>::val;
+        static_assert(index != -1, "No binding found!");
+        return std::get<index>(tuple).val;
     }
 
     template<std::size_t ID0, std::size_t ID1>
