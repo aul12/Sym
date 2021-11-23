@@ -43,16 +43,15 @@ namespace sym {
                 FirstBinding::ID == ID ? index : findBinding<index + 1, ID, std::tuple<Bindings...>>::val;
     };
 
-
     template<typename T>
-    struct WrapIfNotTuple {
-        using type = std::tuple<T>;
-    };
+    auto wrapInTuple(T &&t) {
+        return std::make_tuple(std::forward<T>(t));
+    }
 
     template<typename... Ts>
-    struct WrapIfNotTuple<std::tuple<Ts...>> {
-        using type = std::tuple<Ts...>;
-    };
+    auto wrapInTuple(const std::tuple<Ts...> &tuple) {
+        return tuple;
+    }
 
     template<std::size_t ID>
     class Variable {
@@ -66,6 +65,9 @@ namespace sym {
         template<typename... Bindings>
         constexpr auto resolve(Bindings &&...bindings) const;
 
+        template<typename... Bindings>
+        constexpr auto resolve(const std::tuple<Bindings...> &tuple) const;
+
         template<typename T>
         [[nodiscard]] auto operator=(T val) const -> Binding<T, ID> {
             return Binding<T, ID>{val};
@@ -75,8 +77,16 @@ namespace sym {
     template<std::size_t ID>
     template<typename... Bindings>
     constexpr auto Variable<ID>::resolve(Bindings &&...bindings) const {
-        auto tuple = std::tuple_cat(typename WrapIfNotTuple<std::remove_cvref_t<Bindings>>::type{bindings}...);
+        auto tuple = std::tuple_cat(wrapInTuple(std::forward<Bindings>(bindings))...);
         constexpr auto index = findBinding<0, ID, decltype(tuple)>::val;
+        static_assert(index != -1, "No binding found!");
+        return std::get<index>(tuple).val;
+    }
+
+    template<std::size_t ID>
+    template<typename... Bindings>
+    constexpr auto Variable<ID>::resolve(const std::tuple<Bindings...> &tuple) const {
+        constexpr auto index = findBinding<0, ID, std::tuple<Bindings...>>::val;
         static_assert(index != -1, "No binding found!");
         return std::get<index>(tuple).val;
     }
