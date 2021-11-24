@@ -7,7 +7,8 @@ if (GTest_FOUND)
 
         set(SOURCES
                 Symbolic/ComplexResolve.cpp
-                Symbolic/ManyVariables.cpp)
+                Symbolic/ManyVariables.cpp
+                Symbolic/GradientResolve.cpp)
 
         add_executable(${PROJECT_NAME} main.cpp ${SOURCES})
         target_link_libraries(${PROJECT_NAME} PRIVATE benchmark::benchmark pthread Sym++)

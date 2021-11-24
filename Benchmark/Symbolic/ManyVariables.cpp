@@ -2,7 +2,7 @@
 #include <Symbolic/Variable.hpp>
 #include <benchmark/benchmark.h>
 
-constexpr auto N = 100;
+constexpr auto N = 10;
 
 template<std::size_t... IDs>
 auto getVariableTuple(std::index_sequence<IDs...>) {

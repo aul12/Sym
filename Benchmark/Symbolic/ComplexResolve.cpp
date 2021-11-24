@@ -1,15 +1,16 @@
 #include <benchmark/benchmark.h>
 
-#include "Symbolic/Sum.hpp"
 #include "Symbolic/Operations/Functions/Functions.hpp"
+#include "Symbolic/Sum.hpp"
 
 constexpr auto N = 500;
 
 auto func = [](auto i, auto x, auto y, auto z) {
-    return (x * x - std::exp(x * y + z * y + x) * z / (y + 7)) / (x * x * z + i + 12) + std::sin(x * y) / std::tan(z + i);
+    return (x * x - (x * y + z * y + x) * z / (y + 7)) / (x * x * z + i + 12) +
+           (x * y) / (z + i);
 };
 
-void complexResolve(benchmark::State &state) {
+void complexResolveSym(benchmark::State &state) {
     sym::Variable<'x'> x;
     sym::Variable<'y'> y;
     sym::Variable<'z'> z;
@@ -25,7 +26,7 @@ void complexResolve(benchmark::State &state) {
     }
 }
 
-BENCHMARK(complexResolve)->Unit(benchmark::TimeUnit::kMicrosecond);
+BENCHMARK(complexResolveSym)->Unit(benchmark::TimeUnit::kMicrosecond);
 
 void complexResolveNative(benchmark::State &state) {
     for (auto _ : state) {
@@ -35,7 +36,7 @@ void complexResolveNative(benchmark::State &state) {
         double zVal = rand();
         state.ResumeTiming();
         double res = 0;
-        for (auto i=0; i<N; ++i) {
+        for (auto i = 0; i < N; ++i) {
             res += func(i, xVal, yVal, zVal);
         }
         benchmark::DoNotOptimize(res);
