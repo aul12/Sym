@@ -58,7 +58,7 @@ namespace sym {
         return "(" + toString(x.lhs) + "-" + toString(x.rhs) + ")";
     }
 
-    template<typename Lhs_, typename Rhs_>
+    template<Expression Lhs_, Expression Rhs_>
     constexpr auto getChildren(const Sub<Lhs_, Rhs_> &x) -> std::tuple<Lhs_, Rhs_> {
         return std::make_tuple(x.lhs, x.rhs);
     }

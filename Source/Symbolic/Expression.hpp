@@ -9,6 +9,7 @@
 
 #include <concepts>
 #include <string>
+#include <tuple>
 
 namespace sym {
     template<typename T>

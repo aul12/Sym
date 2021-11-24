@@ -58,8 +58,8 @@ namespace sym {
         return "cos(" + toString(x.expr) + ")";
     }
 
-    template<typename Expr_>
-    auto getChildren(const Sin<Expr_> &sin) -> std::tuple<Expr_> {
+    template<Expression Expr_>
+    constexpr auto getChildren(const Sin<Expr_> &sin) -> std::tuple<Expr_> {
         return std::make_tuple(sin.expr);
     }
 } // namespace sym

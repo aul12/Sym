@@ -46,7 +46,7 @@ namespace sym {
         return "(" + sym::toString(x.cond) + ") ? (" + sym::toString(x.trueVal) + ") : (" + sym::toString(x.falseVal) +
                ")";
     }
-    template<typename Cond_, typename Lhs_, typename Rhs_>
+    template<Expression Cond_, Expression Lhs_, Expression Rhs_>
     constexpr auto getChildren(const Ternary<Cond_, Lhs_, Rhs_> &x) -> std::tuple<Cond_, Lhs_, Rhs_> {
         return std::make_tuple(x.cond, x.trueVal, x.falseVal);
     }

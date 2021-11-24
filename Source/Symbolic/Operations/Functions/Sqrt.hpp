@@ -51,8 +51,8 @@ namespace sym {
         return "sqrt(" + toString(x.expr) + ")";
     }
 
-    template<typename Expr_>
-    auto getChildren(const Sqrt<Expr_> &sqrt) -> std::tuple<Expr_> {
+    template<Expression Expr_>
+    constexpr auto getChildren(const Sqrt<Expr_> &sqrt) -> std::tuple<Expr_> {
         return std::make_tuple(sqrt.expr);
     }
 } // namespace sym
