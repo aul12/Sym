@@ -49,7 +49,7 @@ namespace sym {
 
     template<Expression Lhs_, Expression Rhs_>
     auto toString(const Div<Lhs_, Rhs_> &x) -> std::string {
-        return "(" + x.lhs.toString() + "/" + x.rhs.toString() + ")";
+        return "(" + sym::toString(x.lhs) + "/" + sym::toString(x.rhs) + ")";
     }
 } // namespace sym
 

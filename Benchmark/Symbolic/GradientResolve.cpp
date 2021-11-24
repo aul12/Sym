@@ -4,7 +4,6 @@
 #include "Symbolic/Operations/Functions/Functions.hpp"
 #include "Symbolic/Operators.hpp"
 
-
 auto makeVec = [](auto &&...args) { return sym::Vector{args...}; };
 
 auto makeArr = [](auto &&...args) {
@@ -61,6 +60,7 @@ void gradientResolveSym(benchmark::State &state) {
 
     sym::Vector x{xPos, yPos, vel, psi};
     sym::Vector u{acc, steer};
+
 
     auto func = f(makeVec, xPos, yPos, vel, psi, acc, steer, 0.1);
     auto dx_func = sym::gradient(func, x);
