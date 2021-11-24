@@ -24,6 +24,7 @@ if (GTest_FOUND)
             Symbolic/Sum.cpp
             Symbolic/Variable.cpp
             Symbolic/Vector.cpp
+            Symbolic/Simplifier/Simplifier.cpp
             )
 
     find_package (Eigen3 3.3 REQUIRED NO_MODULE)

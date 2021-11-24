@@ -8,10 +8,21 @@
 #define SYM_EXPRESSIONTRAVERSE_HPP
 
 #include "../Expression.hpp"
+#include "../Vector.hpp"
 
 namespace sym::simplifier {
-    template<std::size_t index, sym::Expression... Children>
-    auto traverseChildren(const std::tuple<Children...> &children);
+    template<template<typename...> typename T, typename... OldArgs>
+    struct ConstructWithNewTemplateArgs {
+        template<typename... NewArgs>
+        static auto construct(NewArgs &&...newArgs) {
+            return T<NewArgs...>(std::forward<NewArgs>(newArgs)...);
+        }
+    };
+
+    template<template<typename...> typename T, typename... OldArgs>
+    auto getConstructWithNewTemplateArgs(T<OldArgs...>) {
+        return ConstructWithNewTemplateArgs<T, OldArgs...>{};
+    }
 
     template<sym::Expression Expr, typename FEnter, typename FLeave>
     requires(IsExpression<decltype(std::declval<FEnter>()(std::declval<Expr>()))>::val and IsExpression<
@@ -20,15 +31,18 @@ namespace sym::simplifier {
                                                                                                    FLeave &&fLeave) {
         auto enterExpr = fEnter(expr);
         auto children = getChildren(enterExpr);
-        traverseChildren<0>(children);
-        return fLeave(expr);
-    }
-
-    template<std::size_t index, typename FEnter, typename FLeave, sym::Expression... Children>
-    auto traverseChildren(std::tuple<Children...> &children, FEnter fEnter, FLeave fLeave) {
-        std::get<index>(children) = traverseExpression(std::get<index>(children), fEnter, fLeave);
-        if constexpr (index + 1 < sizeof...(Children)) {
-            traverseChildren<index+1>(children, fEnter, fLeave);
+        if constexpr (std::tuple_size_v < decltype(children) >> 0) {
+            auto visitedChildren = mapTuple(children, [fEnter, fLeave](Expression auto child) {
+                return traverseExpression(child, fEnter, fLeave);
+            });
+            auto visitedNode = std::apply(
+                    [](auto &&...args) {
+                        return decltype(getConstructWithNewTemplateArgs(enterExpr))::construct(args...);
+                    },
+                    visitedChildren);
+            return fLeave(visitedNode);
+        } else {
+            return fLeave(enterExpr);
         }
     }
 } // namespace sym::simplifier

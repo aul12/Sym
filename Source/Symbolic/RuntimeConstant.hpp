@@ -31,6 +31,7 @@ namespace sym {
 
         template<typename T_>
         constexpr friend auto getChildren(const RuntimeConstant<T_> &x) -> std::tuple<>;
+
       private:
         const T val;
     };
@@ -55,7 +56,7 @@ namespace sym {
         return std::to_string(x.val);
     }
     template<typename T_>
-    constexpr auto getChildren(const RuntimeConstant<T_> &x) -> std::tuple<> {
+    constexpr auto getChildren(const RuntimeConstant<T_> & /*x*/) -> std::tuple<> {
         return std::make_tuple();
     }
 } // namespace sym

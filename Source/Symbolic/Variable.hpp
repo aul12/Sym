@@ -105,7 +105,7 @@ namespace sym {
     }
 
     template<std::size_t ID_>
-    constexpr auto getChildren(const Variable<ID_> &x) -> std::tuple<> {
+    constexpr auto getChildren(const Variable<ID_> & /*x*/) -> std::tuple<> {
         return std::make_tuple();
     }
 } // namespace sym

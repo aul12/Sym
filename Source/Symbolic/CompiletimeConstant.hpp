@@ -45,7 +45,7 @@ namespace sym {
     }
 
     template<typename T_, T_ val0>
-    constexpr auto getChildren(const CompiletimeConstant<T_, val0> &x) -> std::tuple<> {
+    constexpr auto getChildren(const CompiletimeConstant<T_, val0> & /*x*/) -> std::tuple<> {
         return std::make_tuple();
     }
 } // namespace sym
