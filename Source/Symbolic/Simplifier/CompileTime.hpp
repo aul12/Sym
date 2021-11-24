@@ -4,12 +4,15 @@
  * @date 14.11.21
  * Description here TODO
  */
-#ifndef SYM_SIMPLIFIER_HPP
-#define SYM_SIMPLIFIER_HPP
+#ifndef SYM_COMPILETIME_HPP
+#define SYM_COMPILETIME_HPP
 
 #include "../CompiletimeConstant.hpp"
 #include "../Expression.hpp"
 #include "../Operations/Add.hpp"
+#include "../Operations/Sub.hpp"
+#include "../Operations/Mul.hpp"
+#include "../Operations/Div.hpp"
 
 namespace sym::simplifier {
     namespace impl {
@@ -37,7 +40,7 @@ namespace sym::simplifier {
     requires(impl::isConstant<Lhs> and impl::isConstant<Rhs>) struct MergeConstant<OpName<Lhs, Rhs>> {                 \
         static constexpr bool exists = true;                                                                           \
         static constexpr auto val = Lhs::resolve() Op Rhs::resolve();                                                  \
-        static constexpr CompiletimeConstant<std::remove_const_t<decltype(val)>, val> newVal{};                        \
+        static constexpr CompiletimeConstant<std::remove_cvref_t<decltype(val)>, val> newVal{};                        \
     };
 
     CONSTANT_MERGER(Add, +)
@@ -113,8 +116,6 @@ namespace sym::simplifier {
             return expr;
         }
     }
+} // namespace sym::simplifier
 
-
-} // namespace sym
-
-#endif // SYM_SIMPLIFIER_HPP
+#endif // SYM_COMPILETIME_HPP

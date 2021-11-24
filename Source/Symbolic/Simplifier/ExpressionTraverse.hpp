@@ -14,7 +14,7 @@ namespace sym::simplifier {
     template<template<typename...> typename T, typename... OldArgs>
     struct ConstructWithNewTemplateArgs {
         template<typename... NewArgs>
-        static auto construct(NewArgs &&...newArgs) {
+        static auto construct(NewArgs... newArgs) {
             return T<NewArgs...>(std::forward<NewArgs>(newArgs)...);
         }
     };
@@ -36,8 +36,10 @@ namespace sym::simplifier {
                 return traverseExpression(child, fEnter, fLeave);
             });
             auto visitedNode = std::apply(
-                    [](auto &&...args) {
-                        return decltype(getConstructWithNewTemplateArgs(enterExpr))::construct(args...);
+                    [](auto... args) {
+                        using Factory = decltype(getConstructWithNewTemplateArgs(enterExpr));
+                        return Factory::template construct<std::remove_cvref_t<decltype(args)>...>(
+                                std::forward<decltype(args)>(args)...);
                     },
                     visitedChildren);
             return fLeave(visitedNode);

@@ -7,8 +7,25 @@
 #ifndef SYM_SIMPLIFIER_HPP
 #define SYM_SIMPLIFIER_HPP
 
-namespace sym::simplifier {
+#include "CompileTime.hpp"
+#include "ExpressionTraverse.hpp"
 
-}
+namespace sym::simplifier {
+    template<Expression Expr>
+    auto simplifyWhileChangeImpl(Expr &&expr) {
+        auto simplified = simplifyNodeCompileTime(expr);
+        if constexpr (std::is_same_v<decltype(simplified), std::remove_cvref_t<decltype(expr)>>) {
+            return simplified;
+        } else {
+            return simplifyWhileChangeImpl(simplified);
+        }
+    }
+
+    template<Expression Expr>
+    auto simplifiy(Expr &&expr) {
+        auto simplifyWhileChange = [](auto &&expr) { return simplifyWhileChangeImpl(expr); };
+        return traverseExpression(expr, simplifyWhileChange, simplifyWhileChange);
+    }
+} // namespace sym::simplifier
 
 #endif // SYM_SIMPLIFIER_HPP
