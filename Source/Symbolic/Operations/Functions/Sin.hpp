@@ -32,6 +32,8 @@ namespace sym {
         template<Expression Expr_>
         friend auto toString(const Sin<Expr_> &x) -> std::string;
 
+        template<Expression Expr_>
+        constexpr friend auto getChildren(const Sin<Expr_> &sin) -> std::tuple<Expr_>;
       private:
         Expr expr;
     };
@@ -54,6 +56,11 @@ namespace sym {
     template<Expression Expr_>
     auto toString(const Sin<Expr_> &x) -> std::string {
         return "cos(" + toString(x.expr) + ")";
+    }
+
+    template<typename Expr_>
+    auto getChildren(const Sin<Expr_> &sin) -> std::tuple<Expr_> {
+        return std::make_tuple(sin.expr);
     }
 } // namespace sym
 

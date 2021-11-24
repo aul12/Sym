@@ -62,6 +62,9 @@ namespace sym {
         template<std::size_t ID_>
         friend auto toString(const Variable<ID_> &x) -> std::string;
 
+        template<std::size_t ID_>
+        constexpr friend auto getChildren(const Variable<ID_> &x) -> std::tuple<>;
+
         template<typename... Bindings>
         constexpr auto resolve(Bindings &&...bindings) const;
 
@@ -99,6 +102,11 @@ namespace sym {
     template<std::size_t ID>
     auto toString(const Variable<ID> & /*x*/) -> std::string {
         return "{" + std::to_string(ID) + "}";
+    }
+
+    template<std::size_t ID_>
+    constexpr auto getChildren(const Variable<ID_> &x) -> std::tuple<> {
+        return std::make_tuple();
     }
 } // namespace sym
 

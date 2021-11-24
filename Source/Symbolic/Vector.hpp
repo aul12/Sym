@@ -83,6 +83,9 @@ namespace sym {
         template<Expression... Expressions_>
         friend auto toString(const Vector<Expressions_...> &vec) -> std::string;
 
+        template<Expression... Expressions_>
+        constexpr friend auto getChildren(const Vector<Expressions_...> &vec) -> std::tuple<Expressions_...>;
+
         template<std::size_t ID, Expression... Expressions_>
         constexpr friend auto gradient(const Vector<Expressions_...> &vec, const sym::Variable<ID> &d);
 
@@ -101,6 +104,10 @@ namespace sym {
         return Vector{mapTuple(ds.expressions, [&expr](auto &&d) { return gradient(expr, d); })};
     }
 
+    template<Expression... Expressions_>
+    constexpr auto getChildren(const Vector<Expressions_...> &vec) -> std::tuple<Expressions_...> {
+        return vec.expressions;
+    }
 
     template<Expression... Expressions_>
     auto toString(const Vector<Expressions_...> &vec) -> std::string {

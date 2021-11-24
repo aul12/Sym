@@ -26,6 +26,9 @@ namespace sym {
         template<Expression Lhs_, Expression Rhs_>
         friend auto toString(const Div<Lhs_, Rhs_> &x) -> std::string;
 
+        template<Expression Lhs_, Expression Rhs_>
+        constexpr friend auto getChildren(const Div<Lhs_, Rhs_> &x) -> std::tuple<Lhs_, Rhs_>;
+
       private:
         Lhs lhs;
         Rhs rhs;
@@ -50,6 +53,11 @@ namespace sym {
     template<Expression Lhs_, Expression Rhs_>
     auto toString(const Div<Lhs_, Rhs_> &x) -> std::string {
         return "(" + sym::toString(x.lhs) + "/" + sym::toString(x.rhs) + ")";
+    }
+
+    template<typename Lhs_, typename Rhs_>
+    constexpr auto getChildren(const Div<Lhs_, Rhs_> &x) -> std::tuple<Lhs_, Rhs_> {
+        return std::make_tuple(x.lhs, x.rhs);
     }
 } // namespace sym
 

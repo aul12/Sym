@@ -29,6 +29,9 @@ namespace sym {
 
         template<typename T_, T_ val0>
         friend auto toString(const CompiletimeConstant<T_, val0> &x) -> std::string;
+
+        template<typename T_, T_ val0>
+        constexpr friend auto getChildren(const CompiletimeConstant<T_, val0> &x) -> std::tuple<>;
     };
 
     template<typename T_, T_ val0, std::size_t ID>
@@ -39,6 +42,11 @@ namespace sym {
     template<typename T_, T_ val0>
     auto toString(const CompiletimeConstant<T_, val0> &x) -> std::string {
         return std::to_string(x.val);
+    }
+
+    template<typename T_, T_ val0>
+    constexpr auto getChildren(const CompiletimeConstant<T_, val0> &x) -> std::tuple<> {
+        return std::make_tuple();
     }
 } // namespace sym
 

@@ -28,6 +28,8 @@ namespace sym {
         template<Expression Cond_, Expression TrueVal_, Expression FalseVal_>
         friend auto toString(const Ternary<Cond_, TrueVal_, FalseVal_> &x) -> std::string;
 
+        template<Expression Cond_, Expression Lhs_, Expression Rhs_>
+        constexpr friend auto getChildren(const Ternary<Cond_, Lhs_, Rhs_> &x) -> std::tuple<Cond_, Lhs_, Rhs_>;
       private:
         Cond cond;
         TrueVal trueVal;
@@ -43,6 +45,10 @@ namespace sym {
     auto toString(const Ternary<Cond_, TrueVal_, FalseVal_> &x) -> std::string {
         return "(" + sym::toString(x.cond) + ") ? (" + sym::toString(x.trueVal) + ") : (" + sym::toString(x.falseVal) +
                ")";
+    }
+    template<typename Cond_, typename Lhs_, typename Rhs_>
+    constexpr auto getChildren(const Ternary<Cond_, Lhs_, Rhs_> &x) -> std::tuple<Cond_, Lhs_, Rhs_> {
+        return std::make_tuple(x.cond, x.trueVal, x.falseVal);
     }
 } // namespace sym
 

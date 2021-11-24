@@ -36,6 +36,8 @@ set(SOURCES
         Source/Symbolic/Sum.hpp
         Source/Symbolic/Variable.hpp
         Source/Symbolic/Vector.hpp
+        Source/Symbolic/Simplifier/CompileTime.hpp
+        Source/Symbolic/Simplifier/ExpressionTraverse.hpp
         )
 
 set(LIBS)

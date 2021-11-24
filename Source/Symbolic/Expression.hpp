@@ -15,6 +15,7 @@ namespace sym {
     concept Expression = requires(const T t) {
         { toString(t) } -> std::same_as<std::string>;
         //@TODO how resolve (needs to provide correct variables)
+        {getChildren(t)};
     };
 
     template<typename T>

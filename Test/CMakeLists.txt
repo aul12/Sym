@@ -7,7 +7,8 @@ if (GTest_FOUND)
 
     set(TEST_SOURCES
             Symbolic/CompiletimeConstant.cpp
-            Symbolic/Simplifier.cpp
+            Symbolic/Simplifier/CompileTime.cpp
+            Symbolic/Simplifier/ExpressionTraverse.cpp
             Symbolic/Operations/Add.cpp
             Symbolic/Operations/Div.cpp
             Symbolic/Operations/Functions/Cos.cpp

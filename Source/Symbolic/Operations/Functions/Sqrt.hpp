@@ -31,6 +31,8 @@ namespace sym {
         template<Expression Expr_>
         friend auto toString(const Sqrt<Expr_> &x) -> std::string;
 
+        template<Expression Expr_>
+        constexpr friend auto getChildren(const Sqrt<Expr_> &sqrt) -> std::tuple<Expr_>;
       private:
         Expr expr;
     };
@@ -49,6 +51,10 @@ namespace sym {
         return "sqrt(" + toString(x.expr) + ")";
     }
 
+    template<typename Expr_>
+    auto getChildren(const Sqrt<Expr_> &sqrt) -> std::tuple<Expr_> {
+        return std::make_tuple(sqrt.expr);
+    }
 } // namespace sym
 
 #endif // SYM_SQRT_HPP
