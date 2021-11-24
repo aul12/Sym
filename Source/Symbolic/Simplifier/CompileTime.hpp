@@ -7,11 +7,11 @@
 #ifndef SYM_SIMPLIFIER_HPP
 #define SYM_SIMPLIFIER_HPP
 
-#include "CompiletimeConstant.hpp"
-#include "Expression.hpp"
-#include "Operations/Add.hpp"
+#include "../CompiletimeConstant.hpp"
+#include "../Expression.hpp"
+#include "../Operations/Add.hpp"
 
-namespace sym {
+namespace sym::simplifier {
     namespace impl {
         template<Expression Expr>
         struct IsConstant {
@@ -97,7 +97,7 @@ namespace sym {
     };
 
     template<Expression Expr>
-    constexpr auto simplifyNode(const Expr &expr) {
+    constexpr auto simplifyNodeCompileTime(const Expr &expr) {
         if constexpr (MergeConstant<Expr>::exists) {
             return simplifyNode(MergeConstant<Expr>::newVal);
         }
