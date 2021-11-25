@@ -46,7 +46,7 @@ namespace sym {
         return Div{gradient(sqrt.expr, id), Mul{CompiletimeConstant<int, 2>{}, Sqrt{sqrt.expr}}};
     }
 
-    template<typename Expr_>
+    template<Expression Expr_>
     auto toString(const Sqrt<Expr_> &x) -> std::string {
         return "sqrt(" + toString(x.expr) + ")";
     }

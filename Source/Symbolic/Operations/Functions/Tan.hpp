@@ -48,7 +48,7 @@ namespace sym {
         return Div{gradient(x.expr, d), Mul{Cos{x}, Cos{x}}};
     }
 
-    template<typename Expr_>
+    template<Expression Expr_>
     auto toString(const Tan<Expr_> &x) -> std::string {
         return "tan(" + toString(x.expr) + ")";
     }
