@@ -146,7 +146,7 @@ void gradientResolveSymSimplifiedWithPrint(benchmark::State &state) {
     auto dx_func_simplified = sym::simplifier::simplify(dx_func);
     auto du_func_simplified = sym::simplifier::simplify(du_func);
 
-    benchmark::DoNotOptimize(sym::toString(du_func_simplified));
+    std::cout << sym::toString(dx_func_simplified) << "\n\n";
 
     for (auto _ : state) {
         state.PauseTiming();

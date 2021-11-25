@@ -101,7 +101,11 @@ namespace sym {
 
     template<std::size_t ID>
     auto toString(const Variable<ID> & /*x*/) -> std::string {
-        return "{" + std::to_string(ID) + "}";
+        if (std::isalpha(ID)) {
+            return std::string{static_cast<char>(ID)};
+        } else {
+            return "{" + std::to_string(ID) + "}";
+        }
     }
 
     template<std::size_t ID_>

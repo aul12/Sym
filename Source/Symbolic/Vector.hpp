@@ -14,7 +14,7 @@
 
 namespace sym {
     template<typename F, typename Tuple, std::size_t... indices>
-    constexpr auto mapTupleImpl(Tuple &&tuple, F &&f, std::integer_sequence<std::size_t, indices...> /*seq*/) {
+    constexpr auto mapTupleImpl(Tuple &&tuple, F &&f, std::index_sequence<indices...> /*seq*/) {
         return std::make_tuple(f(std::get<indices>(tuple))...);
     }
 
@@ -22,6 +22,18 @@ namespace sym {
     constexpr auto mapTuple(const std::tuple<Ts...> &tuple, F &&f) {
         using IndexSequence = std::make_index_sequence<sizeof...(Ts)>;
         return mapTupleImpl<F>(tuple, std::forward<F>(f), IndexSequence{});
+    }
+
+    template<typename TupleA, typename TupleB, std::size_t... indices>
+    constexpr auto zipTupleImpl(const TupleA &tupleA, const TupleB &tupleB, std::index_sequence<indices...>) {
+        return std::make_tuple(std::make_pair(std::get<indices>(tupleA), std::get<indices>(tupleB))...);
+    }
+
+    template<typename TupleA, typename TupleB>
+    constexpr auto zipTuple(const TupleA &tupleA, const TupleB &tupleB) {
+        static_assert(std::tuple_size_v<TupleA> == std::tuple_size_v<TupleB>);
+        using IndexSequence = std::make_index_sequence<std::tuple_size_v<TupleA>>;
+        return zipTupleImpl(tupleA, tupleB, IndexSequence{});
     }
 
     template<std::size_t index, typename T>
@@ -99,6 +111,16 @@ namespace sym {
         std::tuple<Expressions...> expressions;
     };
 
+    template<typename Expr>
+    struct IsVec {
+        static constexpr auto val = false;
+    };
+
+    template<Expression... Expr>
+    struct IsVec<Vector<Expr...>> {
+        static constexpr auto val = true;
+    };
+
     template<Expression Expr, std::size_t... IDs>
     constexpr auto gradient(const Expr &expr, const Vector<Variable<IDs>...> &ds) {
         return Vector{mapTuple(ds.expressions, [&expr](auto &&d) { return gradient(expr, d); })};
@@ -112,8 +134,19 @@ namespace sym {
     template<Expression... Expressions_>
     auto toString(const Vector<Expressions_...> &vec) -> std::string {
         auto strings = mapTuple(vec.expressions, [](Expression auto expression) { return toString(expression); });
+        auto delims = mapTuple(vec.expressions, [](Expression auto expression) {
+            return IsVec<decltype(expression)>::val ? "\n" : ",";
+        });
+        auto stringsWithDelims = zipTuple(strings, delims);
+
+
         std::string result = "[";
-        std::apply([&result](auto &&...strings) { ((result += strings + ","), ...); }, strings);
+
+        std::apply(
+                [&result](auto &&...stringsWithDelims) {
+                    ((result += stringsWithDelims.first + stringsWithDelims.second), ...);
+                },
+                stringsWithDelims);
         result[result.size() - 1] = ']';
         return result;
     }
