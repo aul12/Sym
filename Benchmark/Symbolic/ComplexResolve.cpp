@@ -3,7 +3,7 @@
 #include "Symbolic/Operations/Functions/Functions.hpp"
 #include "Symbolic/Sum.hpp"
 
-constexpr auto N = 500;
+constexpr auto N = 50;
 
 auto func = [](auto i, auto x, auto y, auto z) {
     return (x * x - (x * y + z * y + x) * z / (y + 7)) / (x * x * z + i + 12) +
@@ -26,7 +26,7 @@ void complexResolveSym(benchmark::State &state) {
     }
 }
 
-BENCHMARK(complexResolveSym)->Unit(benchmark::TimeUnit::kMicrosecond);
+BENCHMARK(complexResolveSym);
 
 void complexResolveNative(benchmark::State &state) {
     for (auto _ : state) {
@@ -43,4 +43,4 @@ void complexResolveNative(benchmark::State &state) {
     }
 }
 
-BENCHMARK(complexResolveNative)->Unit(benchmark::TimeUnit::kMicrosecond);
+BENCHMARK(complexResolveNative);

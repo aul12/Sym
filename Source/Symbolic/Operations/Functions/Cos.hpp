@@ -62,7 +62,7 @@ namespace sym {
 
     template<Expression Expr_>
     constexpr auto getChildren(const Cos<Expr_> &cos) -> std::tuple<Expr_> {
-        return std::make_tuple(cos.expr);
+        return std::tuple<Expr_>(cos.expr);
     }
 } // namespace sym
 

@@ -53,7 +53,7 @@ namespace sym {
 
     template<Expression Expr_>
     constexpr auto getChildren(const Sqrt<Expr_> &sqrt) -> std::tuple<Expr_> {
-        return std::make_tuple(sqrt.expr);
+        return std::tuple<Expr_>(sqrt.expr);
     }
 } // namespace sym
 

@@ -55,7 +55,7 @@ namespace sym {
 
     template<Expression Expr_>
     constexpr auto getChildren(const Tan<Expr_> &tan) -> std::tuple<Expr_> {
-        return std::make_tuple(tan.expr);
+        return std::tuple<Expr_>(tan.expr);
     }
 } // namespace sym
 

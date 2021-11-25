@@ -11,6 +11,6 @@ TEST(Simplifier, Complete) {
     sym::CompiletimeConstant<int, 1> one;
     auto complex = ((a + zero) * one) + (b / one + b * zero);
     auto manual = a + b;
-    auto simplified = sym::simplifier::simplifiy(complex);
+    auto simplified = sym::simplifier::simplify(complex);
     EXPECT_TRUE((std::is_same_v<decltype(manual), decltype(simplified)>) );
 }

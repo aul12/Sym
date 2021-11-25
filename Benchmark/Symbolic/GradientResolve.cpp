@@ -3,6 +3,9 @@
 
 #include "Symbolic/Operations/Functions/Functions.hpp"
 #include "Symbolic/Operators.hpp"
+#include "Symbolic/Simplifier/Simplifier.hpp"
+
+#include <iostream>
 
 auto makeVec = [](auto &&...args) { return sym::Vector{args...}; };
 
@@ -61,7 +64,6 @@ void gradientResolveSym(benchmark::State &state) {
     sym::Vector x{xPos, yPos, vel, psi};
     sym::Vector u{acc, steer};
 
-
     auto func = f(makeVec, xPos, yPos, vel, psi, acc, steer, 0.1);
     auto dx_func = sym::gradient(func, x);
     auto du_func = sym::gradient(func, u);
@@ -85,6 +87,86 @@ void gradientResolveSym(benchmark::State &state) {
 }
 
 BENCHMARK(gradientResolveSym);
+
+void gradientResolveSymSimplified(benchmark::State &state) {
+    sym::Variable<'x'> xPos;
+    sym::Variable<'y'> yPos;
+    sym::Variable<'v'> vel;
+    sym::Variable<'p'> psi;
+
+    sym::Variable<'a'> acc;
+    sym::Variable<'s'> steer;
+
+    sym::Vector x{xPos, yPos, vel, psi};
+    sym::Vector u{acc, steer};
+
+    auto func = f(makeVec, xPos, yPos, vel, psi, acc, steer, 0.1);
+    auto dx_func = sym::gradient(func, x);
+    auto du_func = sym::gradient(func, u);
+    auto func_simplified = sym::simplifier::simplify(func);
+    auto dx_func_simplified = sym::simplifier::simplify(dx_func);
+    auto du_func_simplified = sym::simplifier::simplify(du_func);
+
+    for (auto _ : state) {
+        state.PauseTiming();
+        double xVal = rand();
+        double yVal = rand();
+        double velVal = rand();
+        double psiVal = rand();
+        double accVal = rand();
+        double steerVal = rand();
+        state.ResumeTiming();
+        benchmark::DoNotOptimize(func_simplified.resolve(xPos = xVal, yPos = yVal, vel = velVal, psi = psiVal,
+                                                         acc = accVal, steer = steerVal));
+        benchmark::DoNotOptimize(dx_func_simplified.resolve(xPos = xVal, yPos = yVal, vel = velVal, psi = psiVal,
+                                                            acc = accVal, steer = steerVal));
+        benchmark::DoNotOptimize(du_func_simplified.resolve(xPos = xVal, yPos = yVal, vel = velVal, psi = psiVal,
+                                                            acc = accVal, steer = steerVal));
+    }
+}
+
+BENCHMARK(gradientResolveSymSimplified);
+
+void gradientResolveSymSimplifiedWithPrint(benchmark::State &state) {
+    sym::Variable<'x'> xPos;
+    sym::Variable<'y'> yPos;
+    sym::Variable<'v'> vel;
+    sym::Variable<'p'> psi;
+
+    sym::Variable<'a'> acc;
+    sym::Variable<'s'> steer;
+
+    sym::Vector x{xPos, yPos, vel, psi};
+    sym::Vector u{acc, steer};
+
+    auto func = f(makeVec, xPos, yPos, vel, psi, acc, steer, 0.1);
+    auto dx_func = sym::gradient(func, x);
+    auto du_func = sym::gradient(func, u);
+    auto func_simplified = sym::simplifier::simplify(func);
+    auto dx_func_simplified = sym::simplifier::simplify(dx_func);
+    auto du_func_simplified = sym::simplifier::simplify(du_func);
+
+    benchmark::DoNotOptimize(sym::toString(du_func_simplified));
+
+    for (auto _ : state) {
+        state.PauseTiming();
+        double xVal = rand();
+        double yVal = rand();
+        double velVal = rand();
+        double psiVal = rand();
+        double accVal = rand();
+        double steerVal = rand();
+        state.ResumeTiming();
+        benchmark::DoNotOptimize(func_simplified.resolve(xPos = xVal, yPos = yVal, vel = velVal, psi = psiVal,
+                                                         acc = accVal, steer = steerVal));
+        benchmark::DoNotOptimize(dx_func_simplified.resolve(xPos = xVal, yPos = yVal, vel = velVal, psi = psiVal,
+                                                            acc = accVal, steer = steerVal));
+        benchmark::DoNotOptimize(du_func_simplified.resolve(xPos = xVal, yPos = yVal, vel = velVal, psi = psiVal,
+                                                            acc = accVal, steer = steerVal));
+    }
+}
+
+BENCHMARK(gradientResolveSymSimplifiedWithPrint);
 
 void gradientResolveNative(benchmark::State &state) {
     for (auto _ : state) {

@@ -60,7 +60,7 @@ namespace sym {
 
     template<Expression Expr_>
     constexpr auto getChildren(const Sin<Expr_> &sin) -> std::tuple<Expr_> {
-        return std::make_tuple(sin.expr);
+        return std::tuple<Expr_>(sin.expr);
     }
 } // namespace sym
 

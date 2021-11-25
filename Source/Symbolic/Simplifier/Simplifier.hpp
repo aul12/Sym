@@ -12,7 +12,7 @@
 
 namespace sym::simplifier {
     template<Expression Expr>
-    auto simplifyWhileChangeImpl(Expr &&expr) {
+    auto simplifyWhileChangeImpl(Expr expr) {
         auto simplified = simplifyNodeCompileTime(expr);
         if constexpr (std::is_same_v<decltype(simplified), std::remove_cvref_t<decltype(expr)>>) {
             return simplified;
@@ -22,7 +22,7 @@ namespace sym::simplifier {
     }
 
     template<Expression Expr>
-    auto simplifiy(Expr &&expr) {
+    auto simplify(Expr expr) {
         auto simplifyWhileChange = [](auto &&expr) { return simplifyWhileChangeImpl(expr); };
         return traverseExpression(expr, simplifyWhileChange, simplifyWhileChange);
     }

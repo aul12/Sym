@@ -100,17 +100,17 @@ namespace sym::simplifier {
     };
 
     template<Expression Expr>
-    constexpr auto simplifyNodeCompileTime(const Expr &expr) {
+    constexpr auto simplifyNodeCompileTime(Expr expr) {
         if constexpr (MergeConstant<Expr>::exists) {
-            return simplifyNodeCompileTime(MergeConstant<Expr>::newVal);
+            return MergeConstant<Expr>::newVal;
         } else if constexpr (MergeDisappear<Expr>::exists) {
-            return simplifyNodeCompileTime(MergeDisappear<Expr>::newVal);
+            return MergeDisappear<Expr>::newVal;
         } else if constexpr (MergeIdentity<Expr>::status != MergeStatus::NONE) {
-            auto children = getChildren(expr);
+            const auto children = getChildren(expr);
             if constexpr (MergeIdentity<Expr>::status == MergeStatus::KEEP_LHS) {
-                return simplifyNodeCompileTime(std::get<0>(children));
+                return std::get<0>(children);
             } else {
-                return simplifyNodeCompileTime(std::get<1>(children));
+                return std::get<1>(children);
             }
         } else {
             return expr;

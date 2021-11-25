@@ -72,7 +72,7 @@ namespace sym {
         constexpr auto resolve(const std::tuple<Bindings...> &tuple) const;
 
         template<typename T>
-        [[nodiscard]] auto operator=(T val) const -> Binding<T, ID> {
+        [[nodiscard]] auto operator=(T val) const -> Binding<T, ID> { // NOLINT
             return Binding<T, ID>{val};
         }
     };
@@ -96,7 +96,7 @@ namespace sym {
 
     template<std::size_t ID0, std::size_t ID1>
     constexpr auto gradient(const Variable<ID0> & /*x*/, const Variable<ID1> & /*d*/) {
-        return CompiletimeConstant < int, ID0 == ID1 ? 1 : 0 > {};
+        return CompiletimeConstant<int, ID0 == ID1 ? 1 : 0 >{};
     }
 
     template<std::size_t ID>
