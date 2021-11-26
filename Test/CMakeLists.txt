@@ -7,8 +7,6 @@ if (GTest_FOUND)
 
     set(TEST_SOURCES
             Symbolic/CompiletimeConstant.cpp
-            Symbolic/Simplifier/CompileTime.cpp
-            Symbolic/Simplifier/ExpressionTraverse.cpp
             Symbolic/Operations/Add.cpp
             Symbolic/Operations/Div.cpp
             Symbolic/Operations/Functions/Cos.cpp
@@ -21,10 +19,13 @@ if (GTest_FOUND)
             Symbolic/Operations/Ternary.cpp
             Symbolic/Operators.cpp
             Symbolic/RuntimeConstant.cpp
+            Symbolic/Simplifier/CompileTime.cpp
+            Symbolic/Simplifier/ExpressionTraverse.cpp
+            Symbolic/Simplifier/Runtime.cpp
+            Symbolic/Simplifier/Simplifier.cpp
             Symbolic/Sum.cpp
             Symbolic/Variable.cpp
             Symbolic/Vector.cpp
-            Symbolic/Simplifier/Simplifier.cpp
             )
 
     find_package (Eigen3 3.3 REQUIRED NO_MODULE)

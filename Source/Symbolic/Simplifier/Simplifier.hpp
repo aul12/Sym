@@ -8,6 +8,7 @@
 #define SYM_SIMPLIFIER_HPP
 
 #include "CompileTime.hpp"
+#include "Runtime.hpp"
 #include "ExpressionTraverse.hpp"
 
 namespace sym::simplifier {
@@ -15,7 +16,7 @@ namespace sym::simplifier {
     auto simplifyWhileChangeImpl(Expr expr) {
         auto simplified = simplifyNodeCompileTime(expr);
         if constexpr (std::is_same_v<decltype(simplified), std::remove_cvref_t<decltype(expr)>>) {
-            return simplified;
+            return simplifyRuntime(simplified);
         } else {
             return simplifyWhileChangeImpl(simplified);
         }

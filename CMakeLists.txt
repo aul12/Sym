@@ -33,12 +33,13 @@ set(SOURCES
         Source/Symbolic/Operations/Ternary.hpp
         Source/Symbolic/Operators.hpp
         Source/Symbolic/RuntimeConstant.hpp
+        Source/Symbolic/Simplifier/CompileTime.hpp
+        Source/Symbolic/Simplifier/ExpressionTraverse.hpp
+        Source/Symbolic/Simplifier/Runtime.hpp
+        Source/Symbolic/Simplifier/Simplifier.hpp
         Source/Symbolic/Sum.hpp
         Source/Symbolic/Variable.hpp
         Source/Symbolic/Vector.hpp
-        Source/Symbolic/Simplifier/CompileTime.hpp
-        Source/Symbolic/Simplifier/ExpressionTraverse.hpp
-        Source/Symbolic/Simplifier/Simplifier.hpp
         )
 
 set(LIBS)
