@@ -127,7 +127,7 @@ void gradientResolveSymSimplified(benchmark::State &state) {
 
 BENCHMARK(gradientResolveSymSimplified);
 
-void gradientResolveSymSimplifiedWithPrint(benchmark::State &state) {
+void gradientResolveSymSimplifiedWithToString(benchmark::State &state) {
     sym::Variable<'x'> xPos;
     sym::Variable<'y'> yPos;
     sym::Variable<'v'> vel;
@@ -146,7 +146,7 @@ void gradientResolveSymSimplifiedWithPrint(benchmark::State &state) {
     auto dx_func_simplified = sym::simplifier::simplify(dx_func);
     auto du_func_simplified = sym::simplifier::simplify(du_func);
 
-    std::cout << sym::toString(dx_func_simplified) << "\n\n";
+    benchmark::DoNotOptimize(sym::toString(dx_func_simplified));
 
     for (auto _ : state) {
         state.PauseTiming();
@@ -166,7 +166,7 @@ void gradientResolveSymSimplifiedWithPrint(benchmark::State &state) {
     }
 }
 
-BENCHMARK(gradientResolveSymSimplifiedWithPrint);
+BENCHMARK(gradientResolveSymSimplifiedWithToString);
 
 void gradientResolveNative(benchmark::State &state) {
     for (auto _ : state) {
