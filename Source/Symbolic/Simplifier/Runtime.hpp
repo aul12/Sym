@@ -9,6 +9,7 @@
 
 #include "../Expression.hpp"
 #include "CompileTime.hpp"
+#include "../Vector.hpp"
 
 namespace sym::simplifier {
     namespace impl {
@@ -55,6 +56,11 @@ namespace sym::simplifier {
         } else {
             return expr;
         }
+    }
+
+    template<Expression... Exprs>
+    constexpr auto simplifyRuntime(const Vector<Exprs...> &vec) {
+        return vec;
     }
 } // namespace sym::simplifier
 
