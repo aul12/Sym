@@ -12,6 +12,8 @@
 #include "Sin.hpp"
 #include "Sqrt.hpp"
 #include "Tan.hpp"
+#include "../../Operators.hpp"
+#include "../Ternary.hpp"
 
 namespace std { // NOLINT everything is fine specialization for custom types is allowed.
     template<sym::Expression Expr>
@@ -37,6 +39,21 @@ namespace std { // NOLINT everything is fine specialization for custom types is 
     template<sym::Expression Expr>
     auto exp(Expr &&expr) {
         return sym::Exp<Expr>{std::forward<Expr>(expr)};
+    }
+
+    template<sym::Expression Lhs, sym::Expression Rhs>
+    auto max(const Lhs &lhs, const Rhs &rhs) {
+        return sym::Ternary{lhs > rhs, lhs, rhs};
+    }
+
+    template<sym::Expression Lhs, sym::Expression Rhs>
+    auto min(const Lhs &lhs, const Rhs &rhs) {
+        return sym::Ternary{lhs < rhs, lhs, rhs};
+    }
+
+    template<sym::Expression Expr>
+    auto abs(const Expr &expr) {
+        return std::max(expr, -expr);
     }
 } // namespace std
 
