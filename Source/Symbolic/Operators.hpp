@@ -11,6 +11,8 @@
 #include "Operations/Div.hpp"
 #include "Operations/Mul.hpp"
 #include "Operations/Sub.hpp"
+#include "Operations/Greater.hpp"
+#include "Operations/Not.hpp"
 
 namespace sym {
     // Expr op Expr
@@ -80,6 +82,32 @@ namespace sym {
     template<Expression Expr>
     constexpr auto operator-(Expr expr) {
         return CompiletimeConstant<int, -1>{} * expr;
+    }
+
+    // Comparison
+    template<Expression Expr>
+    constexpr auto operator!(Expr expr) {
+        return Not{expr};
+    }
+
+    template<Expression Lhs, Expression Rhs>
+    constexpr auto operator<(Lhs lhs, Rhs rhs) {
+        return Greater{rhs, lhs};
+    }
+
+    template<Expression Lhs, Expression Rhs>
+    constexpr auto operator>(Lhs lhs, Rhs rhs) {
+        return Greater{lhs, rhs};
+    }
+
+    template<Expression Lhs, Expression Rhs>
+    constexpr auto operator<=(Lhs lhs, Rhs rhs) {
+        return !(rhs > lhs);
+    }
+
+    template<Expression Lhs, Expression Rhs>
+    constexpr auto operator>=(Lhs lhs, Rhs rhs) {
+        return !(lhs > rhs);
     }
 } // namespace sym
 
