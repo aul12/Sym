@@ -7,13 +7,13 @@
 #ifndef SYM_FUNCTIONS_HPP
 #define SYM_FUNCTIONS_HPP
 
+#include "../../Operators.hpp"
+#include "../Ternary.hpp"
 #include "Cos.hpp"
 #include "Exp.hpp"
 #include "Sin.hpp"
 #include "Sqrt.hpp"
 #include "Tan.hpp"
-#include "../../Operators.hpp"
-#include "../Ternary.hpp"
 
 namespace std { // NOLINT everything is fine specialization for custom types is allowed.
     template<sym::Expression Expr>
@@ -50,6 +50,27 @@ namespace std { // NOLINT everything is fine specialization for custom types is 
     auto min(const Lhs &lhs, const Rhs &rhs) {
         return sym::Ternary{lhs < rhs, lhs, rhs};
     }
+
+    template<sym::Expression Lhs, typename Rhs>
+    auto max(const Lhs &lhs, const Rhs &rhs) {
+        return sym::Ternary{lhs > sym::RuntimeConstant{rhs}, lhs, sym::RuntimeConstant{rhs}};
+    }
+
+    template<sym::Expression Lhs, typename Rhs>
+    auto min(const Lhs &lhs, const Rhs &rhs) {
+        return sym::Ternary{lhs < sym::RuntimeConstant{rhs}, lhs, sym::RuntimeConstant{rhs}};
+    }
+
+    template<typename Lhs, sym::Expression Rhs>
+    auto max(const Lhs &lhs, const Rhs &rhs) {
+        return sym::Ternary{sym::RuntimeConstant{lhs} > rhs, sym::RuntimeConstant{lhs}, rhs};
+    }
+
+    template<typename Lhs, sym::Expression Rhs>
+    auto min(const Lhs &lhs, const Rhs &rhs) {
+        return sym::Ternary{sym::RuntimeConstant{lhs} < rhs, sym::RuntimeConstant{lhs}, rhs};
+    }
+
 
     template<sym::Expression Expr>
     auto abs(const Expr &expr) {
