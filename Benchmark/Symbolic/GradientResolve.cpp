@@ -146,6 +146,7 @@ void gradientResolveSymSimplifiedWithToString(benchmark::State &state) {
     auto dx_func_simplified = sym::simplifier::simplify(dx_func);
     auto du_func_simplified = sym::simplifier::simplify(du_func);
 
+    // Necessary with gcc10.3.0-1ubuntu1~20.04
     benchmark::DoNotOptimize(sym::toString(dx_func_simplified));
 
     for (auto _ : state) {

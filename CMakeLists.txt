@@ -29,6 +29,7 @@ set(SOURCES
         Source/Symbolic/Operations/Functions/Tan.hpp
         Source/Symbolic/Operations/Greater.hpp
         Source/Symbolic/Operations/Mul.hpp
+        Source/Symbolic/Operations/Not.hpp
         Source/Symbolic/Operations/Sub.hpp
         Source/Symbolic/Operations/Ternary.hpp
         Source/Symbolic/Operators.hpp

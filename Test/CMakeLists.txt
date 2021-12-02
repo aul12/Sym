@@ -16,6 +16,7 @@ if (GTest_FOUND)
             Symbolic/Operations/Functions/Tan.cpp
             Symbolic/Operations/Greater.cpp
             Symbolic/Operations/Mul.cpp
+            Symbolic/Operations/Not.cpp
             Symbolic/Operations/Ternary.cpp
             Symbolic/Operators.cpp
             Symbolic/RuntimeConstant.cpp
