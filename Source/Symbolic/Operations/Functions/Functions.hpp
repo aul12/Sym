@@ -71,7 +71,6 @@ namespace std { // NOLINT everything is fine specialization for custom types is 
         return sym::Ternary{sym::RuntimeConstant{lhs} < rhs, sym::RuntimeConstant{lhs}, rhs};
     }
 
-
     template<sym::Expression Expr>
     auto abs(const Expr &expr) {
         return std::max(expr, -expr);

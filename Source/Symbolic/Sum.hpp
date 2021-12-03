@@ -18,8 +18,11 @@ namespace sym {
             return make_sum<max, min>(f) * (-1);
         } else if constexpr (min == max) {
             return CompiletimeConstant<int, 0>{};
+        } else if constexpr (min + 1 == max) {
+            return f(min);
         } else {
-            return f(min) + make_sum<min + 1, max>(f);
+            constexpr auto centre = (max+min)/2;
+            return make_sum<min, centre>(f) + make_sum<centre, max>(f);
         }
     }
 } // namespace sym
