@@ -9,8 +9,13 @@ if (GTest_FOUND)
             Symbolic/CompiletimeConstant.cpp
             Symbolic/Operations/Add.cpp
             Symbolic/Operations/Div.cpp
+            Symbolic/Operations/Functions/ArcCos.cpp
+            Symbolic/Operations/Functions/ArcSin.cpp
+            Symbolic/Operations/Functions/ArcTan.cpp
             Symbolic/Operations/Functions/Cos.cpp
             Symbolic/Operations/Functions/Exp.cpp
+            Symbolic/Operations/Functions/Log.cpp
+            Symbolic/Operations/Functions/Pow.cpp
             Symbolic/Operations/Functions/Sin.cpp
             Symbolic/Operations/Functions/Sqrt.cpp
             Symbolic/Operations/Functions/Tan.cpp

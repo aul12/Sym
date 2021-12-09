@@ -21,9 +21,14 @@ set(SOURCES
         Source/Symbolic/Expression.hpp
         Source/Symbolic/Operations/Add.hpp
         Source/Symbolic/Operations/Div.hpp
+        Source/Symbolic/Operations/Functions/ArcCos.hpp
+        Source/Symbolic/Operations/Functions/ArcSin.hpp
+        Source/Symbolic/Operations/Functions/ArcTan.hpp
         Source/Symbolic/Operations/Functions/Cos.hpp
         Source/Symbolic/Operations/Functions/Exp.hpp
         Source/Symbolic/Operations/Functions/Functions.hpp
+        Source/Symbolic/Operations/Functions/Log.hpp
+        Source/Symbolic/Operations/Functions/Pow.hpp
         Source/Symbolic/Operations/Functions/Sin.hpp
         Source/Symbolic/Operations/Functions/Sqrt.hpp
         Source/Symbolic/Operations/Functions/Tan.hpp
