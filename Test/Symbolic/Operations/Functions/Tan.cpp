@@ -16,6 +16,12 @@ TEST(Tan, Resolve) {
     EXPECT_DOUBLE_EQ(tan.resolve(), std::tan(17));
 }
 
+TEST(Tan, ToString) {
+    sym::RuntimeConstant<double> a{17};
+    sym::Tan<decltype(a)> tan{a};
+    EXPECT_NO_THROW(sym::toString(tan));
+}
+
 TEST(Tan, Gradient) {
     sym::Variable<'x'> x;
     sym::Tan<decltype(x)> y{x};

@@ -8,7 +8,12 @@ TEST(Variable, Expression) {
 
 TEST(Variable, Resolve) {
     sym::Variable<'a'> a;
-    EXPECT_EQ(a.resolve(a=42), 42);
+    EXPECT_EQ(a.resolve(a = 42), 42);
+}
+
+TEST(Variable, ToString) {
+    sym::Variable<'a'> a;
+    EXPECT_NO_THROW(sym::toString(a));
 }
 
 TEST(Variable, GradEqual) {
@@ -20,5 +25,5 @@ TEST(Variable, GradEqual) {
 TEST(Variable, GradNEqual) {
     sym::Variable<'a'> a;
     sym::Variable<'b'> b;
-    EXPECT_EQ(sym::gradient(a, b).resolve(a=42), 0);
+    EXPECT_EQ(sym::gradient(a, b).resolve(a = 42), 0);
 }

@@ -18,6 +18,12 @@ TEST(Vector, Resolve) {
     EXPECT_EQ(std::get<2>(result), 42 * 42);
 }
 
+TEST(Vector, ToString) {
+    sym::Variable<'a'> a;
+    sym::Vector vec{a, a + a, a * a};
+    EXPECT_NO_THROW(sym::toString(vec));
+}
+
 TEST(Vector, ResolveTo) {
     sym::Variable<'a'> a;
     sym::Vector vec{a, a + a, a * a};

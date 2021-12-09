@@ -22,6 +22,7 @@ if (GTest_FOUND)
             Symbolic/Operations/Greater.cpp
             Symbolic/Operations/Mul.cpp
             Symbolic/Operations/Not.cpp
+            Symbolic/Operations/Sub.cpp
             Symbolic/Operations/Ternary.cpp
             Symbolic/Operators.cpp
             Symbolic/RuntimeConstant.cpp

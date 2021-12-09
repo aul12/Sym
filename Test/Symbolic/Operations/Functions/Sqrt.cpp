@@ -13,6 +13,12 @@ TEST(Sqrt, Resolve) {
     EXPECT_DOUBLE_EQ(sqrt.resolve(), 4);
 }
 
+TEST(Sqrt, ToString) {
+    sym::RuntimeConstant<double> a{16};
+    sym::Sqrt<decltype(a)> sqrt{a};
+    EXPECT_NO_THROW(sym::toString(sqrt));
+}
+
 TEST(Sqrt, Gradient) {
     sym::Variable<'x'> x;
     sym::Sqrt<decltype(x)> y{x};

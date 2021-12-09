@@ -15,8 +15,12 @@ TEST(CompiletimeConstant, Expression) {
 
 TEST(CompiletimeConstant, Resolve) {
     sym::CompiletimeConstant<int, 42> c;
-
     EXPECT_EQ(c.resolve(), 42);
+}
+
+TEST(CompiletimeConstant, ToString) {
+    sym::CompiletimeConstant<int, 42> c;
+    EXPECT_NO_THROW(sym::toString(c));
 }
 
 TEST(CompiletimeConstant, GradResolve) {

@@ -16,6 +16,13 @@ TEST(Mul, Resolve) {
     EXPECT_EQ(mul.resolve(), 17 * 42);
 }
 
+TEST(Mul, ToString) {
+    sym::RuntimeConstant<int> a{17};
+    sym::RuntimeConstant<int> b{42};
+    sym::Mul<decltype(a), decltype(b)> mul{a, b};
+    EXPECT_NO_THROW(sym::toString(mul));
+}
+
 TEST(Mul, GradA) {
     sym::Variable<'a'> a;
     sym::Variable<'b'> b;

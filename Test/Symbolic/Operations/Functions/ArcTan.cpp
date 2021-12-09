@@ -16,6 +16,12 @@ TEST(ArcTan, Resolve) {
     EXPECT_DOUBLE_EQ(atan.resolve(), std::atan(0.5));
 }
 
+TEST(ArcTan, ToString) {
+    sym::RuntimeConstant<double> a{0.5};
+    sym::ArcTan<decltype(a)> atan{a};
+    EXPECT_NO_THROW(sym::toString(atan));
+}
+
 TEST(ArcTan, Gradient) {
     sym::Variable<'x'> x;
     sym::ArcTan<decltype(x)> y{x};

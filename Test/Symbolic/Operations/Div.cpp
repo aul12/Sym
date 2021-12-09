@@ -16,6 +16,13 @@ TEST(Div, Resolve) {
     EXPECT_EQ(div.resolve(), 21);
 }
 
+TEST(Div, ToString) {
+    sym::RuntimeConstant<int> a{42};
+    sym::RuntimeConstant<int> b{2};
+    sym::Div<decltype(a), decltype(b)> div{a, b};
+    EXPECT_NO_THROW(sym::toString(div));
+}
+
 TEST(Div, GradA) {
     sym::Variable<'a'> a;
     sym::Variable<'b'> b;

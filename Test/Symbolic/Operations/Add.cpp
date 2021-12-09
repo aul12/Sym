@@ -16,6 +16,13 @@ TEST(Add, Resolve) {
     EXPECT_EQ(add.resolve(), 17 + 42);
 }
 
+TEST(Add, ToString) {
+    sym::RuntimeConstant<int> a{17};
+    sym::RuntimeConstant<int> b{42};
+    sym::Add<decltype(a), decltype(b)> add{a, b};
+    EXPECT_NO_THROW(sym::toString(add));
+}
+
 TEST(Add, GradA) {
     sym::Variable<'a'> a;
     sym::Variable<'b'> b;

@@ -5,9 +5,9 @@
  * Description here TODO
  */
 
-#include <gtest/gtest.h>
-
 #include "Symbolic/RuntimeConstant.hpp"
+
+#include <gtest/gtest.h>
 
 TEST(RuntimeConstant, Expression) {
     EXPECT_TRUE((sym::IsExpression<sym::RuntimeConstant<int>>::val));
@@ -17,6 +17,12 @@ TEST(RuntimeConstant, Resolve) {
     sym::RuntimeConstant<int> c{42};
 
     EXPECT_EQ(c.resolve(), 42);
+}
+
+TEST(RuntimeConstant, ToString) {
+    sym::RuntimeConstant<int> c{42};
+
+    EXPECT_NO_THROW(sym::toString(c));
 }
 
 TEST(RuntimeConstant, GradResolve) {

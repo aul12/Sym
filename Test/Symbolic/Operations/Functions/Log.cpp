@@ -16,6 +16,12 @@ TEST(Log, Resolve) {
     EXPECT_DOUBLE_EQ(log.resolve(), std::log(0.5));
 }
 
+TEST(Log, ToString) {
+    sym::RuntimeConstant<double> a{0.5};
+    sym::Log<decltype(a)> log{a};
+    EXPECT_NO_THROW(sym::toString(log));
+}
+
 TEST(Log, Gradient) {
     sym::Variable<'x'> x;
     sym::Log<decltype(x)> y{x};

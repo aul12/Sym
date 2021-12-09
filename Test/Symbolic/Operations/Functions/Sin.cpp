@@ -16,6 +16,12 @@ TEST(Sin, Resolve) {
     EXPECT_DOUBLE_EQ(sin.resolve(), std::sin(17));
 }
 
+TEST(Sin, ToString) {
+    sym::RuntimeConstant<double> a{17};
+    sym::Sin<decltype(a)> sin{a};
+    EXPECT_NO_THROW(sym::toString(sin));
+}
+
 TEST(Sin, Gradient) {
     sym::Variable<'a'> x;
     sym::Sin<decltype(x)> y{x};

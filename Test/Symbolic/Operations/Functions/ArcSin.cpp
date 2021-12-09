@@ -16,6 +16,12 @@ TEST(ArcSin, Resolve) {
     EXPECT_DOUBLE_EQ(asin.resolve(), std::asin(0.5));
 }
 
+TEST(ArcSin, ToString) {
+    sym::RuntimeConstant<double> a{0.5};
+    sym::ArcSin<decltype(a)> asin{a};
+    EXPECT_NO_THROW(sym::toString(asin));
+}
+
 TEST(ArcSin, Gradient) {
     sym::Variable<'x'> x;
     sym::ArcSin<decltype(x)> y{x};

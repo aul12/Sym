@@ -19,10 +19,10 @@ namespace sym {
         constexpr auto resolve(Bindings &&...bindings) const;
 
         template<Expression Expr_>
-        constexpr friend auto getChildren(const sym::Not<Expr> &notExpr) -> std::tuple<Expr_>;
+        constexpr friend auto getChildren(const sym::Not<Expr_> &notExpr) -> std::tuple<Expr_>;
 
         template<Expression Expr_>
-        friend auto toString(const sym::Not<Expr> &notExpr) -> std::string;
+        friend auto toString(const sym::Not<Expr_> &notExpr) -> std::string;
 
       private:
         Expr expr;

@@ -16,6 +16,12 @@ TEST(Cos, Resolve) {
     EXPECT_DOUBLE_EQ(cos.resolve(), std::cos(17));
 }
 
+TEST(Cos, ToString) {
+    sym::RuntimeConstant<double> a{17};
+    sym::Cos<decltype(a)> cos{a};
+    EXPECT_NO_THROW(sym::toString(cos));
+}
+
 TEST(Cos, Gradient) {
     sym::Variable<'x'> x;
     sym::Cos<decltype(x)> y{x};

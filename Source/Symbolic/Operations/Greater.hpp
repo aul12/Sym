@@ -10,6 +10,7 @@
 #include <tuple>
 
 #include "../Expression.hpp"
+#include "../Variable.hpp"
 
 namespace sym {
     template<Expression Lhs, Expression Rhs>
