@@ -11,9 +11,14 @@
 
 #include "../../Expression.hpp"
 #include "../../Variable.hpp"
-#include "../Div.hpp"
 
 namespace sym {
+    template<Expression Lhs, Expression Rhs>
+    class Div;
+
+    template<Expression Lhs, Expression Rhs>
+    class Mul;
+
     template<Expression Expr>
     class Sqrt {
       public:
@@ -33,6 +38,7 @@ namespace sym {
 
         template<Expression Expr_>
         constexpr friend auto getChildren(const Sqrt<Expr_> &sqrt) -> std::tuple<Expr_>;
+
       private:
         Expr expr;
     };
@@ -56,5 +62,7 @@ namespace sym {
         return std::tuple<Expr_>(sqrt.expr);
     }
 } // namespace sym
+
+#include "../Div.hpp"
 
 #endif // SYM_SQRT_HPP
