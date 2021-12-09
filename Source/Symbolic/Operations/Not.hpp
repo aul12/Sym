@@ -38,12 +38,12 @@ namespace sym {
         return not expr.resolve(std::forward<Bindings>(bindings)...);
     }
 
-    template<typename Expr_>
+    template<Expression Expr_>
     constexpr auto getChildren(const sym::Not<Expr_> &notExpr) -> std::tuple<Expr_> {
         return std::tuple{notExpr};
     }
 
-    template<typename Expr_>
+    template<Expression Expr_>
     auto toString(const sym::Not<Expr_> &notExpr) -> std::string {
         return "not (" + toString(notExpr.expr) + ")";
     }

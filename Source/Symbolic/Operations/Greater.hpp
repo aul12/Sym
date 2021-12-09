@@ -34,10 +34,11 @@ namespace sym {
         Rhs rhs;
     };
 
-    template<typename Lhs_, typename Rhs_>
+    template<Expression Lhs_, Expression Rhs_>
     auto toString(const Greater<Lhs_, Rhs_> &greater) -> std::string {
         return "(" + sym::toString(greater.lhs) + ")>(" + sym::toString(greater.rhs) + ")";
     }
+
     template<Expression Lhs_, Expression Rhs_>
     constexpr auto getChildren(const Greater<Lhs_, Rhs_> &x) -> std::tuple<Lhs_, Rhs_> {
         return std::make_tuple(x.lhs, x.rhs);
