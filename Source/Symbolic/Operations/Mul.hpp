@@ -8,9 +8,12 @@
 #define SYM_MUL_HPP
 
 #include "../Expression.hpp"
-#include "Add.hpp"
+#include "../Variable.hpp"
 
 namespace sym {
+    template<Expression Lhs, Expression Rhs>
+    class Add;
+
     template<Expression Lhs, Expression Rhs>
     class Mul {
       public:
@@ -27,6 +30,7 @@ namespace sym {
 
         template<Expression Lhs_, Expression Rhs_>
         constexpr friend auto getChildren(const Mul<Lhs_, Rhs_> &x) -> std::tuple<Lhs_, Rhs_>;
+
       private:
         Lhs lhs;
         Rhs rhs;
@@ -63,5 +67,7 @@ namespace sym {
         return std::make_tuple(x.lhs, x.rhs);
     }
 } // namespace sym
+
+#include "Add.hpp"
 
 #endif // SYM_MUL_HPP

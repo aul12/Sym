@@ -11,12 +11,20 @@
 
 #include "../../Expression.hpp"
 #include "../../Variable.hpp"
-#include "../Div.hpp"
-#include "../Mul.hpp"
-#include "../Sub.hpp"
-#include "Sqrt.hpp"
 
 namespace sym {
+    template<Expression Lhs, Expression Rhs>
+    class Div;
+
+    template<Expression Lhs, Expression Rhs>
+    class Mul;
+
+    template<Expression Lhs, Expression Rhs>
+    class Sub;
+
+    template<sym::Expression Expr>
+    class Sqrt;
+
     template<sym::Expression Expr>
     class ArcSin {
       public:
@@ -63,5 +71,10 @@ namespace sym {
         return std::tuple<Expr_>(sin.expr);
     }
 } // namespace sym
+
+#include "../Div.hpp"
+#include "../Mul.hpp"
+#include "../Sub.hpp"
+#include "Sqrt.hpp"
 
 #endif // SYM_ARCSIN_HPP

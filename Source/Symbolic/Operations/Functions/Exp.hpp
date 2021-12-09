@@ -11,9 +11,12 @@
 
 #include "../../Expression.hpp"
 #include "../../Variable.hpp"
-#include "../Mul.hpp"
 
 namespace sym {
+    template<Expression Lhs, Expression Rhs>
+    class Mul;
+
+
     template<Expression Expr>
     class Exp {
       public:
@@ -30,6 +33,7 @@ namespace sym {
 
         template<Expression Expr_>
         constexpr friend auto getChildren(const Exp<Expr_> &exp) -> std::tuple<Expr_>;
+
       private:
         Expr expr;
     };
@@ -59,5 +63,7 @@ namespace sym {
         return std::tuple<Expr_>(exp.expr);
     }
 } // namespace sym
+
+#include "../Mul.hpp"
 
 #endif // SYM_EXP_HPP

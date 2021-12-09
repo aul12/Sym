@@ -9,15 +9,21 @@
 
 #include <cmath>
 
-#include "../../CompiletimeConstant.hpp"
 #include "../../Expression.hpp"
 #include "../../Variable.hpp"
-#include "Sin.hpp"
-#include "Symbolic/Operations//Mul.hpp"
 
 namespace sym {
     template<Expression Expr>
     class Sin;
+
+    template<Expression Lhs, Expression Rhs>
+    class Mul;
+
+    template<Expression Lhs, Expression Rhs>
+    class Sub;
+
+    template<typename T, T val>
+    class CompiletimeConstant;
 
     template<Expression Expr>
     class Cos {
@@ -65,5 +71,10 @@ namespace sym {
         return std::tuple<Expr_>(cos.expr);
     }
 } // namespace sym
+
+#include "../../CompiletimeConstant.hpp"
+#include "Sin.hpp"
+#include "Symbolic/Operations/Mul.hpp"
+#include "Symbolic/Operations/Sub.hpp"
 
 #endif // SYM_COS_HPP

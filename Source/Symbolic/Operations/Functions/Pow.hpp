@@ -11,13 +11,26 @@
 
 #include "../../Expression.hpp"
 #include "../../Variable.hpp"
-#include "../Div.hpp"
-#include "../Mul.hpp"
-#include "../Sub.hpp"
-#include "Log.hpp"
-#include "Sqrt.hpp"
 
 namespace sym {
+    template<sym::Expression Lhs, sym::Expression Rhs>
+    class Div;
+
+    template<sym::Expression Lhs, sym::Expression Rhs>
+    class Mul;
+
+    template<sym::Expression Lhs, sym::Expression Rhs>
+    class Sub;
+
+    template<sym::Expression Lhs, sym::Expression Rhs>
+    class Add;
+
+    template<sym::Expression>
+    class Log;
+
+    template<sym::Expression>
+    class Sqrt;
+
     template<sym::Expression Base, sym::Expression Exp>
     class Pow {
       public:
@@ -66,5 +79,12 @@ namespace sym {
         return std::tuple<Base_, Exp_>(pow.base, pow.exp);
     }
 } // namespace sym
+
+#include "../Add.hpp"
+#include "../Div.hpp"
+#include "../Mul.hpp"
+#include "../Sub.hpp"
+#include "Log.hpp"
+#include "Sqrt.hpp"
 
 #endif // SYM_POW_HPP

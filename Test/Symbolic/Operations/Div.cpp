@@ -1,9 +1,10 @@
+
+#include "Symbolic/RuntimeConstant.hpp"
 #include "Symbolic/Operations/Div.hpp"
 
 #include <gtest/gtest.h>
 
 #include "Symbolic/Operations/Functions/Sqrt.hpp"
-#include "Symbolic/RuntimeConstant.hpp"
 
 TEST(Div, Expression) {
     using Const = sym::RuntimeConstant<int>;

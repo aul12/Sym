@@ -7,11 +7,21 @@
 #ifndef SYM_TAN_HPP
 #define SYM_TAN_HPP
 
+#include <cmath>
+
 #include "../../Expression.hpp"
-#include "../Div.hpp"
-#include "Sin.hpp"
+#include "../../Variable.hpp"
 
 namespace sym {
+    template<Expression Lhs, Expression Rhs>
+    class Div;
+
+    template<Expression Lhs, Expression Rhs>
+    class Mul;
+
+    template<Expression Expr>
+    class Cos;
+
     template<Expression Expr>
     class Tan {
       public:
@@ -58,5 +68,9 @@ namespace sym {
         return std::tuple<Expr_>(tan.expr);
     }
 } // namespace sym
+
+#include "../Div.hpp"
+#include "../Mul.hpp"
+#include "Cos.hpp"
 
 #endif // SYM_TAN_HPP

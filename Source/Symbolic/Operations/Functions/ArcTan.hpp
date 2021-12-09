@@ -11,12 +11,17 @@
 
 #include "../../Expression.hpp"
 #include "../../Variable.hpp"
-#include "../Div.hpp"
-#include "../Mul.hpp"
-#include "../Sub.hpp"
-#include "Sqrt.hpp"
 
 namespace sym {
+    template<Expression Lhs, Expression Rhs>
+    class Div;
+
+    template<Expression Lhs, Expression Rhs>
+    class Mul;
+
+    template<Expression Lhs, Expression Rhs>
+    class Add;
+
     template<sym::Expression Expr>
     class ArcTan {
       public:
@@ -63,5 +68,9 @@ namespace sym {
         return std::tuple<Expr_>(tan.expr);
     }
 } // namespace sym
+
+#include "../Add.hpp"
+#include "../Div.hpp"
+#include "../Mul.hpp"
 
 #endif // SYM_ARCTAN_HPP

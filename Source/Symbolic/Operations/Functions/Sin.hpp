@@ -11,12 +11,13 @@
 
 #include "../../Expression.hpp"
 #include "../../Variable.hpp"
-#include "../Mul.hpp"
-#include "Cos.hpp"
 
 namespace sym {
     template<Expression Expr>
     class Cos;
+
+    template<sym::Expression Lhs, sym::Expression Rhs>
+    class Mul;
 
     template<Expression Expr>
     class Sin {
@@ -34,6 +35,7 @@ namespace sym {
 
         template<Expression Expr_>
         constexpr friend auto getChildren(const Sin<Expr_> &sin) -> std::tuple<Expr_>;
+
       private:
         Expr expr;
     };
@@ -63,5 +65,8 @@ namespace sym {
         return std::tuple<Expr_>(sin.expr);
     }
 } // namespace sym
+
+#include "../Mul.hpp"
+#include "Cos.hpp"
 
 #endif // SYM_SIN_HPP

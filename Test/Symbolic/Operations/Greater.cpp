@@ -1,5 +1,5 @@
-#include <Symbolic/Operations/Greater.hpp>
 #include <Symbolic/Variable.hpp>
+#include <Symbolic/Operations/Greater.hpp>
 #include <gtest/gtest.h>
 
 TEST(Greater, IsExpression) {

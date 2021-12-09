@@ -9,7 +9,6 @@
 
 #include "../Expression.hpp"
 #include "../Variable.hpp"
-#include "Sub.hpp"
 
 
 namespace sym {

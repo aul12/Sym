@@ -7,11 +7,19 @@
 #ifndef SYM_DIV_HPP
 #define SYM_DIV_HPP
 
-#include "../RuntimeConstant.hpp"
-#include "Add.hpp"
-#include "Mul.hpp"
+#include "../Expression.hpp"
+#include "../Variable.hpp"
 
 namespace sym {
+    template<Expression Lhs, Expression Rhs>
+    class Sub;
+
+    template<Expression Lhs, Expression Rhs>
+    class Mul;
+
+    template<typename T>
+    class RuntimeConstant;
+
     template<Expression Lhs, Expression Rhs>
     class Div {
       public:
@@ -59,5 +67,9 @@ namespace sym {
         return std::make_tuple(x.lhs, x.rhs);
     }
 } // namespace sym
+
+#include "../RuntimeConstant.hpp"
+#include "Mul.hpp"
+#include "Sub.hpp"
 
 #endif // SYM_DIV_HPP

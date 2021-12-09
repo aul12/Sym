@@ -64,5 +64,6 @@ namespace sym {
 } // namespace sym
 
 #include "../Div.hpp"
+#include "../Mul.hpp"
 
 #endif // SYM_SQRT_HPP

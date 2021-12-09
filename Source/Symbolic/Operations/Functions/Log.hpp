@@ -11,9 +11,11 @@
 
 #include "../../Expression.hpp"
 #include "../../Variable.hpp"
-#include "../Div.hpp"
 
 namespace sym {
+    template<sym::Expression Lhs, sym::Expression Rhs>
+    class Div;
+
     template<Expression Expr>
     class Log {
       public:
@@ -60,5 +62,7 @@ namespace sym {
         return std::tuple<Expr_>(log.expr);
     }
 } // namespace sym
+
+#include "../Div.hpp"
 
 #endif // SYM_LOG_HPP

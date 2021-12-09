@@ -7,13 +7,15 @@
 #ifndef SYM_RUNTIMECONSTANT_HPP
 #define SYM_RUNTIMECONSTANT_HPP
 
-#include "CompiletimeConstant.hpp"
 #include "Expression.hpp"
 #include "Variable.hpp"
 
 namespace sym {
     template<std::size_t ID>
     class Variable;
+
+    template<typename T, T val_>
+    class CompiletimeConstant;
 
     template<typename T>
     class RuntimeConstant {
@@ -60,5 +62,7 @@ namespace sym {
         return std::make_tuple();
     }
 } // namespace sym
+
+#include "CompiletimeConstant.hpp"
 
 #endif // SYM_RUNTIMECONSTANT_HPP
