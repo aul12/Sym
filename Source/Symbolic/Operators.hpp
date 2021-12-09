@@ -81,7 +81,7 @@ namespace sym {
     // Unary
     template<Expression Expr>
     constexpr auto operator-(Expr expr) {
-        return CompiletimeConstant<int, -1>{} * expr;
+        return CompiletimeConstant<int, 0>{} - expr;
     }
 
     // Comparison

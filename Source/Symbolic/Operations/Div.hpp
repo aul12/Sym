@@ -46,8 +46,7 @@ namespace sym {
 
     template<Expression Lhs_, Expression Rhs_, std::size_t ID>
     constexpr auto gradient(const Div<Lhs_, Rhs_> &x, const Variable<ID> &d) {
-        auto neg = RuntimeConstant{-1};
-        return Div{Add{Mul{gradient(x.lhs, d), x.rhs}, Mul{Mul{x.lhs, gradient(x.rhs, d)}, neg}}, Mul{x.rhs, x.rhs}};
+        return Div{Sub{Mul{gradient(x.lhs, d), x.rhs}, Mul{x.lhs, gradient(x.rhs, d)}}, Mul{x.rhs, x.rhs}};
     }
 
     template<Expression Lhs_, Expression Rhs_>

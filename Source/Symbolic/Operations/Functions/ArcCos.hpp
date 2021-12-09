@@ -50,7 +50,7 @@ namespace sym {
 
     template<Expression Expr_, std::size_t ID>
     constexpr auto gradient(const ArcCos<Expr_> &x, const Variable<ID> &d) {
-        return Div{Mul{CompiletimeConstant<int, -1>{}, gradient(x.expr, d)},
+        return Div{Sub{CompiletimeConstant<int, 0>{}, gradient(x.expr, d)},
                    Sqrt{Sub{CompiletimeConstant<int, 1>{}, Mul{x.expr, x.expr}}}};
     }
 

@@ -52,7 +52,7 @@ namespace sym {
 
     template<Expression Expr_, std::size_t ID>
     constexpr auto gradient(const Cos<Expr_> &x, const Variable<ID> &d) {
-        return Mul{Mul{CompiletimeConstant<int, -1>{}, Sin{x.expr}}, gradient(x.expr, d)};
+        return Mul{Sub{CompiletimeConstant<int, 0>{}, Sin{x.expr}}, gradient(x.expr, d)};
     }
 
     template<Expression Expr_>
