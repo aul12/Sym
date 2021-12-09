@@ -88,7 +88,7 @@ void gradientResolveSym(benchmark::State &state) {
 
 BENCHMARK(gradientResolveSym);
 
-void gradientResolveSymSimplified(benchmark::State &state) {
+void gradientResolveSymSimplifiedAfter(benchmark::State &state) {
     sym::Variable<'x'> xPos;
     sym::Variable<'y'> yPos;
     sym::Variable<'v'> vel;
@@ -125,9 +125,9 @@ void gradientResolveSymSimplified(benchmark::State &state) {
     }
 }
 
-BENCHMARK(gradientResolveSymSimplified);
+BENCHMARK(gradientResolveSymSimplifiedAfter);
 
-void gradientResolveSymSimplifiedWithToString(benchmark::State &state) {
+void gradientResolveSymSimplifiedAfterWithToString(benchmark::State &state) {
     sym::Variable<'x'> xPos;
     sym::Variable<'y'> yPos;
     sym::Variable<'v'> vel;
@@ -163,6 +163,81 @@ void gradientResolveSymSimplifiedWithToString(benchmark::State &state) {
         benchmark::DoNotOptimize(dx_func_simplified.resolve(xPos = xVal, yPos = yVal, vel = velVal, psi = psiVal,
                                                             acc = accVal, steer = steerVal));
         benchmark::DoNotOptimize(du_func_simplified.resolve(xPos = xVal, yPos = yVal, vel = velVal, psi = psiVal,
+                                                            acc = accVal, steer = steerVal));
+    }
+}
+
+BENCHMARK(gradientResolveSymSimplifiedAfterWithToString);
+
+void gradientResolveSymSimplified(benchmark::State &state) {
+    sym::Variable<'x'> xPos;
+    sym::Variable<'y'> yPos;
+    sym::Variable<'v'> vel;
+    sym::Variable<'p'> psi;
+
+    sym::Variable<'a'> acc;
+    sym::Variable<'s'> steer;
+
+    sym::Vector x{xPos, yPos, vel, psi};
+    sym::Vector u{acc, steer};
+
+    auto func = sym::simplifier::simplify(f(makeVec, xPos, yPos, vel, psi, acc, steer, 0.1));
+    auto dx_func = sym::simplifier::simplify(sym::gradient(func, x));
+    auto du_func = sym::simplifier::simplify(sym::gradient(func, u));
+
+    for (auto _ : state) {
+        state.PauseTiming();
+        double xVal = rand();
+        double yVal = rand();
+        double velVal = rand();
+        double psiVal = rand();
+        double accVal = rand();
+        double steerVal = rand();
+        state.ResumeTiming();
+        benchmark::DoNotOptimize(func.resolve(xPos = xVal, yPos = yVal, vel = velVal, psi = psiVal,
+                                                         acc = accVal, steer = steerVal));
+        benchmark::DoNotOptimize(dx_func.resolve(xPos = xVal, yPos = yVal, vel = velVal, psi = psiVal,
+                                                            acc = accVal, steer = steerVal));
+        benchmark::DoNotOptimize(du_func.resolve(xPos = xVal, yPos = yVal, vel = velVal, psi = psiVal,
+                                                            acc = accVal, steer = steerVal));
+    }
+}
+
+BENCHMARK(gradientResolveSymSimplified);
+
+void gradientResolveSymSimplifiedWithToString(benchmark::State &state) {
+    sym::Variable<'x'> xPos;
+    sym::Variable<'y'> yPos;
+    sym::Variable<'v'> vel;
+    sym::Variable<'p'> psi;
+
+    sym::Variable<'a'> acc;
+    sym::Variable<'s'> steer;
+
+    sym::Vector x{xPos, yPos, vel, psi};
+    sym::Vector u{acc, steer};
+
+    auto func = sym::simplifier::simplify(f(makeVec, xPos, yPos, vel, psi, acc, steer, 0.1));
+    auto dx_func = sym::simplifier::simplify(sym::gradient(func, x));
+    auto du_func = sym::simplifier::simplify(sym::gradient(func, u));
+
+    // Necessary with gcc10.3.0-1ubuntu1~20.04
+    benchmark::DoNotOptimize(sym::toString(dx_func));
+
+    for (auto _ : state) {
+        state.PauseTiming();
+        double xVal = rand();
+        double yVal = rand();
+        double velVal = rand();
+        double psiVal = rand();
+        double accVal = rand();
+        double steerVal = rand();
+        state.ResumeTiming();
+        benchmark::DoNotOptimize(func.resolve(xPos = xVal, yPos = yVal, vel = velVal, psi = psiVal,
+                                                         acc = accVal, steer = steerVal));
+        benchmark::DoNotOptimize(dx_func.resolve(xPos = xVal, yPos = yVal, vel = velVal, psi = psiVal,
+                                                            acc = accVal, steer = steerVal));
+        benchmark::DoNotOptimize(du_func.resolve(xPos = xVal, yPos = yVal, vel = velVal, psi = psiVal,
                                                             acc = accVal, steer = steerVal));
     }
 }
