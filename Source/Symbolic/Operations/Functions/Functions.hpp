@@ -9,8 +9,13 @@
 
 #include "../../Operators.hpp"
 #include "../Ternary.hpp"
+#include "ArcCos.hpp"
+#include "ArcSin.hpp"
+#include "ArcTan.hpp"
 #include "Cos.hpp"
 #include "Exp.hpp"
+#include "Log.hpp"
+#include "Pow.hpp"
 #include "Sin.hpp"
 #include "Sqrt.hpp"
 #include "Tan.hpp"
@@ -41,6 +46,42 @@ namespace std { // NOLINT everything is fine specialization for custom types is 
         return sym::Exp<Expr>{std::forward<Expr>(expr)};
     }
 
+    template<sym::Expression Expr>
+    auto asin(Expr &&expr) {
+        return sym::ArcSin{std::forward<Expr>(expr)};
+    }
+
+    template<sym::Expression Expr>
+    auto acos(Expr &&expr) {
+        return sym::ArcCos{std::forward<Expr>(expr)};
+    }
+
+    template<sym::Expression Expr>
+    auto atan(Expr &&expr) {
+        return sym::ArcTan{std::forward<Expr>(expr)};
+    }
+
+    template<sym::Expression Expr>
+    auto log(Expr &&expr) {
+        return sym::Log{std::forward<Expr>(expr)};
+    }
+
+    template<sym::Expression Base, sym::Expression Exp>
+    auto pow(Base &&base, Exp &&exp) {
+        return sym::Pow{std::forward<Base>(base), std::forward<Exp>(exp)};
+    }
+
+    template<typename Base, sym::Expression Exp>
+    auto pow(Base &&base, Exp &&exp) {
+        return sym::Pow{sym::RuntimeConstant{std::forward<Base>(base)}, std::forward<Exp>(exp)};
+    }
+
+    template<sym::Expression Base, typename Exp>
+    auto pow(Base &&base, Exp &&exp) {
+        return sym::Pow{std::forward<Base>(base), sym::RuntimeConstant{std::forward<Exp>(exp)}};
+    }
+
+    // Ternary based
     template<sym::Expression Lhs, sym::Expression Rhs>
     auto max(const Lhs &lhs, const Rhs &rhs) {
         return sym::Ternary{lhs > rhs, lhs, rhs};

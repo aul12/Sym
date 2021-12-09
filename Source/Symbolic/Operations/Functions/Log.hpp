@@ -4,8 +4,8 @@
  * @date 21.10.20
  * Description here TODO
  */
-#ifndef SYM_EXP_HPP
-#define SYM_EXP_HPP
+#ifndef SYM_LOG_HPP
+#define SYM_LOG_HPP
 
 #include <cmath>
 
@@ -61,4 +61,4 @@ namespace sym {
     }
 } // namespace sym
 
-#endif // SYM_EXP_HPP
+#endif // SYM_LOG_HPP
