@@ -109,6 +109,46 @@ namespace sym {
     constexpr auto operator>=(Lhs lhs, Rhs rhs) {
         return !(lhs > rhs);
     }
+
+    template<Expression Lhs, typename Rhs>
+    constexpr auto operator<(Lhs lhs, Rhs rhs) {
+        return Greater{RuntimeConstant{rhs}, lhs};
+    }
+
+    template<Expression Lhs, typename Rhs>
+    constexpr auto operator>(Lhs lhs, Rhs rhs) {
+        return Greater{lhs, RuntimeConstant{rhs}};
+    }
+
+    template<Expression Lhs, typename Rhs>
+    constexpr auto operator<=(Lhs lhs, Rhs rhs) {
+        return !(RuntimeConstant{rhs} > lhs);
+    }
+
+    template<Expression Lhs, typename Rhs>
+    constexpr auto operator>=(Lhs lhs, Rhs rhs) {
+        return !(lhs > RuntimeConstant{rhs});
+    }
+
+    template<typename Lhs, Expression Rhs>
+    constexpr auto operator<(Lhs lhs, Rhs rhs) {
+        return Greater{rhs, RuntimeConstant{lhs}};
+    }
+
+    template<typename Lhs, Expression Rhs>
+    constexpr auto operator>(Lhs lhs, Rhs rhs) {
+        return Greater{RuntimeConstant{lhs}, rhs};
+    }
+
+    template<typename Lhs, Expression Rhs>
+    constexpr auto operator<=(Lhs lhs, Rhs rhs) {
+        return !(rhs > RuntimeConstant{lhs});
+    }
+
+    template<typename Lhs, Expression Rhs>
+    constexpr auto operator>=(Lhs lhs, Rhs rhs) {
+        return !(RuntimeConstant{lhs} > rhs);
+    }
 } // namespace sym
 
 #endif // SYM_OPERATORS_HPP
