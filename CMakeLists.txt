@@ -56,6 +56,12 @@ target_include_directories(${PROJECT_NAME} PUBLIC Source)
 
 #target_link_libraries(${PROJECT_NAME} ${LIBS})
 
+include(GNUInstallDirs)
+set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${SOURCES}")
+install(TARGETS ${PROJECT_NAME}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
 if (BUILD_TESTS)
     add_subdirectory(Test)
     add_subdirectory(Benchmark)
