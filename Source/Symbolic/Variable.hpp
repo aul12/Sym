@@ -38,8 +38,8 @@ namespace sym {
 
     template<std::size_t index, std::size_t ID, typename FirstBinding, typename... Bindings>
     struct findBinding<index, ID, std::tuple<FirstBinding, Bindings...>> {
-        static constexpr std::size_t val =
-                FirstBinding::ID == ID ? index : findBinding<index + 1, ID, std::tuple<Bindings...>>::val;
+        static constexpr std::size_t followingVal = findBinding<index + 1, ID, std::tuple<Bindings...>>::val;
+        static constexpr std::size_t val = FirstBinding::ID == ID ? (followingVal == -1 ? index : -2) : followingVal;
     };
 
     template<typename T>
@@ -82,6 +82,7 @@ namespace sym {
         auto tuple = std::tuple_cat(wrapInTuple(std::forward<Bindings>(bindings))...);
         constexpr auto index = findBinding<0, ID, decltype(tuple)>::val;
         static_assert(index != -1, "No binding found!");
+        static_assert(index != -2, "Multiple bindings for same variable found!");
         return std::get<index>(tuple).val;
     }
 
@@ -90,6 +91,7 @@ namespace sym {
     constexpr auto Variable<ID>::resolve(const std::tuple<Bindings...> &tuple) const {
         constexpr auto index = findBinding<0, ID, std::tuple<Bindings...>>::val;
         static_assert(index != -1, "No binding found!");
+        static_assert(index != -2, "Multiple bindings for same variable found!");
         return std::get<index>(tuple).val;
     }
 
