@@ -165,6 +165,9 @@ auto sum = a + b;
 
 auto aBinding = a=17; // A binding can be explicitly specified
 sum.resolve(aBinding, b=15); // or directly given to resolve
+
+auto bindings = std::make_tuple(a=3, b=17); // Bindings can be collected in tuples which can be used like normal bindings in resolve (and mixed with normal bindings)
+sum.resolve(bindings);
 ```
 
 the compilation will fail if an expression is resolved without providing all necessary variables.
@@ -182,8 +185,8 @@ sym::Variable<'b'> b;
 
 auto prod = a * b;
 
-auto da_sum = sym::gradient(prod, a); // d/da (a*b) = b
-auto db_sum = sym::gradient(prod, b); // d/db (a*b) = a
+auto da_prod = sym::gradient(prod, a); // d/da (a*b) = b
+auto db_prod = sym::gradient(prod, b); // d/db (a*b) = a
 ```
 
 ## Simplification
@@ -197,8 +200,8 @@ sym::Variable<'b'> b;
 
 auto prod = a * b;
 
-auto da_sum = sym::gradient(prod, a); // The actual expression is 1 * b + 0 * a
-auto da_sum_simplified = sym::simpifier::simplify(da_sum); // The simplified expression is now only b
+auto da_prod = sym::gradient(prod, a); // The actual expression is 1 * b + 0 * a
+auto da_prod_simplified = sym::simpifier::simplify(da_prod); // The simplified expression is now only b
 ```
 
 As simplification is done during compile time no overhead will incur on runtime, thus it is advisable to simplify the
