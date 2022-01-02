@@ -11,9 +11,9 @@ auto func = [](auto i, auto x, auto y, auto z) {
 };
 
 void complexResolveSym(benchmark::State &state) {
-    sym::Variable<'x'> x;
-    sym::Variable<'y'> y;
-    sym::Variable<'z'> z;
+    sym::Variable<"x"> x;
+    sym::Variable<"y"> y;
+    sym::Variable<"z"> z;
     auto sum = sym::make_sum<0, N>([x, y, z](auto i) { return func(i, x, y, z); });
 
     for (auto _ : state) {

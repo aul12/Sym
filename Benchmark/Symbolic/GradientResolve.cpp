@@ -53,13 +53,13 @@ auto du_f(F factory, XPos /*xPos*/, YPos /*yPos*/, Vel vel, Psi /*psi*/, Acc /*a
 }
 
 void gradientResolveSym(benchmark::State &state) {
-    sym::Variable<'x'> xPos;
-    sym::Variable<'y'> yPos;
-    sym::Variable<'v'> vel;
-    sym::Variable<'p'> psi;
+    sym::Variable<"x"> xPos;
+    sym::Variable<"y"> yPos;
+    sym::Variable<"v"> vel;
+    sym::Variable<"p"> psi;
 
-    sym::Variable<'a'> acc;
-    sym::Variable<'s'> steer;
+    sym::Variable<"a"> acc;
+    sym::Variable<"s"> steer;
 
     sym::Vector x{xPos, yPos, vel, psi};
     sym::Vector u{acc, steer};
@@ -89,13 +89,13 @@ void gradientResolveSym(benchmark::State &state) {
 BENCHMARK(gradientResolveSym);
 
 void gradientResolveSymSimplifiedAfter(benchmark::State &state) {
-    sym::Variable<'x'> xPos;
-    sym::Variable<'y'> yPos;
-    sym::Variable<'v'> vel;
-    sym::Variable<'p'> psi;
+    sym::Variable<"x"> xPos;
+    sym::Variable<"y"> yPos;
+    sym::Variable<"v"> vel;
+    sym::Variable<"p"> psi;
 
-    sym::Variable<'a'> acc;
-    sym::Variable<'s'> steer;
+    sym::Variable<"a"> acc;
+    sym::Variable<"s"> steer;
 
     sym::Vector x{xPos, yPos, vel, psi};
     sym::Vector u{acc, steer};
@@ -128,13 +128,13 @@ void gradientResolveSymSimplifiedAfter(benchmark::State &state) {
 BENCHMARK(gradientResolveSymSimplifiedAfter);
 
 void gradientResolveSymSimplifiedAfterWithToString(benchmark::State &state) {
-    sym::Variable<'x'> xPos;
-    sym::Variable<'y'> yPos;
-    sym::Variable<'v'> vel;
-    sym::Variable<'p'> psi;
+    sym::Variable<"x"> xPos;
+    sym::Variable<"y"> yPos;
+    sym::Variable<"v"> vel;
+    sym::Variable<"p"> psi;
 
-    sym::Variable<'a'> acc;
-    sym::Variable<'s'> steer;
+    sym::Variable<"a"> acc;
+    sym::Variable<"s"> steer;
 
     sym::Vector x{xPos, yPos, vel, psi};
     sym::Vector u{acc, steer};
@@ -170,13 +170,13 @@ void gradientResolveSymSimplifiedAfterWithToString(benchmark::State &state) {
 BENCHMARK(gradientResolveSymSimplifiedAfterWithToString);
 
 void gradientResolveSymSimplified(benchmark::State &state) {
-    sym::Variable<'x'> xPos;
-    sym::Variable<'y'> yPos;
-    sym::Variable<'v'> vel;
-    sym::Variable<'p'> psi;
+    sym::Variable<"x"> xPos;
+    sym::Variable<"y"> yPos;
+    sym::Variable<"v"> vel;
+    sym::Variable<"p"> psi;
 
-    sym::Variable<'a'> acc;
-    sym::Variable<'s'> steer;
+    sym::Variable<"a"> acc;
+    sym::Variable<"s"> steer;
 
     sym::Vector x{xPos, yPos, vel, psi};
     sym::Vector u{acc, steer};
@@ -206,13 +206,13 @@ void gradientResolveSymSimplified(benchmark::State &state) {
 BENCHMARK(gradientResolveSymSimplified);
 
 void gradientResolveSymSimplifiedWithToString(benchmark::State &state) {
-    sym::Variable<'x'> xPos;
-    sym::Variable<'y'> yPos;
-    sym::Variable<'v'> vel;
-    sym::Variable<'p'> psi;
+    sym::Variable<"x"> xPos;
+    sym::Variable<"y"> yPos;
+    sym::Variable<"v"> vel;
+    sym::Variable<"p"> psi;
 
-    sym::Variable<'a'> acc;
-    sym::Variable<'s'> steer;
+    sym::Variable<"a"> acc;
+    sym::Variable<"s"> steer;
 
     sym::Vector x{xPos, yPos, vel, psi};
     sym::Vector u{acc, steer};

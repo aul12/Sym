@@ -39,7 +39,7 @@ namespace sym {
         template<typename... Bindings>
         constexpr auto resolve(const Bindings &...bindings) const;
 
-        template<sym::Expression Base_, sym::Expression Exp_, std::size_t ID>
+        template<sym::Expression Base_, sym::Expression Exp_, fixed_string ID>
         constexpr friend auto gradient(const Pow<Base_, Exp_> &x, const Variable<ID> &d);
 
         template<sym::Expression Base_, sym::Expression Exp_>
@@ -63,7 +63,7 @@ namespace sym {
         return std::pow(base.resolve(bindings...), exp.resolve(bindings...));
     }
 
-    template<sym::Expression Base_, sym::Expression Exp_, std::size_t ID>
+    template<sym::Expression Base_, sym::Expression Exp_, fixed_string ID>
     constexpr auto gradient(const Pow<Base_, Exp_> &x, const Variable<ID> &d) {
         return Mul{Pow{x.base, Sub{x.exp, CompiletimeConstant<int, 1>{}}},
                    Add{Mul{x.exp, gradient(x.base, d)}, Mul{Mul{x.base, Log{x.base}}, gradient(x.exp, d)}}};

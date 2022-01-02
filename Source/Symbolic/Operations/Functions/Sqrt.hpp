@@ -30,7 +30,7 @@ namespace sym {
             return std::sqrt(expr.resolve(std::forward<Bindings>(bindings)...));
         }
 
-        template<Expression Expr_, std::size_t ID>
+        template<Expression Expr_, fixed_string ID>
         constexpr friend auto gradient(const Sqrt<Expr_> &sqrt, const Variable<ID> &id);
 
         template<Expression Expr_>
@@ -43,7 +43,7 @@ namespace sym {
         Expr expr;
     };
 
-    template<Expression Expr_, std::size_t ID>
+    template<Expression Expr_, fixed_string ID>
     constexpr auto gradient(const Sqrt<Expr_> &sqrt, const Variable<ID> &id) {
         /*
          * d/dx \sqrt(f(x)) = 0.5 * 1 / \sqrt{f(x)} * d/dx f(x)

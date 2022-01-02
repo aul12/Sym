@@ -23,7 +23,7 @@ TEST(ArcCos, ToString) {
 }
 
 TEST(ArcCos, Gradient) {
-    sym::Variable<'x'> x;
+    sym::Variable<"x"> x;
     sym::ArcCos<decltype(x)> y{x};
     EXPECT_DOUBLE_EQ(sym::gradient(y, x).resolve(x=0), -1);
 }

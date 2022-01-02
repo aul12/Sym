@@ -25,7 +25,7 @@ namespace sym {
         template<typename... Bindings>
         constexpr auto resolve(Bindings &&...bindings) const;
 
-        template<Expression Expr_, std::size_t ID>
+        template<Expression Expr_, fixed_string ID>
         constexpr friend auto gradient(const Exp<Expr_> &x, const Variable<ID> &d);
 
         template<Expression Expr_>
@@ -48,7 +48,7 @@ namespace sym {
         return std::exp(expr.resolve(std::forward<Bindings>(bindings)...));
     }
 
-    template<Expression Expr_, std::size_t ID>
+    template<Expression Expr_, fixed_string ID>
     constexpr auto gradient(const Exp<Expr_> &x, const Variable<ID> &d) {
         return Mul{Exp{x.expr}, gradient(x.expr, d)};
     }

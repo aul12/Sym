@@ -24,29 +24,29 @@ TEST(Mul, ToString) {
 }
 
 TEST(Mul, GradA) {
-    sym::Variable<'a'> a;
-    sym::Variable<'b'> b;
+    sym::Variable<"a"> a;
+    sym::Variable<"b"> b;
     sym::Mul<decltype(a), decltype(b)> mul{a, b};
     EXPECT_EQ(sym::gradient(mul, a).resolve(a=17, b=42), 42);
 }
 
 TEST(Mul, GradB) {
-    sym::Variable<'a'> a;
-    sym::Variable<'b'> b;
+    sym::Variable<"a"> a;
+    sym::Variable<"b"> b;
     sym::Mul<decltype(a), decltype(b)> mul{a, b};
     EXPECT_EQ(sym::gradient(mul, b).resolve(a=17, b=42), 17);
 }
 
 TEST(Mul, GradNone) {
-    sym::Variable<'a'> a;
-    sym::Variable<'b'> b;
-    sym::Variable<'c'> c;
+    sym::Variable<"a"> a;
+    sym::Variable<"b"> b;
+    sym::Variable<"c"> c;
     sym::Mul<decltype(a), decltype(b)> mul{a, b};
     EXPECT_EQ(sym::gradient(mul, c).resolve(a=17, b=42, c=42), 0);
 }
 
 TEST(Mul, GradBoth) {
-    sym::Variable<'a'> a;
+    sym::Variable<"a"> a;
     sym::Mul<decltype(a), decltype(a)> mul{a, a};
     EXPECT_EQ(sym::gradient(mul, a).resolve(a=17), 2 * 17);
 }

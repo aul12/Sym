@@ -10,15 +10,16 @@
 #include <memory>
 
 #include "Expression.hpp"
+#include "FixedString.hpp"
 
 namespace sym {
     template<typename T, T val>
     class CompiletimeConstant;
 
-    template<std::size_t ID>
+    template<fixed_string ID>
     class Variable;
 
-    template<typename T, std::size_t ID_>
+    template<typename T, fixed_string ID_>
     class Binding {
       public:
         static constexpr auto ID = ID_;
@@ -31,12 +32,12 @@ namespace sym {
         T val;
     };
 
-    template<std::size_t index, std::size_t ID, typename T>
+    template<std::size_t index, fixed_string ID, typename T>
     struct findBinding {
         static constexpr std::size_t val = -1;
     };
 
-    template<std::size_t index, std::size_t ID, typename FirstBinding, typename... Bindings>
+    template<std::size_t index, fixed_string ID, typename FirstBinding, typename... Bindings>
     struct findBinding<index, ID, std::tuple<FirstBinding, Bindings...>> {
         static constexpr std::size_t followingVal = findBinding<index + 1, ID, std::tuple<Bindings...>>::val;
         static constexpr std::size_t val = FirstBinding::ID == ID ? (followingVal == -1 ? index : -2) : followingVal;
@@ -52,16 +53,16 @@ namespace sym {
         return tuple;
     }
 
-    template<std::size_t ID>
+    template<fixed_string ID>
     class Variable {
       public:
-        template<std::size_t ID0, std::size_t ID1>
+        template<fixed_string ID0, fixed_string ID1>
         friend constexpr auto gradient(const Variable<ID0> &x, const Variable<ID1> &d);
 
-        template<std::size_t ID_>
+        template<fixed_string ID_>
         friend auto toString(const Variable<ID_> &x) -> std::string;
 
-        template<std::size_t ID_>
+        template<fixed_string ID_>
         constexpr friend auto getChildren(const Variable<ID_> &x) -> std::tuple<>;
 
         template<typename... Bindings>
@@ -76,7 +77,7 @@ namespace sym {
         }
     };
 
-    template<std::size_t ID>
+    template<fixed_string ID>
     template<typename... Bindings>
     constexpr auto Variable<ID>::resolve(Bindings &&...bindings) const {
         auto tuple = std::tuple_cat(wrapInTuple(std::forward<Bindings>(bindings))...);
@@ -86,7 +87,7 @@ namespace sym {
         return std::get<index>(tuple).val;
     }
 
-    template<std::size_t ID>
+    template<fixed_string ID>
     template<typename... Bindings>
     constexpr auto Variable<ID>::resolve(const std::tuple<Bindings...> &tuple) const {
         constexpr auto index = findBinding<0, ID, std::tuple<Bindings...>>::val;
@@ -95,21 +96,17 @@ namespace sym {
         return std::get<index>(tuple).val;
     }
 
-    template<std::size_t ID0, std::size_t ID1>
+    template<fixed_string ID0, fixed_string ID1>
     constexpr auto gradient(const Variable<ID0> & /*x*/, const Variable<ID1> & /*d*/) {
         return CompiletimeConstant < int, ID0 == ID1 ? 1 : 0 > {};
     }
 
-    template<std::size_t ID>
+    template<fixed_string ID>
     auto toString(const Variable<ID> & /*x*/) -> std::string {
-        if (std::isalpha(ID)) {
-            return std::string{static_cast<char>(ID)};
-        } else {
-            return "{" + std::to_string(ID) + "}";
-        }
+        return std::string{ID.data};
     }
 
-    template<std::size_t ID_>
+    template<fixed_string ID_>
     constexpr auto getChildren(const Variable<ID_> & /*x*/) -> std::tuple<> {
         return std::make_tuple();
     }

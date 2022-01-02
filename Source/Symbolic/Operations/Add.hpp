@@ -20,7 +20,7 @@ namespace sym {
         template<typename... Bindings>
         constexpr auto resolve(const Bindings &...bindings) const;
 
-        template<Expression Lhs_, Expression Rhs_, std::size_t ID>
+        template<Expression Lhs_, Expression Rhs_, fixed_string ID>
         friend constexpr auto gradient(const Add<Lhs_, Rhs_> &x, const Variable<ID> &d);
 
         template<Expression Lhs_, Expression Rhs_>
@@ -44,7 +44,7 @@ namespace sym {
         return lhs.resolve(bindings...) + rhs.resolve(bindings...);
     }
 
-    template<Expression Lhs_, Expression Rhs_, std::size_t ID>
+    template<Expression Lhs_, Expression Rhs_, fixed_string ID>
     constexpr auto gradient(const Add<Lhs_, Rhs_> &x, const Variable<ID> &d) {
         using ldiff = decltype(gradient(x.lhs, d));
         using rdiff = decltype(gradient(x.rhs, d));

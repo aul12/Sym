@@ -11,7 +11,7 @@
 #include "Variable.hpp"
 
 namespace sym {
-    template<std::size_t ID>
+    template<fixed_string ID>
     class Variable;
 
     template<typename T, T val_>
@@ -24,7 +24,7 @@ namespace sym {
             return val_;
         }
 
-        template<typename T_, T_ val0, std::size_t ID>
+        template<typename T_, T_ val0, fixed_string ID>
         friend constexpr auto gradient(const CompiletimeConstant<T_, val0> &, const Variable<ID> &);
 
         template<typename T_, T_ val0>
@@ -34,7 +34,7 @@ namespace sym {
         constexpr friend auto getChildren(const CompiletimeConstant<T_, val0> &x) -> std::tuple<>;
     };
 
-    template<typename T_, T_ val0, std::size_t ID>
+    template<typename T_, T_ val0, fixed_string ID>
     constexpr auto gradient(const CompiletimeConstant<T_, val0> &, const Variable<ID> &) {
         return CompiletimeConstant<T_, 0>{};
     }

@@ -23,7 +23,7 @@ TEST(ArcSin, ToString) {
 }
 
 TEST(ArcSin, Gradient) {
-    sym::Variable<'x'> x;
+    sym::Variable<"x"> x;
     sym::ArcSin<decltype(x)> y{x};
     EXPECT_DOUBLE_EQ(sym::gradient(y, x).resolve(x=0), 1);
 }

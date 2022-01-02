@@ -7,6 +7,7 @@ if (GTest_FOUND)
 
     set(TEST_SOURCES
             Symbolic/CompiletimeConstant.cpp
+            Symbolic/LongVariableNames.cpp
             Symbolic/Operations/Add.cpp
             Symbolic/Operations/Div.cpp
             Symbolic/Operations/Functions/ArcCos.cpp

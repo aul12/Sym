@@ -26,5 +26,5 @@ TEST(CompiletimeConstant, ToString) {
 TEST(CompiletimeConstant, GradResolve) {
     sym::CompiletimeConstant<int, 42> c;
 
-    EXPECT_EQ(sym::gradient(c, sym::Variable<'a'>{}).resolve(), 0);
+    EXPECT_EQ(sym::gradient(c, sym::Variable<"a">{}).resolve(), 0);
 }

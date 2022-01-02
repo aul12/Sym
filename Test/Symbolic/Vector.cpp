@@ -10,7 +10,7 @@ TEST(Vector, Expression) {
 }
 
 TEST(Vector, Resolve) {
-    sym::Variable<'a'> a;
+    sym::Variable<"a"> a;
     sym::Vector vec{a, a + a, a * a};
     auto result = vec.resolve(a = 42);
     EXPECT_EQ(std::get<0>(result), 42);
@@ -19,13 +19,13 @@ TEST(Vector, Resolve) {
 }
 
 TEST(Vector, ToString) {
-    sym::Variable<'a'> a;
+    sym::Variable<"a"> a;
     sym::Vector vec{a, a + a, a * a};
     EXPECT_NO_THROW(sym::toString(vec));
 }
 
 TEST(Vector, ResolveTo) {
-    sym::Variable<'a'> a;
+    sym::Variable<"a"> a;
     sym::Vector vec{a, a + a, a * a};
     auto res = vec.resolveAs<std::vector<int>>(a = 42);
     EXPECT_EQ(res[0], 42);
@@ -34,7 +34,7 @@ TEST(Vector, ResolveTo) {
 }
 
 TEST(Vector, Gradient) {
-    sym::Variable<'a'> a;
+    sym::Variable<"a"> a;
     sym::Vector vec{a, a + a, a * a};
     auto dvec = sym::gradient(vec, a);
     auto res = dvec.resolveAs<std::vector<int>>(a = 42);
@@ -44,8 +44,8 @@ TEST(Vector, Gradient) {
 }
 
 TEST(Vector, Gradients) {
-    sym::Variable<'a'> a;
-    sym::Variable<'b'> b;
+    sym::Variable<"a"> a;
+    sym::Variable<"b"> b;
     sym::Vector f{a * b, a + b};
     auto grad = sym::gradient(f, sym::Vector{a, b});
     auto res = grad.resolve(a = 17, b = 42);
@@ -56,8 +56,8 @@ TEST(Vector, Gradients) {
 }
 
 TEST(Vector, GradientsResolveAsEigen) {
-    sym::Variable<'a'> a;
-    sym::Variable<'b'> b;
+    sym::Variable<"a"> a;
+    sym::Variable<"b"> b;
     sym::Vector f{a * b, a + b};
     auto grad = sym::gradient(f, sym::Vector{a, b});
     auto vec = grad.resolveAs<Eigen::Matrix<int, 4, 1>>(a = 17, b = 42);
@@ -69,9 +69,9 @@ TEST(Vector, GradientsResolveAsEigen) {
 }
 
 TEST(Vector, ResolveFromEigen) {
-    sym::Variable<'a'> a;
-    sym::Variable<'b'> b;
-    sym::Variable<'c'> c;
+    sym::Variable<"a"> a;
+    sym::Variable<"b"> b;
+    sym::Variable<"c"> c;
     sym::Vector sym{a, b, c};
     Eigen::Vector3d vec{17, 38, 42};
     auto resolved = sym.resolve(sym::bindVectorFromContainer(sym, vec));

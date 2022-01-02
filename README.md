@@ -9,8 +9,8 @@ Framework for efficient symbolic calculations during compile time using C++ zero
 ```c++
 // Initialize two variables which can be used to form expressions,
 // at this point they have neither a type nor a value
-sym::Variable<'a'> a;
-sym::Variable<'b'> b;
+sym::Variable<"a"> a;
+sym::Variable<"b"> b;
 
 // Build an expression from the variables
 auto f = a*a + b - a * b;
@@ -35,7 +35,7 @@ auto dadb_f = gradient(db_f, a);
 ### Vector Handling and Interaction with other Libraries
 
 ```c++
-sym::Variable<'a'> a;
+sym::Variable<"a"> a;
 
 // A vector is a combination of multiple expressions
 sym::Vector vec{a, a + a, a * a};
@@ -95,7 +95,7 @@ Example:
 
 ```c++
 sym::Variable<0> a; // A variable with ID 0
-sym::Variable<'b'> b; // a single character can be used instead of a number to increase readability
+sym::Variable<"b"> b; // a single character can be used instead of a number to increase readability
 ```
 
 ### Compile Time Constants
@@ -132,8 +132,8 @@ class Add {
 To simplify the definition of expressions the corresponding operators for the declared operations are overwritten:
 
 ```c++
-sym::Variable<'a'> a;
-sym::Variable<'b'> b;
+sym::Variable<"a"> a;
+sym::Variable<"b"> b;
 
 Add<decltype(a), decltype(b)> sum{a, b}; // Not very readable
 Add sum{a, b}; // Better readable thanks to class template argument deduction
@@ -145,7 +145,7 @@ auto sum = a + b; // Even better readable, looks like normal C++
 In addition to the basic operations most of the relevant mathematical functions are supported as well:
 
 ```c++
-sym::Variable<'a'> a;
+sym::Variable<"a"> a;
 auto sqrt_a = std::sqrt(a);
 auto pow_a_a = std::pow(a, a);
 ```
@@ -158,8 +158,8 @@ bind a variable you can assign a value to a variable, this does not directly inf
 a `Binding` object which can then be used to resolve an expression:
 
 ```c++
-sym::Variable<'a'> a;
-sym::Variable<'b'> b;
+sym::Variable<"a"> a;
+sym::Variable<"b"> b;
 
 auto sum = a + b;
 
@@ -180,8 +180,8 @@ differentiation using the forward mode of automatic differentiation. For this a 
 derivative of the expression with respect to the variable:
 
 ```c++
-sym::Variable<'a'> a;
-sym::Variable<'b'> b;
+sym::Variable<"a"> a;
+sym::Variable<"b"> b;
 
 auto prod = a * b;
 
@@ -195,8 +195,8 @@ Especially when using the symbolic differentiation the resulting expression tree
 containing many parts which are 0. To remove these parts the tree can be simplified:
 
 ```c++
-sym::Variable<'a'> a;
-sym::Variable<'b'> b;
+sym::Variable<"a"> a;
+sym::Variable<"b"> b;
 
 auto prod = a * b;
 
@@ -213,8 +213,8 @@ massively, that is the reason why simplification needs to be done explicitly.
 A vector is a sorted collection of expressions:
 
 ```c++
-sym::Variable<'a'> a;
-sym::Variable<'b'> b;
+sym::Variable<"a"> a;
+sym::Variable<"b"> b;
 
 sym::Vector vec{a, b, a+b, a*b};
 ```
@@ -226,8 +226,8 @@ the individual components are not required to be the same the resulting type is 
 resolved components with their respective type:
 
 ```c++
-sym::Variable<'a'> a;
-sym::Variable<'b'> b;
+sym::Variable<"a"> a;
+sym::Variable<"b"> b;
 
 sym::Vector vec{a, b};
 auto res = vec.resolve(a=1, b=0.5); // res is a tuple<int, double> containing {1, 0.5}
@@ -238,8 +238,8 @@ and `.resolveTo`. The first variant constructs a `T` with the resolved values as
 variant fills the first argument with the values returned as constructor arguments:
 
 ```c++
-sym::Variable<'a'> a;
-sym::Variable<'b'> b;
+sym::Variable<"a"> a;
+sym::Variable<"b"> b;
 sym::Vector vec{a, b};
 
 auto stdVec = vec.resolveAs<std::vector<double>>(a=1, b=0.5);
@@ -257,8 +257,8 @@ Similar to the two special resolve variants there is also a special bind functio
 container with `[]`-access:
 
 ```c++
-sym::Variable<'a'> a;
-sym::Variable<'b'> b;
+sym::Variable<"a"> a;
+sym::Variable<"b"> b;
 sym::Vector vec{a, b};
 
 std::vector<double> vals{1, 0.5};
@@ -270,8 +270,8 @@ vec.resolve(sym::bindVectorFromContainer(vec, vals));
 The gradient of vectors can be calculated identitcal to all other gradients, the resulting expression is a vector:
 
 ```c++
-sym::Variable<'a'> a;
-sym::Variable<'b'> b;
+sym::Variable<"a"> a;
+sym::Variable<"b"> b;
 sym::Vector vec{a, b};
 
 sym::gradient(vec, a);
@@ -281,8 +281,8 @@ instead of calculating the derivative with respect to a single variable the grad
 to a vector:
 
 ```c++
-sym::Variable<'a'> a;
-sym::Variable<'b'> b;
+sym::Variable<"a"> a;
+sym::Variable<"b"> b;
 sym::Vector vec{a, b};
 
 sym::gradient(a, vec);

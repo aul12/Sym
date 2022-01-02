@@ -4,17 +4,17 @@
 
 constexpr auto N = 10;
 
-template<std::size_t... IDs>
+template<sym::fixed_string... IDs>
 auto getVariableTuple(std::index_sequence<IDs...>) {
     return std::make_tuple(sym::Variable<IDs>{}...);
 }
 
-template<std::size_t... IDs>
+template<sym::fixed_string... IDs>
 auto getSum(std::tuple<sym::Variable<IDs>...>) {
     return (... + sym::Variable<IDs>{});
 }
 
-template<std::size_t index, std::size_t... IDs>
+template<std::size_t index, sym::fixed_string... IDs>
 auto getBinding(std::tuple<sym::Variable<IDs>...> tuple) {
     auto currBinding = (std::get<index>(tuple) = static_cast<double>(rand()));
     if constexpr (index < sizeof...(IDs) - 1) {
@@ -24,7 +24,7 @@ auto getBinding(std::tuple<sym::Variable<IDs>...> tuple) {
     }
 }
 
-
+/*
 void manyVariableAsTuple(benchmark::State &state) {
     auto variables = getVariableTuple(std::make_index_sequence<N>());
     auto expr = getSum(variables);
@@ -54,6 +54,7 @@ void manyVariableAsVariadic(benchmark::State &state) {
     }
 }
 BENCHMARK(manyVariableAsVariadic);
+*/
 
 void manyVariableNative(benchmark::State &state) {
     for (auto _ : state) {
