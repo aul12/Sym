@@ -25,7 +25,7 @@ TEST(Pow, ToString) {
 }
 
 TEST(Pow, GradientA) {
-    sym::Variable<"a"> a;
+    sym::Variable<'a'> a;
     sym::CompiletimeConstant<int, 2> b;
     sym::Pow y{a, b};
     EXPECT_DOUBLE_EQ(sym::gradient(y, a).resolve(a = 17), 34);
@@ -33,7 +33,7 @@ TEST(Pow, GradientA) {
 
 TEST(Pow, GradientB) {
     sym::RuntimeConstant<double> a{std::exp(1)};
-    sym::Variable<"b"> b;
+    sym::Variable<'b'> b;
     sym::Pow y{a, b};
     EXPECT_DOUBLE_EQ(sym::gradient(y, b).resolve(b = 8), std::exp(8));
 }

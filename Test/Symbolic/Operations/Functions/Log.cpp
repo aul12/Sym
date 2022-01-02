@@ -23,7 +23,7 @@ TEST(Log, ToString) {
 }
 
 TEST(Log, Gradient) {
-    sym::Variable<"x"> x;
+    sym::Variable<'x'> x;
     sym::Log<decltype(x)> y{x};
     EXPECT_DOUBLE_EQ(sym::gradient(y, x).resolve(x=0.5), 2);
 }

@@ -6,8 +6,8 @@
 #include "Symbolic/Variable.hpp"
 
 TEST(Simplifier_Traverse, Enter) {
-    sym::Variable<"a"> a;
-    sym::Variable<"b"> b;
+    sym::Variable<'a'> a;
+    sym::Variable<'b'> b;
     auto expr = a + b * (a - b) + b * 3;
     auto traversed = sym::simplifier::traverseExpression(
             expr, [](auto && /*expr*/) { return sym::CompiletimeConstant<int, 0>{}; },
@@ -17,8 +17,8 @@ TEST(Simplifier_Traverse, Enter) {
 }
 
 TEST(Simplifier_Traverse, Leave) {
-    sym::Variable<"a"> a;
-    sym::Variable<"b"> b;
+    sym::Variable<'a'> a;
+    sym::Variable<'b'> b;
     auto expr = a + b * (a - b) + b * 3;
     auto traversed = sym::simplifier::traverseExpression(
             expr, [](auto &&expr) { return expr; },

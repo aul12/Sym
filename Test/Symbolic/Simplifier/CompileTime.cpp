@@ -13,7 +13,7 @@ TEST(Simplifier_CompileTime, MergeConstantDirect) {
 }
 
 TEST(Simplifier_CompileTime, MergeIdentityDirect) {
-    sym::Variable<"a"> a;
+    sym::Variable<'a'> a;
     sym::CompiletimeConstant<int, 0> b;
     auto sum = a + b;
 
@@ -21,7 +21,7 @@ TEST(Simplifier_CompileTime, MergeIdentityDirect) {
 }
 
 TEST(Simplifier_CompileTime, MergeDisappearDirect) {
-    sym::Variable<"a"> a;
+    sym::Variable<'a'> a;
     sym::CompiletimeConstant<int, 0> b;
     auto prod = a * b;
     auto simplified = sym::simplifier::MergeDisappear<decltype(prod)>::newVal;
@@ -40,17 +40,17 @@ TEST(Simplifier_CompileTime, MergeConstant) {
 }
 
 TEST(Simplifier_CompileTime, MergeIdentity) {
-    sym::Variable<"a"> a;
+    sym::Variable<'a'> a;
     sym::CompiletimeConstant<int, 0> b;
     auto sum = a + b;
 
     auto newSum = sym::simplifier::simplifyNodeCompileTime(sum);
 
-    EXPECT_TRUE((std::is_same_v<decltype(newSum), sym::Variable<"a">>) );
+    EXPECT_TRUE((std::is_same_v<decltype(newSum), sym::Variable<'a'>>) );
 }
 
 TEST(Simplifier_CompileTime, MergeDisappear) {
-    sym::Variable<"a"> a;
+    sym::Variable<'a'> a;
     sym::CompiletimeConstant<int, 0> b;
     auto prod = a * b;
     auto simplified = sym::simplifier::simplifyNodeCompileTime(prod);

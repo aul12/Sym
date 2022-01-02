@@ -23,7 +23,7 @@ TEST(Tan, ToString) {
 }
 
 TEST(Tan, Gradient) {
-    sym::Variable<"x"> x;
+    sym::Variable<'x'> x;
     sym::Tan<decltype(x)> y{x};
     EXPECT_DOUBLE_EQ(sym::gradient(y, x).resolve(x=0), 1);
 }
