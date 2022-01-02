@@ -12,6 +12,19 @@
 #include "Expression.hpp"
 #include "FixedString.hpp"
 
+#define STRINGIZE2(s) #s
+#define STRINGIZE(s) STRINGIZE2(s)
+
+/**
+ * Define a variable with the same name and identifier
+ */
+#define VARIABLE(name) sym::Variable<#name> name
+
+/**
+ * Define a variable with automatic name based on file name and line number
+ */
+#define A_VARIABLE sym::Variable<__FILE__ ":" STRINGIZE(__LINE__)>
+
 namespace sym {
     template<typename T, T val>
     class CompiletimeConstant;
