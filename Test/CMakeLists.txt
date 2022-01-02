@@ -32,6 +32,7 @@ if (GTest_FOUND)
             Symbolic/Simplifier/Runtime.cpp
             Symbolic/Simplifier/Simplifier.cpp
             Symbolic/Sum.cpp
+            Symbolic/ToString.cpp
             Symbolic/Variable.cpp
             Symbolic/Vector.cpp
             )

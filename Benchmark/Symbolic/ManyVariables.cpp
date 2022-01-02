@@ -4,7 +4,7 @@
 
 constexpr auto N = 10;
 
-template<sym::fixed_string... IDs>
+template<std::size_t... IDs>
 auto getVariableTuple(std::index_sequence<IDs...>) {
     return std::make_tuple(sym::Variable<IDs>{}...);
 }
@@ -24,8 +24,6 @@ auto getBinding(std::tuple<sym::Variable<IDs>...> tuple) {
     }
 }
 
-/*
- * TODO: Fix make_index_sequence
 void manyVariableAsTuple(benchmark::State &state) {
     auto variables = getVariableTuple(std::make_index_sequence<N>());
     auto expr = getSum(variables);
@@ -55,7 +53,6 @@ void manyVariableAsVariadic(benchmark::State &state) {
     }
 }
 BENCHMARK(manyVariableAsVariadic);
-*/
 
 void manyVariableNative(benchmark::State &state) {
     for (auto _ : state) {
