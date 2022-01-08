@@ -22,7 +22,7 @@ namespace sym {
             return cond.resolve(bindings...) ? trueVal.resolve(bindings...) : falseVal.resolve(bindings...);
         }
 
-        template<Expression Cond_, Expression TrueVal_, Expression FalseVal_, std::size_t ID>
+        template<Expression Cond_, Expression TrueVal_, Expression FalseVal_, fixed_string ID>
         friend constexpr auto gradient(const Ternary<Cond_, TrueVal_, FalseVal_> &x, const Variable<ID> &d);
 
         template<Expression Cond_, Expression TrueVal_, Expression FalseVal_>
@@ -36,7 +36,7 @@ namespace sym {
         FalseVal falseVal;
     };
 
-    template<Expression Cond_, Expression TrueVal_, Expression FalseVal_, std::size_t ID>
+    template<Expression Cond_, Expression TrueVal_, Expression FalseVal_, fixed_string ID>
     constexpr auto gradient(const Ternary<Cond_, TrueVal_, FalseVal_> &x, const Variable<ID> &d) {
         return Ternary{x.cond, gradient(x.trueVal, d), gradient(x.falseVal, d)};
     }

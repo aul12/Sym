@@ -7,6 +7,7 @@ if (GTest_FOUND)
 
     set(TEST_SOURCES
             Symbolic/CompiletimeConstant.cpp
+            Symbolic/LongVariableNames.cpp
             Symbolic/Operations/Add.cpp
             Symbolic/Operations/Div.cpp
             Symbolic/Operations/Functions/ArcCos.cpp
@@ -31,6 +32,7 @@ if (GTest_FOUND)
             Symbolic/Simplifier/Runtime.cpp
             Symbolic/Simplifier/Simplifier.cpp
             Symbolic/Sum.cpp
+            Symbolic/ToString.cpp
             Symbolic/Variable.cpp
             Symbolic/Vector.cpp
             )

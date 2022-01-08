@@ -11,7 +11,7 @@
 #include "Variable.hpp"
 
 namespace sym {
-    template<std::size_t ID>
+    template<fixed_string ID>
     class Variable;
 
     template<typename T, T val_>
@@ -25,7 +25,7 @@ namespace sym {
         template<typename... Bindings>
         constexpr auto resolve(Bindings...) const -> T;
 
-        template<typename T_, std::size_t ID>
+        template<typename T_, fixed_string ID>
         friend constexpr auto gradient(const RuntimeConstant<T_> &, const Variable<ID> &);
 
         template<typename T_>
@@ -48,7 +48,7 @@ namespace sym {
         return val;
     }
 
-    template<typename T_, std::size_t ID>
+    template<typename T_, fixed_string ID>
     constexpr auto gradient(const RuntimeConstant<T_> &, const Variable<ID> &) {
         return CompiletimeConstant<int, 0>{};
     }

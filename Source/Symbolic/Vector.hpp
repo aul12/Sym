@@ -98,10 +98,10 @@ namespace sym {
         template<Expression... Expressions_>
         constexpr friend auto getChildren(const Vector<Expressions_...> &vec) -> std::tuple<Expressions_...>;
 
-        template<std::size_t ID, Expression... Expressions_>
+        template<fixed_string ID, Expression... Expressions_>
         constexpr friend auto gradient(const Vector<Expressions_...> &vec, const sym::Variable<ID> &d);
 
-        template<Expression Expr, std::size_t... IDs>
+        template<Expression Expr, fixed_string... IDs>
         constexpr friend auto gradient(const Expr &expr, const Vector<Variable<IDs>...> &ds);
 
       private:
@@ -121,7 +121,7 @@ namespace sym {
         static constexpr auto val = true;
     };
 
-    template<Expression Expr, std::size_t... IDs>
+    template<Expression Expr, fixed_string... IDs>
     constexpr auto gradient(const Expr &expr, const Vector<Variable<IDs>...> &ds) {
         return Vector{mapTuple(ds.expressions, [&expr](auto &&d) { return gradient(expr, d); })};
     }
@@ -151,13 +151,13 @@ namespace sym {
         return result;
     }
 
-    template<std::size_t ID, Expression... Expressions_>
+    template<fixed_string ID, Expression... Expressions_>
     constexpr auto gradient(const Vector<Expressions_...> &vec, const sym::Variable<ID> &d) {
         auto grads = mapTuple(vec.expressions, [&d](Expression auto expression) { return gradient(expression, d); });
         return Vector{grads};
     }
 
-    template<std::size_t index, typename Container, std::size_t id, std::size_t... ids>
+    template<std::size_t index, typename Container, fixed_string id, fixed_string... ids>
     constexpr auto bindVectorFromContainerImpl(Container &&container) {
         auto binding = std::make_tuple(sym::Variable<id>{} = container[index]);
         if constexpr (sizeof...(ids) > 0) {
@@ -168,7 +168,7 @@ namespace sym {
         }
     }
 
-    template<typename Container, std::size_t... ids>
+    template<typename Container, fixed_string... ids>
     constexpr auto bindVectorFromContainer(Vector<Variable<ids>...> /*sym*/, Container container) {
         return bindVectorFromContainerImpl<0, Container, ids...>(std::forward<Container>(container));
     }
