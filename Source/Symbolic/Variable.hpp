@@ -18,12 +18,12 @@
 /**
  * Define a variable with the same name and identifier
  */
-#define VARIABLE(name) sym::Variable<#name> name
+#define SYM_VARIABLE(name) sym::Variable<#name> name
 
 /**
  * Define a variable with automatic name based on file name and line number
  */
-#define A_VARIABLE sym::Variable<__FILE__ ":" STRINGIZE(__LINE__)>
+#define SYM_A_VARIABLE sym::Variable<__FILE__ ":" STRINGIZE(__LINE__)>
 
 namespace sym {
     template<typename T, T val>

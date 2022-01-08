@@ -21,18 +21,18 @@ TEST(ToString, Number) {
 }
 
 TEST(ToString, IdentifierName) {
-    VARIABLE(v);
+    SYM_VARIABLE(v);
     EXPECT_EQ(toString(v), "v");
 
-    VARIABLE(longName);
+    SYM_VARIABLE(longName);
     EXPECT_EQ(toString(longName), "longName");
 }
 
 TEST(ToString, AutomaticName) {
-    A_VARIABLE v;
+    SYM_A_VARIABLE v;
     EXPECT_TRUE(toString(v).ends_with("Test/Symbolic/ToString.cpp:" + std::to_string(__LINE__ - 1)));
 
-    A_VARIABLE longName;
+    SYM_A_VARIABLE longName;
     EXPECT_TRUE(toString(longName).ends_with("Test/Symbolic/ToString.cpp:" + std::to_string(__LINE__ - 1)));
 
     EXPECT_NE(toString(v), toString(longName));
