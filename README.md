@@ -88,14 +88,19 @@ are only determined once you evaluate the expression (see below) and both can ch
 variables can be used to evaluate the same expression with different values. The second important role of variables is
 during symbolic differentiation (see below).
 
-A variable is uniquely identified by its ID, which is a `std::size_t`
-number. When using two variables with the same ID they are considered to be the identical variable.
+A variable is uniquely identified by its ID, which is a string that has to be known at compile-time.
+Two variables with the same ID are considered to be the same variable.
+
+Helper macros exist to create a variable with the same ID as its identifier, or with some automatically determined unique ID.
 
 Example:
 
 ```c++
 sym::Variable<0> a; // A variable with ID 0
-sym::Variable<'b'> b; // a single character can be used instead of a number to increase readability
+sym::Variable<'b'> b; // a single character or a string can be used instead of a number to increase readability
+sym::Variable<"velocity"> vel; 
+SYM_VARIABLE(acc); // Shorthand for sym::Variable<"acc"> acc;
+SYM_A_VARIABLE pos; // SYM_A_VARIABLE Expands to a variable with new unique ID
 ```
 
 ### Compile Time Constants
