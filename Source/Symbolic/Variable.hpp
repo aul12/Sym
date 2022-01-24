@@ -18,7 +18,7 @@
 /**
  * Define a variable with the same name and identifier
  */
-#define SYM_VARIABLE(name) sym::Variable<#name> name
+#define SYM_VARIABLE(name) sym::Variable< #name > name
 
 /**
  * Define a variable with automatic name based on file name and line number
