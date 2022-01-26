@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include "Symbolic/Operators.hpp"
 #include "Symbolic/Variable.hpp"
 
 TEST(ToString, String) {
@@ -37,4 +38,10 @@ TEST(ToString, AutomaticName) {
 
     EXPECT_NE(toString(v), toString(longName));
     EXPECT_FALSE((std::is_same_v<decltype(v), decltype(longName)>) );
+}
+
+TEST(ToString, DivideByRuntimeConstant) {
+    SYM_VARIABLE(a);
+    auto div = a / sym::RuntimeConstant(2.0);
+    EXPECT_EQ(toString(div), "(a/2.000000)");
 }
