@@ -38,3 +38,23 @@ TEST(ToString, AutomaticName) {
     EXPECT_NE(toString(v), toString(longName));
     EXPECT_FALSE((std::is_same_v<decltype(v), decltype(longName)>) );
 }
+
+TEST(ToString, Binding) {
+    SYM_VARIABLE(a);
+    EXPECT_EQ(toString(a = 1), "a=1");
+}
+
+TEST(ToString, Bindings_ParameterPack) {
+    SYM_VARIABLE(a);
+    SYM_VARIABLE(b);
+    SYM_VARIABLE(c);
+    auto bindings = std::make_tuple(a = 1, b = 2, c = 3);
+    EXPECT_EQ(toString(bindings), "a=1, b=2, c=3");
+}
+
+TEST(ToString, Bindings_Tuple) {
+    SYM_VARIABLE(a);
+    SYM_VARIABLE(b);
+    SYM_VARIABLE(c);
+    EXPECT_EQ(toString(a = 1, b = 2, c = 3), "a=1, b=2, c=3");
+}

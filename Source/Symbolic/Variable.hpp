@@ -40,6 +40,9 @@ namespace sym {
       private:
         friend Variable<ID_>;
 
+        template<typename T_, fixed_string ID>
+        friend auto toString(const Binding<T_, ID> &b) -> std::string;
+
         constexpr explicit Binding(T val) : val{val} {
         }
         T val;
@@ -117,6 +120,37 @@ namespace sym {
     template<fixed_string ID>
     auto toString(const Variable<ID> & /*x*/) -> std::string {
         return std::string{ID.data};
+    }
+
+    template<typename T, fixed_string ID>
+    auto toString(const Binding<T, ID> &b) -> std::string {
+        return toString(Variable<ID>{}) + "=" + std::to_string(b.val);
+    }
+
+    namespace impl {
+        class ListString {
+          public:
+            inline ListString &operator+(const std::string &rhs) {
+                if (s.empty()) {
+                    s = rhs;
+                } else {
+                    s += ", " + rhs;
+                }
+                return *this;
+            }
+            std::string s;
+        };
+    } // namespace impl
+
+    template<typename... Ts, fixed_string... IDs>
+    auto toString(const Binding<Ts, IDs> &...bindings) -> std::string {
+        impl::ListString s;
+        return (impl::ListString{} + ... + toString(bindings)).s;
+    }
+
+    template<typename... Ts, fixed_string... IDs>
+    auto toString(const std::tuple<Binding<Ts, IDs>...> &bindings) -> std::string {
+        return std::apply([](const auto &...bs) { return toString(bs...); }, bindings);
     }
 
     template<fixed_string ID_>
