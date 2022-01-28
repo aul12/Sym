@@ -28,7 +28,7 @@ namespace std { // NOLINT everything is fine specialization for custom types is 
 
     template<sym::Expression Expr>
     auto cos(Expr &&expr) {
-        return sym::Cos<Expr>{std::forward<Expr>(expr)};
+        return sym::Cos{std::forward<Expr>(expr)};
     }
 
     template<sym::Expression Expr>
