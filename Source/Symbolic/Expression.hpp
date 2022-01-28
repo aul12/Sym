@@ -13,11 +13,30 @@
 
 namespace sym {
     template<typename T>
+    constexpr auto nonCvRefType = std::is_same_v<T, std::remove_cvref_t<T>>;
+
+    template<typename Tuple, std::size_t... ids>
+    constexpr auto AllNonCvRefTypeImpl(std::index_sequence<ids...>) {
+        return (... and nonCvRefType<std::tuple_element_t<ids, Tuple>>);
+    }
+
+    template<typename... Ts>
+    constexpr auto AllNonCvRefType(std::tuple<Ts...>) {
+        constexpr auto allNonCvRef = AllNonCvRefTypeImpl<std::tuple<Ts...>>(std::index_sequence_for<Ts...>{});
+        if constexpr (allNonCvRef) {
+            return std::true_type{};
+        } else {
+            return std::false_type{};
+        }
+    }
+
+    template<typename T>
     concept Expression = requires(const T t) {
         { toString(t) } -> std::same_as<std::string>;
         //@TODO how resolve (needs to provide correct variables)
-        {getChildren(t)};
+        { AllNonCvRefType(getChildren(t)) } -> std::same_as<std::true_type>;
     };
+
 
     template<typename T>
     struct IsExpression {

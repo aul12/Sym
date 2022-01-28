@@ -23,7 +23,7 @@
 namespace std { // NOLINT everything is fine specialization for custom types is allowed.
     template<sym::Expression Expr>
     auto sin(Expr &&expr) {
-        return sym::Sin<Expr>{std::forward<Expr>(expr)};
+        return sym::Sin{std::forward<Expr>(expr)};
     }
 
     template<sym::Expression Expr>
@@ -33,17 +33,17 @@ namespace std { // NOLINT everything is fine specialization for custom types is 
 
     template<sym::Expression Expr>
     auto tan(Expr &&expr) {
-        return sym::Tan<Expr>{std::forward<Expr>(expr)};
+        return sym::Tan{std::forward<Expr>(expr)};
     }
 
     template<sym::Expression Expr>
     auto sqrt(Expr &&expr) {
-        return sym::Sqrt<Expr>{std::forward<Expr>(expr)};
+        return sym::Sqrt{std::forward<Expr>(expr)};
     }
 
     template<sym::Expression Expr>
     auto exp(Expr &&expr) {
-        return sym::Exp<Expr>{std::forward<Expr>(expr)};
+        return sym::Exp{std::forward<Expr>(expr)};
     }
 
     template<sym::Expression Expr>

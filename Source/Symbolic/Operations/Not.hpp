@@ -40,7 +40,7 @@ namespace sym {
 
     template<Expression Expr_>
     constexpr auto getChildren(const sym::Not<Expr_> &notExpr) -> std::tuple<Expr_> {
-        return std::tuple{notExpr};
+        return std::tuple{notExpr.expr};
     }
 
     template<Expression Expr_>

@@ -6,6 +6,7 @@ if (GTest_FOUND)
     include_directories(${GTEST_INCLUDE_DIR})
 
     set(TEST_SOURCES
+            Symbolic/Expression.cpp
             Symbolic/CompiletimeConstant.cpp
             Symbolic/LongVariableNames.cpp
             Symbolic/Operations/Add.cpp
@@ -15,6 +16,7 @@ if (GTest_FOUND)
             Symbolic/Operations/Functions/ArcTan.cpp
             Symbolic/Operations/Functions/Cos.cpp
             Symbolic/Operations/Functions/Exp.cpp
+            Symbolic/Operations/Functions/Functions.cpp
             Symbolic/Operations/Functions/Log.cpp
             Symbolic/Operations/Functions/Pow.cpp
             Symbolic/Operations/Functions/Sin.cpp
