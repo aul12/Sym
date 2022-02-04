@@ -69,6 +69,8 @@ namespace sym {
       public:
         explicit Vector(Expressions... expressions) : expressions{expressions...} {
         }
+        
+        Vector() = default;
 
         template<typename... Bindings>
         constexpr auto resolve(const Bindings &...bindings) const {
