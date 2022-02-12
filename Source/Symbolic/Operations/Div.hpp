@@ -55,7 +55,7 @@ namespace sym {
 
     template<Expression Lhs_, Expression Rhs_, fixed_string ID>
     constexpr auto gradient(const Div<Lhs_, Rhs_> &x, const Variable<ID> &d) {
-        return _GRADIENT_SIMPLIFICATION(
+        return _GRADIENT_SIMPLIFY(
                 Div{Sub{Mul{gradient(x.lhs, d), x.rhs}, Mul{x.lhs, gradient(x.rhs, d)}}, Mul{x.rhs, x.rhs}});
     }
 

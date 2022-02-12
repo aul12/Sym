@@ -50,7 +50,7 @@ namespace sym {
         using rdiff = decltype(gradient(x.rhs, d));
         using dtype = Sub<ldiff, rdiff>;
 
-        return _GRADIENT_SIMPLIFICATION(dtype{gradient(x.lhs, d), gradient(x.rhs, d)});
+        return _GRADIENT_SIMPLIFY(dtype{gradient(x.lhs, d), gradient(x.rhs, d)});
     }
 
     template<Expression Lhs_, Expression Rhs_>

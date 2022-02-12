@@ -46,7 +46,7 @@ namespace sym {
 
     template<Expression Lhs_, Expression Rhs_, fixed_string ID>
     constexpr auto gradient(const Add<Lhs_, Rhs_> &x, const Variable<ID> &d) {
-        return _GRADIENT_SIMPLIFICATION(Add{gradient(x.lhs, d), gradient(x.rhs, d)});
+        return _GRADIENT_SIMPLIFY(Add{gradient(x.lhs, d), gradient(x.rhs, d)});
     }
 
     template<Expression Lhs_, Expression Rhs_>

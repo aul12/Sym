@@ -113,7 +113,14 @@ namespace sym::simplifier {
             return expr;
         }
     }
+#ifdef _GRADIENT_SIMPLIFICATION
+    #define _GRADIENT_SIMPLIFY(...) simplifier::simplifyNodeCompileTime(__VA_ARGS__)
+#else
+    #define _GRADIENT_SIMPLIFY(...) __VA_ARGS__
+#endif
+
 } // namespace sym::simplifier
+
 
 #include "../Operations/Add.hpp"
 #include "../Operations/Div.hpp"

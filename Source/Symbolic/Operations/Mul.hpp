@@ -57,7 +57,7 @@ namespace sym {
         using rsum = Mul<rgrad, lhs>;
         using dtype = Add<lsum, rsum>;
 
-        return _GRADIENT_SIMPLIFICATION(dtype{lsum{gradient(x.lhs, d), x.rhs}, rsum{gradient(x.rhs, d), x.lhs}});
+        return _GRADIENT_SIMPLIFY(dtype{lsum{gradient(x.lhs, d), x.rhs}, rsum{gradient(x.rhs, d), x.lhs}});
     }
 
     template<Expression Lhs_, Expression Rhs_>
