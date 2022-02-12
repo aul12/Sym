@@ -114,7 +114,7 @@ namespace std { // NOLINT everything is fine specialization for custom types is 
 
     template<sym::Expression Expr>
     auto abs(const Expr &expr) {
-        return std::max(expr, -expr);
+        return sym::Ternary{expr > sym::CompiletimeConstant<int, 0>{}, expr, -expr};
     }
 } // namespace std
 
