@@ -73,5 +73,4 @@ install(TARGETS ${PROJECT_NAME}
 if (BUILD_TESTS)
     add_subdirectory(Test)
     add_subdirectory(Benchmark)
-    add_subdirectory(CompileTime)
 endif ()

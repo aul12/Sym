@@ -8,8 +8,8 @@
 #define SYM_DIV_HPP
 
 #include "../Expression.hpp"
-#include "../Simplifier/CompileTime.hpp"
 #include "../Variable.hpp"
+#include "../Simplifier/GradientSimplifcation.hpp"
 
 namespace sym {
     template<Expression Lhs, Expression Rhs>
@@ -71,6 +71,7 @@ namespace sym {
 } // namespace sym
 
 #include "../RuntimeConstant.hpp"
+#include "../Simplifier/CompileTime.hpp"
 #include "Mul.hpp"
 #include "Sub.hpp"
 

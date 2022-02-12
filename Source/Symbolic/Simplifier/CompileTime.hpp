@@ -11,19 +11,13 @@
 #include "../Expression.hpp"
 #include "Util.hpp"
 
+#include "../Operations/Add.hpp"
+#include "../Operations/Div.hpp"
+#include "../Operations/Mul.hpp"
+#include "../Operations/Sub.hpp"
+
+
 namespace sym::simplifier {
-    template<Expression Lhs, Expression Rhs>
-    class Add;
-
-    template<Expression Lhs, Expression Rhs>
-    class Div;
-
-    template<Expression Lhs, Expression Rhs>
-    class Mul;
-
-    template<Expression Lhs, Expression Rhs>
-    class Sub;
-
     template<typename T>
     struct MergeConstant {
         static constexpr bool exists = false;
@@ -113,18 +107,7 @@ namespace sym::simplifier {
             return expr;
         }
     }
-#ifdef _GRADIENT_SIMPLIFICATION
-    #define _GRADIENT_SIMPLIFY(...) simplifier::simplifyNodeCompileTime(__VA_ARGS__)
-#else
-    #define _GRADIENT_SIMPLIFY(...) __VA_ARGS__
-#endif
-
 } // namespace sym::simplifier
 
-
-#include "../Operations/Add.hpp"
-#include "../Operations/Div.hpp"
-#include "../Operations/Mul.hpp"
-#include "../Operations/Sub.hpp"
 
 #endif // SYM_COMPILETIME_HPP

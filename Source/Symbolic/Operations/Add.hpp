@@ -8,7 +8,7 @@
 #define SYM_ADD_HPP
 
 #include "../Expression.hpp"
-#include "../Simplifier/CompileTime.hpp"
+#include "../Simplifier/GradientSimplifcation.hpp"
 #include "../Variable.hpp"
 
 namespace sym {
@@ -59,5 +59,7 @@ namespace sym {
         return std::make_tuple(x.lhs, x.rhs);
     }
 } // namespace sym
+
+#include "../Simplifier/CompileTime.hpp"
 
 #endif // SYM_ADD_HPP

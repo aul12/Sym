@@ -8,8 +8,8 @@
 #define SYM_SUB_HPP
 
 #include "../Expression.hpp"
-#include "../Simplifier/CompileTime.hpp"
 #include "../Variable.hpp"
+#include "../Simplifier/GradientSimplifcation.hpp"
 
 namespace sym {
     template<Expression Lhs, Expression Rhs>
@@ -63,5 +63,7 @@ namespace sym {
         return std::make_tuple(x.lhs, x.rhs);
     }
 } // namespace sym
+
+#include "../Simplifier/CompileTime.hpp"
 
 #endif // SYM_SUB_HPP

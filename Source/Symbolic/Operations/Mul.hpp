@@ -8,7 +8,7 @@
 #define SYM_MUL_HPP
 
 #include "../Expression.hpp"
-#include "../Simplifier/CompileTime.hpp"
+#include "../Simplifier/GradientSimplifcation.hpp"
 #include "../Variable.hpp"
 
 namespace sym {
@@ -71,6 +71,8 @@ namespace sym {
     }
 } // namespace sym
 
+#include "../Simplifier/CompileTime.hpp"
 #include "Add.hpp"
+
 
 #endif // SYM_MUL_HPP
