@@ -8,8 +8,8 @@
 #define SYM_ADD_HPP
 
 #include "../Expression.hpp"
+#include "../Simplifier/CompileTime.hpp"
 #include "../Variable.hpp"
-
 
 namespace sym {
     template<Expression Lhs, Expression Rhs>
@@ -46,11 +46,7 @@ namespace sym {
 
     template<Expression Lhs_, Expression Rhs_, fixed_string ID>
     constexpr auto gradient(const Add<Lhs_, Rhs_> &x, const Variable<ID> &d) {
-        using ldiff = decltype(gradient(x.lhs, d));
-        using rdiff = decltype(gradient(x.rhs, d));
-        using dtype = Add<ldiff, rdiff>;
-
-        return dtype{gradient(x.lhs, d), gradient(x.rhs, d)};
+        return _GRADIENT_SIMPLIFICATION(Add{gradient(x.lhs, d), gradient(x.rhs, d)});
     }
 
     template<Expression Lhs_, Expression Rhs_>

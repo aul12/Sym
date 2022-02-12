@@ -8,6 +8,7 @@
 #define SYM_SUB_HPP
 
 #include "../Expression.hpp"
+#include "../Simplifier/CompileTime.hpp"
 #include "../Variable.hpp"
 
 namespace sym {
@@ -49,7 +50,7 @@ namespace sym {
         using rdiff = decltype(gradient(x.rhs, d));
         using dtype = Sub<ldiff, rdiff>;
 
-        return dtype{gradient(x.lhs, d), gradient(x.rhs, d)};
+        return _GRADIENT_SIMPLIFICATION(dtype{gradient(x.lhs, d), gradient(x.rhs, d)});
     }
 
     template<Expression Lhs_, Expression Rhs_>

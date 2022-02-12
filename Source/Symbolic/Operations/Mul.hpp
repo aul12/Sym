@@ -8,6 +8,7 @@
 #define SYM_MUL_HPP
 
 #include "../Expression.hpp"
+#include "../Simplifier/CompileTime.hpp"
 #include "../Variable.hpp"
 
 namespace sym {
@@ -48,13 +49,15 @@ namespace sym {
 
     template<Expression Lhs_, Expression Rhs_, fixed_string ID>
     constexpr auto gradient(const Mul<Lhs_, Rhs_> &x, const Variable<ID> &d) {
+        using lhs = decltype(x.lhs);
+        using rhs = decltype(x.rhs);
         using lgrad = decltype(gradient(x.lhs, d));
         using rgrad = decltype(gradient(x.rhs, d));
-        using lsum = Mul<lgrad, decltype(x.rhs)>;
-        using rsum = Mul<rgrad, decltype(x.lhs)>;
+        using lsum = Mul<lgrad, rhs>;
+        using rsum = Mul<rgrad, lhs>;
         using dtype = Add<lsum, rsum>;
 
-        return dtype{lsum{gradient(x.lhs, d), x.rhs}, rsum{gradient(x.rhs, d), x.lhs}};
+        return _GRADIENT_SIMPLIFICATION(dtype{lsum{gradient(x.lhs, d), x.rhs}, rsum{gradient(x.rhs, d), x.lhs}});
     }
 
     template<Expression Lhs_, Expression Rhs_>

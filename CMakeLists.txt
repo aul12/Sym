@@ -6,6 +6,7 @@ if (NOT CMAKE_BUILD_TYPE)
 endif (NOT CMAKE_BUILD_TYPE)
 
 option(BUILD_TESTS "Build Tests" OFF)
+option(SIMPLIFY_GRADIENTS "Simplify the gradients during calculation" ON)
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -53,6 +54,14 @@ set(LIBS)
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 target_include_directories(${PROJECT_NAME} PUBLIC Source)
+
+if (${SIMPLIFY_GRADIENTS})
+    target_compile_definitions(${PROJECT_NAME} PUBLIC _GRADIENT_SIMPLIFICATION=simplifier::simplifyNodeCompileTime)
+    message(STATUS "Gradient simplification")
+else ()
+    target_compile_definitions(${PROJECT_NAME} PUBLIC _GRADIENT_SIMPLIFICATION)
+    message(STATUS "No Gradient simplification")
+endif ()
 
 #target_link_libraries(${PROJECT_NAME} ${LIBS})
 

@@ -1,5 +1,5 @@
 /**
- * @file Simplifier.hpp
+ * @file CompileTime.hpp
  * @author paul
  * @date 14.11.21
  * Description here TODO
@@ -9,26 +9,20 @@
 
 #include "../CompiletimeConstant.hpp"
 #include "../Expression.hpp"
-#include "../Operations/Add.hpp"
-#include "../Operations/Sub.hpp"
-#include "../Operations/Mul.hpp"
-#include "../Operations/Div.hpp"
+#include "Util.hpp"
 
 namespace sym::simplifier {
-    namespace impl {
-        template<Expression Expr>
-        struct IsCompileTimeConstant {
-            static constexpr auto val = false;
-        };
+    template<Expression Lhs, Expression Rhs>
+    class Add;
 
-        template<typename T, T val_>
-        struct IsCompileTimeConstant<CompiletimeConstant<T, val_>> {
-            static constexpr auto val = true;
-        };
+    template<Expression Lhs, Expression Rhs>
+    class Div;
 
-        template<Expression Expr>
-        constexpr auto isCompileTimeConstant = IsCompileTimeConstant<Expr>::val;
-    } // namespace impl
+    template<Expression Lhs, Expression Rhs>
+    class Mul;
+
+    template<Expression Lhs, Expression Rhs>
+    class Sub;
 
     template<typename T>
     struct MergeConstant {
@@ -37,7 +31,8 @@ namespace sym::simplifier {
 
 #define CONSTANT_MERGER(OpName, Op)                                                                                    \
     template<Expression Lhs, Expression Rhs>                                                                           \
-    requires(impl::isCompileTimeConstant<Lhs> and impl::isCompileTimeConstant<Rhs>) struct MergeConstant<OpName<Lhs, Rhs>> {                 \
+    requires(util::isCompileTimeConstant<Lhs> and                                                                      \
+             util::isCompileTimeConstant<Rhs>) struct MergeConstant<OpName<Lhs, Rhs>> {                                \
         static constexpr bool exists = true;                                                                           \
         static constexpr auto val = Lhs::resolve() Op Rhs::resolve();                                                  \
         static constexpr CompiletimeConstant<std::remove_cvref_t<decltype(val)>, val> newVal{};                        \
@@ -57,13 +52,15 @@ namespace sym::simplifier {
 
 #define IDENTITY_MERGE_KEEP_LHS(OpName, identityVal)                                                                   \
     template<Expression Lhs, Expression Rhs>                                                                           \
-    requires(impl::isCompileTimeConstant<Rhs> and Rhs::resolve() == identityVal) struct MergeIdentity<OpName<Lhs, Rhs>> {         \
+    requires(util::isCompileTimeConstant<Rhs> and                                                                      \
+             Rhs::resolve() == identityVal) struct MergeIdentity<OpName<Lhs, Rhs>> {                                   \
         static constexpr MergeStatus status = MergeStatus::KEEP_LHS;                                                   \
     };
 
 #define IDENTITY_MERGE_KEEP_RHS(OpName, identityVal)                                                                   \
     template<Expression Lhs, Expression Rhs>                                                                           \
-    requires(impl::isCompileTimeConstant<Lhs> and Lhs::resolve() == identityVal) struct MergeIdentity<OpName<Lhs, Rhs>> {         \
+    requires(util::isCompileTimeConstant<Lhs> and                                                                      \
+             Lhs::resolve() == identityVal) struct MergeIdentity<OpName<Lhs, Rhs>> {                                   \
         static constexpr MergeStatus status = MergeStatus::KEEP_RHS;                                                   \
     };
 
@@ -82,19 +79,19 @@ namespace sym::simplifier {
     };
 
     template<Expression Lhs, Expression Rhs>
-    requires(impl::isCompileTimeConstant<Lhs> and Lhs::resolve() == 0) struct MergeDisappear<Mul<Lhs, Rhs>> {
+    requires(util::isCompileTimeConstant<Lhs> and Lhs::resolve() == 0) struct MergeDisappear<Mul<Lhs, Rhs>> {
         static constexpr auto exists = true;
         static constexpr Lhs newVal = Lhs{};
     };
 
     template<Expression Lhs, Expression Rhs>
-    requires(impl::isCompileTimeConstant<Rhs> and Rhs::resolve() == 0) struct MergeDisappear<Mul<Lhs, Rhs>> {
+    requires(util::isCompileTimeConstant<Rhs> and Rhs::resolve() == 0) struct MergeDisappear<Mul<Lhs, Rhs>> {
         static constexpr auto exists = true;
         static constexpr Rhs newVal = Rhs{};
     };
 
     template<Expression Lhs, Expression Rhs>
-    requires(impl::isCompileTimeConstant<Lhs> and Lhs::resolve() == 0) struct MergeDisappear<Div<Lhs, Rhs>> {
+    requires(util::isCompileTimeConstant<Lhs> and Lhs::resolve() == 0) struct MergeDisappear<Div<Lhs, Rhs>> {
         static constexpr auto exists = true;
         static constexpr Lhs newVal = Lhs{};
     };
@@ -117,5 +114,10 @@ namespace sym::simplifier {
         }
     }
 } // namespace sym::simplifier
+
+#include "../Operations/Add.hpp"
+#include "../Operations/Div.hpp"
+#include "../Operations/Mul.hpp"
+#include "../Operations/Sub.hpp"
 
 #endif // SYM_COMPILETIME_HPP

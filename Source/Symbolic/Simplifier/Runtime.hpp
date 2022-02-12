@@ -9,7 +9,7 @@
 
 #include "../Expression.hpp"
 #include "../Vector.hpp"
-#include "CompileTime.hpp"
+#include "Util.hpp"
 
 namespace sym::simplifier {
     namespace impl {
@@ -31,7 +31,7 @@ namespace sym::simplifier {
 
         template<typename... Ts>
         struct AllConstant<std::tuple<Ts...>> {
-            static constexpr auto val = (... and (isRuntimeConstant<Ts> or isCompileTimeConstant<Ts>));
+            static constexpr auto val = (... and (isRuntimeConstant<Ts> or util::isCompileTimeConstant<Ts>));
         };
 
         template<typename T>
