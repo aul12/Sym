@@ -12,6 +12,7 @@
 #include "ArcCos.hpp"
 #include "ArcSin.hpp"
 #include "ArcTan.hpp"
+#include "ArcTan2.hpp"
 #include "Cos.hpp"
 #include "Exp.hpp"
 #include "Log.hpp"
@@ -59,6 +60,21 @@ namespace std { // NOLINT everything is fine specialization for custom types is 
     template<sym::Expression Expr>
     auto atan(Expr &&expr) {
         return sym::ArcTan{std::forward<Expr>(expr)};
+    }
+
+    template<sym::Expression Lhs, sym::Expression Rhs>
+    auto atan2(Lhs lhs, Rhs rhs) {
+        return sym::ArcTan2{std::forward<Lhs>(lhs), std::forward<Rhs>(rhs)};
+    }
+
+    template<sym::Expression Lhs, typename Rhs>
+    auto atan2(Lhs lhs, Rhs rhs) {
+        return sym::ArcTan2{std::forward<Lhs>(lhs), sym::RuntimeConstant{std::forward<Rhs>(rhs)}};
+    }
+
+    template<typename Lhs, sym::Expression Rhs>
+    auto atan2(Lhs lhs, Rhs rhs) {
+        return sym::ArcTan2{sym::RuntimeConstant{std::forward<Lhs>(lhs)}, std::forward<Rhs>(rhs)};
     }
 
     template<sym::Expression Expr>

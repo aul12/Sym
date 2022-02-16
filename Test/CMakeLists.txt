@@ -6,14 +6,15 @@ if (GTest_FOUND)
     include_directories(${GTEST_INCLUDE_DIR})
 
     set(TEST_SOURCES
-            Symbolic/Expression.cpp
             Symbolic/CompiletimeConstant.cpp
+            Symbolic/Expression.cpp
             Symbolic/LongVariableNames.cpp
             Symbolic/Operations/Add.cpp
             Symbolic/Operations/Div.cpp
             Symbolic/Operations/Functions/ArcCos.cpp
             Symbolic/Operations/Functions/ArcSin.cpp
             Symbolic/Operations/Functions/ArcTan.cpp
+            Symbolic/Operations/Functions/ArcTan2.cpp
             Symbolic/Operations/Functions/Cos.cpp
             Symbolic/Operations/Functions/Exp.cpp
             Symbolic/Operations/Functions/Functions.cpp
