@@ -40,7 +40,7 @@ namespace sym {
         constexpr friend auto getChildren(const Sqrt<Expr_> &sqrt) -> std::tuple<Expr_>;
 
       private:
-        Expr expr;
+        [[no_unique_address]] Expr expr;
     };
 
     template<Expression Expr_, fixed_string ID>

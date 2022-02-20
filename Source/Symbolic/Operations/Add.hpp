@@ -30,8 +30,8 @@ namespace sym {
         constexpr friend auto getChildren(const Add<Lhs_, Rhs_> &x) -> std::tuple<Lhs_, Rhs_>;
 
       private:
-        Lhs lhs;
-        Rhs rhs;
+        [[no_unique_address]] Lhs lhs;
+        [[no_unique_address]] Rhs rhs;
     };
 
     template<Expression Lhs, Expression Rhs>

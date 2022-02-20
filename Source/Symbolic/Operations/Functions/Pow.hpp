@@ -49,8 +49,8 @@ namespace sym {
         constexpr friend auto getChildren(const Pow<Base_, Exp_> &cos) -> std::tuple<Base_, Exp_>;
 
       private:
-        Base base;
-        Exp exp;
+        [[no_unique_address]] Base base;
+        [[no_unique_address]] Exp exp;
     };
 
     template<sym::Expression Base, sym::Expression Exp>

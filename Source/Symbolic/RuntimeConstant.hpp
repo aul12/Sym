@@ -35,7 +35,7 @@ namespace sym {
         constexpr friend auto getChildren(const RuntimeConstant<T_> &x) -> std::tuple<>;
 
       private:
-        const T val;
+        [[no_unique_address]] const T val;
     };
 
     template<typename T>

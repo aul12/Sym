@@ -31,9 +31,9 @@ namespace sym {
         template<Expression Cond_, Expression Lhs_, Expression Rhs_>
         constexpr friend auto getChildren(const Ternary<Cond_, Lhs_, Rhs_> &x) -> std::tuple<Cond_, Lhs_, Rhs_>;
       private:
-        Cond cond;
-        TrueVal trueVal;
-        FalseVal falseVal;
+        [[no_unique_address]] Cond cond;
+        [[no_unique_address]] TrueVal trueVal;
+        [[no_unique_address]] FalseVal falseVal;
     };
 
     template<Expression Cond_, Expression TrueVal_, Expression FalseVal_, fixed_string ID>

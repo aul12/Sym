@@ -25,7 +25,7 @@ namespace sym {
         friend auto toString(const sym::Not<Expr_> &notExpr) -> std::string;
 
       private:
-        Expr expr;
+        [[no_unique_address]] Expr expr;
     };
 
     template<Expression Expr>

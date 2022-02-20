@@ -43,7 +43,7 @@ namespace sym {
         constexpr friend auto getChildren(const Cos<Expr_> &cos) -> std::tuple<Expr_>;
 
       private:
-        Expr expr;
+        [[no_unique_address]] Expr expr;
     };
 
     template<Expression Expr>

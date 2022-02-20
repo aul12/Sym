@@ -40,7 +40,7 @@ namespace sym {
         constexpr friend auto getChildren(const ArcTan<Expr_> &tan) -> std::tuple<Expr_>;
 
       private:
-        Expr expr;
+        [[no_unique_address]] Expr expr;
     };
 
     template<sym::Expression Expr>

@@ -43,8 +43,8 @@ namespace sym {
         constexpr friend auto getChildren(const ArcTan2<Lhs_, Rhs_> &tan) -> std::tuple<Lhs_, Rhs_>;
 
       private:
-        Lhs lhs;
-        Rhs rhs;
+        [[no_unique_address]] Lhs lhs;
+        [[no_unique_address]] Rhs rhs;
     };
 
     template<sym::Expression Lhs, sym::Expression Rhs>
