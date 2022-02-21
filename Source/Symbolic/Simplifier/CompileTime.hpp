@@ -9,12 +9,11 @@
 
 #include "../CompiletimeConstant.hpp"
 #include "../Expression.hpp"
-#include "Util.hpp"
-
 #include "../Operations/Add.hpp"
 #include "../Operations/Div.hpp"
 #include "../Operations/Mul.hpp"
 #include "../Operations/Sub.hpp"
+#include "Util.hpp"
 
 
 namespace sym::simplifier {
@@ -46,15 +45,13 @@ namespace sym::simplifier {
 
 #define IDENTITY_MERGE_KEEP_LHS(OpName, identityVal)                                                                   \
     template<Expression Lhs, Expression Rhs>                                                                           \
-    requires(util::isCompileTimeConstant<Rhs> and                                                                      \
-             Rhs::resolve() == identityVal) struct MergeIdentity<OpName<Lhs, Rhs>> {                                   \
+    requires(Rhs::resolve() == identityVal) struct MergeIdentity<OpName<Lhs, Rhs>> {                                   \
         static constexpr MergeStatus status = MergeStatus::KEEP_LHS;                                                   \
     };
 
 #define IDENTITY_MERGE_KEEP_RHS(OpName, identityVal)                                                                   \
     template<Expression Lhs, Expression Rhs>                                                                           \
-    requires(util::isCompileTimeConstant<Lhs> and                                                                      \
-             Lhs::resolve() == identityVal) struct MergeIdentity<OpName<Lhs, Rhs>> {                                   \
+    requires(Lhs::resolve() == identityVal) struct MergeIdentity<OpName<Lhs, Rhs>> {                                   \
         static constexpr MergeStatus status = MergeStatus::KEEP_RHS;                                                   \
     };
 
@@ -73,19 +70,19 @@ namespace sym::simplifier {
     };
 
     template<Expression Lhs, Expression Rhs>
-    requires(util::isCompileTimeConstant<Lhs> and Lhs::resolve() == 0) struct MergeDisappear<Mul<Lhs, Rhs>> {
+    requires(Lhs::resolve() == 0) struct MergeDisappear<Mul<Lhs, Rhs>> {
         static constexpr auto exists = true;
         static constexpr Lhs newVal = Lhs{};
     };
 
     template<Expression Lhs, Expression Rhs>
-    requires(util::isCompileTimeConstant<Rhs> and Rhs::resolve() == 0) struct MergeDisappear<Mul<Lhs, Rhs>> {
+    requires(Rhs::resolve() == 0) struct MergeDisappear<Mul<Lhs, Rhs>> {
         static constexpr auto exists = true;
         static constexpr Rhs newVal = Rhs{};
     };
 
     template<Expression Lhs, Expression Rhs>
-    requires(util::isCompileTimeConstant<Lhs> and Lhs::resolve() == 0) struct MergeDisappear<Div<Lhs, Rhs>> {
+    requires(Lhs::resolve() == 0) struct MergeDisappear<Div<Lhs, Rhs>> {
         static constexpr auto exists = true;
         static constexpr Lhs newVal = Lhs{};
     };
