@@ -17,7 +17,7 @@
 
 
 namespace sym::simplifier {
-    template<typename T>
+    /*template<typename T>
     struct MergeConstant {
         static constexpr bool exists = false;
     };
@@ -103,7 +103,101 @@ namespace sym::simplifier {
         } else {
             return expr;
         }
+    }*/
+
+    template<Expression Expr>
+    constexpr auto simplifyNodeCompileTime(Expr expr) {
+        return expr;
     }
+
+    /*
+     * ADD
+     */
+    template<Expression Lhs, Expression Rhs>
+    constexpr auto simplifyNodeCompileTime(Add<Lhs, Rhs> add) requires(Lhs::resolve() == 0) {
+        return std::get<1>(getChildren(add));
+    }
+
+    template<Expression Lhs, Expression Rhs>
+    constexpr auto simplifyNodeCompileTime(Add<Lhs, Rhs> add) requires(Rhs::resolve() == 0 and util::notZero<Lhs>) {
+        return std::get<0>(getChildren(add));
+    }
+
+    template<Expression Lhs, Expression Rhs>
+    constexpr auto simplifyNodeCompileTime(Add<Lhs, Rhs> /*add*/) requires(
+            util::isCompileTimeConstant<Lhs> and util::isCompileTimeConstant<Rhs> and
+            (util::notZero<Lhs> and util::notZero<Rhs>)) {
+        constexpr auto val = Lhs::resolve() + Rhs::resolve();
+        return CompiletimeConstant<std::remove_const_t<decltype(val)>, val>{};
+    }
+
+    /*
+     * SUB
+     */
+    template<Expression Lhs, Expression Rhs>
+    constexpr auto simplifyNodeCompileTime(Sub<Lhs, Rhs> sub) requires(Rhs::resolve() == 0) {
+        return std::get<0>(getChildren(sub));
+    }
+
+    template<Expression Lhs, Expression Rhs>
+    constexpr auto simplifyNodeCompileTime(Sub<Lhs, Rhs> /*sub*/) requires(
+            util::isCompileTimeConstant<Lhs> and util::isCompileTimeConstant<Rhs> and util::notZero<Lhs>) {
+        constexpr auto val = Lhs::resolve() - Rhs::resolve();
+        return CompiletimeConstant<std::remove_const_t<decltype(val)>, val>{};
+    }
+
+    /*
+     * MUL
+     */
+    template<Expression Lhs, Expression Rhs>
+    constexpr auto simplifyNodeCompileTime(Mul<Lhs, Rhs> /*mul*/) requires(Lhs::resolve() == 0) {
+        return CompiletimeConstant<int, 0>{};
+    }
+
+    template<Expression Lhs, Expression Rhs>
+    constexpr auto simplifyNodeCompileTime(Mul<Lhs, Rhs> /*mul*/) requires(Rhs::resolve() == 0 and util::notZero<Lhs>) {
+        return CompiletimeConstant<int, 0>{};
+    }
+
+    template<Expression Lhs, Expression Rhs>
+    constexpr auto simplifyNodeCompileTime(Mul<Lhs, Rhs> mul) requires(Lhs::resolve() == 1 and util::notZero<Rhs>) {
+        return std::get<1>(getChildren(mul));
+    }
+
+    template<Expression Lhs, Expression Rhs>
+    constexpr auto simplifyNodeCompileTime(Mul<Lhs, Rhs> mul) requires(Rhs::resolve() == 1 and util::notZero<Lhs>) {
+        return std::get<0>(getChildren(mul));
+    }
+
+    template<Expression Lhs, Expression Rhs>
+    constexpr auto simplifyNodeCompileTime(Mul<Lhs, Rhs> /*mul*/) requires(
+            util::isCompileTimeConstant<Lhs> and util::isCompileTimeConstant<Rhs> and
+            (util::notZero<Lhs> and util::notZero<Rhs> and util::notOne<Lhs> and util::notOne<Rhs>)) {
+        constexpr auto val = Lhs::resolve() - Rhs::resolve();
+        return CompiletimeConstant<std::remove_const_t<decltype(val)>, val>{};
+    }
+
+    /*
+     * DIV
+     */
+    template<Expression Lhs, Expression Rhs>
+    constexpr auto simplifyNodeCompileTime(Div<Lhs, Rhs> /*div*/) requires(Lhs::resolve() == 0) {
+        return CompiletimeConstant<int, 0>{};
+    }
+
+    template<Expression Lhs, Expression Rhs>
+    constexpr auto simplifyNodeCompileTime(Div<Lhs, Rhs> div) requires(Rhs::resolve() == 1 and util::notZero<Lhs>) {
+        return std::get<0>(getChildren(div));
+    }
+
+    template<Expression Lhs, Expression Rhs>
+    constexpr auto simplifyNodeCompileTime(Div<Lhs, Rhs> /*div*/) requires(
+            util::isCompileTimeConstant<Lhs> and util::isCompileTimeConstant<Rhs> and
+            (util::notZero<Lhs> and util::notOne<Rhs>)) {
+        constexpr auto val = Lhs::resolve() / Rhs::resolve();
+        return CompiletimeConstant<std::remove_const_t<decltype(val)>, val>{};
+    }
+
 } // namespace sym::simplifier
 
 

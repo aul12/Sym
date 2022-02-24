@@ -6,7 +6,7 @@ if (NOT CMAKE_BUILD_TYPE)
 endif (NOT CMAKE_BUILD_TYPE)
 
 option(BUILD_TESTS "Build Tests" OFF)
-option(SIMPLIFY_GRADIENTS "Simplify the gradients during calculation" OFF)
+option(SIMPLIFY_GRADIENTS "Simplify the gradients during calculation" ON)
 
 set(CMAKE_CXX_STANDARD 20)
 
