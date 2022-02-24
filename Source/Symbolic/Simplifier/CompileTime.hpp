@@ -141,7 +141,7 @@ namespace sym::simplifier {
 
     template<Expression Lhs, Expression Rhs>
     constexpr auto simplifyNodeCompileTime(Sub<Lhs, Rhs> /*sub*/) requires(
-            util::isCompileTimeConstant<Lhs> and util::isCompileTimeConstant<Rhs> and util::notZero<Lhs>) {
+            util::isCompileTimeConstant<Lhs> and util::isCompileTimeConstant<Rhs> and util::notZero<Rhs>) {
         constexpr auto val = Lhs::resolve() - Rhs::resolve();
         return CompiletimeConstant<std::remove_const_t<decltype(val)>, val>{};
     }
@@ -160,12 +160,14 @@ namespace sym::simplifier {
     }
 
     template<Expression Lhs, Expression Rhs>
-    constexpr auto simplifyNodeCompileTime(Mul<Lhs, Rhs> mul) requires(Lhs::resolve() == 1 and util::notZero<Rhs>) {
+    constexpr auto simplifyNodeCompileTime(Mul<Lhs, Rhs> mul) requires(Lhs::resolve() == 1 and util::notZero<Lhs> and
+                                                                       util::notZero<Rhs>) {
         return std::get<1>(getChildren(mul));
     }
 
     template<Expression Lhs, Expression Rhs>
-    constexpr auto simplifyNodeCompileTime(Mul<Lhs, Rhs> mul) requires(Rhs::resolve() == 1 and util::notZero<Lhs>) {
+    constexpr auto simplifyNodeCompileTime(Mul<Lhs, Rhs> mul) requires(Rhs::resolve() == 1 and util::notZero<Lhs> and
+                                                                       util::notZero<Rhs> and util::notOne<Rhs>) {
         return std::get<0>(getChildren(mul));
     }
 
