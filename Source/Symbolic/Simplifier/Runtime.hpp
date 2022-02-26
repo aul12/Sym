@@ -13,35 +13,13 @@
 
 namespace sym::simplifier {
     namespace impl {
-        template<Expression Expr>
-        struct IsRuntimeConstant {
-            static constexpr auto val = false;
-        };
-
-        template<typename T>
-        struct IsRuntimeConstant<RuntimeConstant<T>> {
-            static constexpr auto val = true;
-        };
-
-        template<Expression Expr>
-        constexpr auto isRuntimeConstant = IsRuntimeConstant<Expr>::val;
-
         template<typename T>
         struct AllConstant {};
 
         template<typename... Ts>
         struct AllConstant<std::tuple<Ts...>> {
-            static constexpr auto val = (... and (isRuntimeConstant<Ts> or util::isCompileTimeConstant<Ts>));
+            static constexpr auto val = (... and (util::isRuntimeConstant<Ts> or util::isCompileTimeConstant<Ts>));
         };
-
-        template<typename T>
-        struct OneRuntimeConstant {};
-
-        template<typename... Ts>
-        struct OneRuntimeConstant<std::tuple<Ts...>> {
-            static constexpr auto val = (... or isRuntimeConstant<Ts>);
-        };
-
     } // namespace impl
 
 
@@ -50,9 +28,8 @@ namespace sym::simplifier {
         using Children = decltype(getChildren(expr));
         if constexpr (std::tuple_size_v < Children >> 0) {
             constexpr auto allConstant = impl::AllConstant<Children>::val;
-            //constexpr auto atLeastOneRuntimeConstant = impl::OneRuntimeConstant<Children>::val;
 
-            if constexpr (allConstant /*and atLeastOneRuntimeConstant*/) {
+            if constexpr (allConstant) {
                 return RuntimeConstant{expr.resolve()};
             } else {
                 return expr;
