@@ -53,11 +53,10 @@ namespace sym::simplifier::util {
     };
 
     template<Expression Expr>
-    constexpr auto notZero = not(CompiletimeConstantAndEqual<Expr, int, 0>::val);
+    constexpr auto isZero = CompiletimeConstantAndEqual<Expr, int, 0>::val;
 
     template<Expression Expr>
-    constexpr auto notOne = not(CompiletimeConstantAndEqual<Expr, int, 1>::val);
-
+    constexpr auto isOne = CompiletimeConstantAndEqual<Expr, int, 1>::val;
 
 } // namespace sym::simplifier::util
 
