@@ -93,7 +93,7 @@ namespace sym {
             return false;
         }
 
-        char data[N]{};
+        [[no_unique_address]] char data[N]{};
     };
 
     // deduction guide for single-char ctor: use single-char + null-byte

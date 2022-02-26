@@ -10,6 +10,7 @@
 #include <cmath>
 
 #include "../../Expression.hpp"
+#include "../../Simplifier/GradientSimplifcation.hpp"
 #include "../../Variable.hpp"
 
 namespace sym {
@@ -58,7 +59,10 @@ namespace sym {
 
     template<Expression Expr_, fixed_string ID>
     constexpr auto gradient(const ArcSin<Expr_> &x, const Variable<ID> &d) {
-        return Div{gradient(x.expr, d), Sqrt{Sub{CompiletimeConstant<int, 1>{}, Mul{x.expr, x.expr}}}};
+        auto xSqr = _GRADIENT_SIMPLIFY(Mul{x.expr, x.expr});
+        auto sqrtArg = _GRADIENT_SIMPLIFY(Sub{CompiletimeConstant<int, 1>{}, xSqr});
+        auto sqrt = _GRADIENT_SIMPLIFY(Sqrt{sqrtArg});
+        return _GRADIENT_SIMPLIFY(Div{gradient(x.expr, d), sqrt});
     }
 
     template<Expression Expr_>
@@ -76,5 +80,6 @@ namespace sym {
 #include "../Mul.hpp"
 #include "../Sub.hpp"
 #include "Sqrt.hpp"
+#include "../../Simplifier/CompileTime.hpp"
 
 #endif // SYM_ARCSIN_HPP

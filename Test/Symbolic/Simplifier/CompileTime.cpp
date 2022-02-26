@@ -2,58 +2,133 @@
 #include <Symbolic/Simplifier/CompileTime.hpp>
 #include <gtest/gtest.h>
 
-TEST(Simplifier_CompileTime, MergeConstantDirect) {
+TEST(Simplifier_CompileTime, AddMergeConstant) {
     sym::CompiletimeConstant<int, 1> a;
     sym::CompiletimeConstant<int, 2> b;
     auto sum = a + b;
 
-    auto newSum = sym::simplifier::MergeConstant<decltype(sum)>::newVal;
+    auto newSum = sym::simplifier::simplifyNodeCompileTime(sum);
 
     EXPECT_TRUE((std::is_same_v<decltype(newSum), sym::CompiletimeConstant<int, 3>>) );
 }
 
-TEST(Simplifier_CompileTime, MergeIdentityDirect) {
+TEST(Simplifier_CompileTime, AddMergeIdentityKeepLhs) {
     sym::Variable<'a'> a;
     sym::CompiletimeConstant<int, 0> b;
     auto sum = a + b;
 
-    EXPECT_TRUE(sym::simplifier::MergeIdentity<decltype(sum)>::status == sym::simplifier::MergeStatus::KEEP_LHS);
+    auto newSum = sym::simplifier::simplifyNodeCompileTime(sum);
+
+    EXPECT_TRUE((std::is_same_v<decltype(newSum), decltype(a)>) );
 }
 
-TEST(Simplifier_CompileTime, MergeDisappearDirect) {
+TEST(Simplifier_CompileTime, AddMergeIdentityKeepRhs) {
     sym::Variable<'a'> a;
     sym::CompiletimeConstant<int, 0> b;
-    auto prod = a * b;
-    auto simplified = sym::simplifier::MergeDisappear<decltype(prod)>::newVal;
+    auto sum = b + a;
 
-    EXPECT_TRUE((std::is_same_v<decltype(simplified), sym::CompiletimeConstant<int, 0>>) );
+    auto newSum = sym::simplifier::simplifyNodeCompileTime(sum);
+
+    EXPECT_TRUE((std::is_same_v<decltype(newSum), decltype(a)>) );
 }
 
-TEST(Simplifier_CompileTime, MergeConstant) {
+
+TEST(Simplifier_CompileTime, SubMergeConstant) {
     sym::CompiletimeConstant<int, 1> a;
     sym::CompiletimeConstant<int, 2> b;
-    auto sum = a + b;
+    auto sum = a - b;
 
     auto newSum = sym::simplifier::simplifyNodeCompileTime(sum);
 
-    EXPECT_TRUE((std::is_same_v<decltype(newSum), sym::CompiletimeConstant<int, 3>>));
+    EXPECT_TRUE((std::is_same_v<decltype(newSum), sym::CompiletimeConstant<int, -1>>) );
 }
 
-TEST(Simplifier_CompileTime, MergeIdentity) {
+TEST(Simplifier_CompileTime, SubMergeIdentityKeepLhs) {
     sym::Variable<'a'> a;
     sym::CompiletimeConstant<int, 0> b;
-    auto sum = a + b;
+    auto sum = a - b;
 
     auto newSum = sym::simplifier::simplifyNodeCompileTime(sum);
 
-    EXPECT_TRUE((std::is_same_v<decltype(newSum), sym::Variable<'a'>>) );
+    EXPECT_TRUE((std::is_same_v<decltype(newSum), decltype(a)>) );
 }
 
-TEST(Simplifier_CompileTime, MergeDisappear) {
+TEST(Simplifier_CompileTime, MulMergeConstant) {
+    sym::CompiletimeConstant<int, 1> a;
+    sym::CompiletimeConstant<int, 2> b;
+    auto sum = a * b;
+
+    auto newSum = sym::simplifier::simplifyNodeCompileTime(sum);
+
+    EXPECT_TRUE((std::is_same_v<decltype(newSum), sym::CompiletimeConstant<int, 2>>) );
+}
+
+TEST(Simplifier_CompileTime, MulMergeIdentityKeepLhs) {
+    sym::Variable<'a'> a;
+    sym::CompiletimeConstant<int, 1> b;
+    auto sum = a * b;
+
+    auto newSum = sym::simplifier::simplifyNodeCompileTime(sum);
+
+    EXPECT_TRUE((std::is_same_v<decltype(newSum), decltype(a)>) );
+}
+
+TEST(Simplifier_CompileTime, MulMergeIdentityKeepRhs) {
+    sym::Variable<'a'> a;
+    sym::CompiletimeConstant<int, 1> b;
+    auto sum = b * a;
+
+    auto newSum = sym::simplifier::simplifyNodeCompileTime(sum);
+
+    EXPECT_TRUE((std::is_same_v<decltype(newSum), decltype(a)>) );
+}
+
+TEST(Simplifier_CompileTime, MulMergeDisappearFromLhs) {
     sym::Variable<'a'> a;
     sym::CompiletimeConstant<int, 0> b;
-    auto prod = a * b;
-    auto simplified = sym::simplifier::simplifyNodeCompileTime(prod);
+    auto sum = b * a;
 
-    EXPECT_TRUE((std::is_same_v<decltype(simplified), sym::CompiletimeConstant<int, 0>>) );
+    auto newSum = sym::simplifier::simplifyNodeCompileTime(sum);
+
+    EXPECT_TRUE((std::is_same_v<decltype(newSum), sym::CompiletimeConstant<int, 0>>) );
+}
+
+TEST(Simplifier_CompileTime, MulMergeDisappearFromRhs) {
+    sym::Variable<'a'> a;
+    sym::CompiletimeConstant<int, 0> b;
+    auto sum = a * b;
+
+    auto newSum = sym::simplifier::simplifyNodeCompileTime(sum);
+
+    EXPECT_TRUE((std::is_same_v<decltype(newSum), sym::CompiletimeConstant<int, 0>>) );
+}
+
+TEST(Simplifier_CompileTime, DivMergeConstant) {
+    sym::CompiletimeConstant<int, 1> a;
+    sym::CompiletimeConstant<int, 2> b;
+    auto sum = b / a;
+
+    auto newSum = sym::simplifier::simplifyNodeCompileTime(sum);
+
+    EXPECT_TRUE((std::is_same_v<decltype(newSum), sym::CompiletimeConstant<int, 2>>) );
+}
+
+TEST(Simplifier_CompileTime, DivMergeIdentityKeepLhs) {
+    sym::Variable<'a'> a;
+    sym::CompiletimeConstant<int, 1> b;
+    auto sum = a / b;
+
+    auto newSum = sym::simplifier::simplifyNodeCompileTime(sum);
+
+    EXPECT_TRUE((std::is_same_v<decltype(newSum), decltype(a)>) );
+}
+
+TEST(Simplifier_CompileTime, DivMergeDisappearFromLhs) {
+    sym::Variable<'a'> a;
+    sym::CompiletimeConstant<int, 0> b;
+    auto sum = b / a;
+
+    auto newSum = sym::simplifier::simplifyNodeCompileTime(sum);
+
+    EXPECT_TRUE((std::is_same_v<decltype(newSum), sym::CompiletimeConstant<int, 0>>) );
 }

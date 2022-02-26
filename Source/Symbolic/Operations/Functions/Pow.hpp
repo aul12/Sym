@@ -10,6 +10,7 @@
 #include <cmath>
 
 #include "../../Expression.hpp"
+#include "../../Simplifier/GradientSimplifcation.hpp"
 #include "../../Variable.hpp"
 
 namespace sym {
@@ -65,8 +66,16 @@ namespace sym {
 
     template<sym::Expression Base_, sym::Expression Exp_, fixed_string ID>
     constexpr auto gradient(const Pow<Base_, Exp_> &x, const Variable<ID> &d) {
-        return Mul{Pow{x.base, Sub{x.exp, CompiletimeConstant<int, 1>{}}},
-                   Add{Mul{x.exp, gradient(x.base, d)}, Mul{Mul{x.base, Log{x.base}}, gradient(x.exp, d)}}};
+        auto exp_minus_1 = _GRADIENT_SIMPLIFY(Sub{x.exp, CompiletimeConstant<int, 1>{}});
+        auto x_pow_exp_minus_1 = _GRADIENT_SIMPLIFY(Pow{x.base, exp_minus_1});
+
+        auto x_log_x = _GRADIENT_SIMPLIFY(Mul{x.base, Log{x.base}});
+        auto x_log_x_dexp = _GRADIENT_SIMPLIFY(Mul{x_log_x, gradient(x.exp, d)});
+        auto x_dx = _GRADIENT_SIMPLIFY(Mul{x.exp, gradient(x.base, d)});
+
+        auto add = _GRADIENT_SIMPLIFY(Add{x_dx, x_log_x_dexp});
+
+        return _GRADIENT_SIMPLIFY(Mul{x_pow_exp_minus_1, add});
     }
 
     template<sym::Expression Base_, sym::Expression Exp_>
@@ -80,6 +89,7 @@ namespace sym {
     }
 } // namespace sym
 
+#include "../../Simplifier/CompileTime.hpp"
 #include "../Add.hpp"
 #include "../Div.hpp"
 #include "../Mul.hpp"

@@ -10,6 +10,7 @@
 #include <cmath>
 
 #include "../../Expression.hpp"
+#include "../../Simplifier/GradientSimplifcation.hpp"
 #include "../../Variable.hpp"
 
 namespace sym {
@@ -64,7 +65,16 @@ namespace sym {
         auto g = x.rhs;
         auto df = gradient(f, d);
         auto dg = gradient(g, d);
-        return Div{Sub{Mul{g, df}, Mul{f, dg}}, Add{Mul{f, f}, Mul{g, g}}};
+
+        auto g_df = _GRADIENT_SIMPLIFY(Mul{g, df});
+        auto f_dg = _GRADIENT_SIMPLIFY(Mul{f, dg});
+        auto nom = _GRADIENT_SIMPLIFY(Sub{g_df, f_dg});
+
+        auto f2 = _GRADIENT_SIMPLIFY(Mul{f, f});
+        auto g2 = _GRADIENT_SIMPLIFY(Mul{g, g});
+        auto denom = _GRADIENT_SIMPLIFY(Add{f2, g2});
+
+        return _GRADIENT_SIMPLIFY(Div{nom, denom});
     }
 
     template<sym::Expression Lhs_, sym::Expression Rhs_>
@@ -82,5 +92,6 @@ namespace sym {
 #include "../Div.hpp"
 #include "../Mul.hpp"
 #include "../Sub.hpp"
+#include "../../Simplifier/CompileTime.hpp"
 
 #endif // SYM_ARCTAN2_HPP

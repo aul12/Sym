@@ -10,6 +10,7 @@
 #include <cmath>
 
 #include "../../Expression.hpp"
+#include "../../Simplifier/GradientSimplifcation.hpp"
 #include "../../Variable.hpp"
 
 namespace sym {
@@ -55,7 +56,9 @@ namespace sym {
 
     template<Expression Expr_, fixed_string ID>
     constexpr auto gradient(const ArcTan<Expr_> &x, const Variable<ID> &d) {
-        return Div{gradient(x.expr, d), Add{CompiletimeConstant<int, 1>{}, Mul{x.expr, x.expr}}};
+        auto xSqr = _GRADIENT_SIMPLIFY(Mul{x.expr, x.expr});
+        auto denom = _GRADIENT_SIMPLIFY(Add{CompiletimeConstant<int, 1>{}, xSqr});
+        return _GRADIENT_SIMPLIFY(Div{gradient(x.expr, d), denom});
     }
 
     template<Expression Expr_>
@@ -72,5 +75,6 @@ namespace sym {
 #include "../Add.hpp"
 #include "../Div.hpp"
 #include "../Mul.hpp"
+#include "../../Simplifier/CompileTime.hpp"
 
 #endif // SYM_ARCTAN_HPP

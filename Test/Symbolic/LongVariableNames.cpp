@@ -8,7 +8,7 @@ TEST(LongVariableNames, DifferentLength) {
     sym::Variable<"time"> time;
     auto acc_time = acc * time;
     auto g = sym::simplifier::simplify(sym::gradient(acc_time, time));
-    EXPECT_EQ(g.resolve(acc = 7), 7);
+    EXPECT_EQ(g.resolve(acc = 7, time = 13), 7);
 }
 
 TEST(LongVariableNames, StringChar) {
@@ -16,7 +16,7 @@ TEST(LongVariableNames, StringChar) {
     sym::Variable<'t'> time;
     auto acc_time = acc * time;
     auto g = sym::simplifier::simplify(sym::gradient(acc_time, time));
-    EXPECT_EQ(g.resolve(acc = 7), 7);
+    EXPECT_EQ(g.resolve(acc = 7, time = 13), 7);
 }
 
 
@@ -25,7 +25,7 @@ TEST(LongVariableNames, SameLength) {
     sym::Variable<"tim"> time;
     auto acc_time = acc * time;
     auto g = sym::simplifier::simplify(sym::gradient(acc_time, time));
-    EXPECT_EQ(g.resolve(acc = 7), 7);
+    EXPECT_EQ(g.resolve(acc = 7, time = 13), 7);
 }
 
 TEST(LongVariableNames, SameName) {
