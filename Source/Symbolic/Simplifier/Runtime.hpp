@@ -50,9 +50,9 @@ namespace sym::simplifier {
         using Children = decltype(getChildren(expr));
         if constexpr (std::tuple_size_v < Children >> 0) {
             constexpr auto allConstant = impl::AllConstant<Children>::val;
-            constexpr auto atLeastOneRuntimeConstant = impl::OneRuntimeConstant<Children>::val;
+            //constexpr auto atLeastOneRuntimeConstant = impl::OneRuntimeConstant<Children>::val;
 
-            if constexpr (allConstant and atLeastOneRuntimeConstant) {
+            if constexpr (allConstant /*and atLeastOneRuntimeConstant*/) {
                 return RuntimeConstant{expr.resolve()};
             } else {
                 return expr;
