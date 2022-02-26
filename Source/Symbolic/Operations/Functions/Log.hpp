@@ -10,6 +10,7 @@
 #include <cmath>
 
 #include "../../Expression.hpp"
+#include "../../Simplifier/GradientSimplifcation.hpp"
 #include "../../Variable.hpp"
 
 namespace sym {
@@ -49,7 +50,7 @@ namespace sym {
 
     template<Expression Expr_, fixed_string ID>
     constexpr auto gradient(const Log<Expr_> &x, const Variable<ID> &d) {
-        return Div{gradient(x.expr, d), x.expr};
+        return _GRADIENT_SIMPLIFY(Div{gradient(x.expr, d), x.expr});
     }
 
     template<Expression Expr_>
@@ -63,6 +64,7 @@ namespace sym {
     }
 } // namespace sym
 
+#include "../../Simplifier/CompileTime.hpp"
 #include "../Div.hpp"
 
 #endif // SYM_LOG_HPP

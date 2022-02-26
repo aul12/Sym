@@ -10,6 +10,7 @@
 #include <cmath>
 
 #include "../../Expression.hpp"
+#include "../../Simplifier/GradientSimplifcation.hpp"
 #include "../../Variable.hpp"
 
 namespace sym {
@@ -49,7 +50,10 @@ namespace sym {
          * d/dx \sqrt(f(x)) = 0.5 * 1 / \sqrt{f(x)} * d/dx f(x)
          *  = d/dx f(x) / (2 * \sqrt{f(x)})
          */
-        return Div{gradient(sqrt.expr, id), Mul{CompiletimeConstant<int, 2>{}, Sqrt{sqrt.expr}}};
+
+        auto sqrt_ = _GRADIENT_SIMPLIFY(Sqrt{sqrt.expr});
+        auto denom = _GRADIENT_SIMPLIFY(Mul{CompiletimeConstant<int, 2>{}, sqrt_});
+        return _GRADIENT_SIMPLIFY(Div{gradient(sqrt.expr, id), denom});
     }
 
     template<Expression Expr_>
@@ -63,6 +67,7 @@ namespace sym {
     }
 } // namespace sym
 
+#include "../../Simplifier/CompileTime.hpp"
 #include "../Div.hpp"
 #include "../Mul.hpp"
 

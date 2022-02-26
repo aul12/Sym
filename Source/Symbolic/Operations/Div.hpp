@@ -8,8 +8,8 @@
 #define SYM_DIV_HPP
 
 #include "../Expression.hpp"
-#include "../Variable.hpp"
 #include "../Simplifier/GradientSimplifcation.hpp"
+#include "../Variable.hpp"
 
 namespace sym {
     template<Expression Lhs, Expression Rhs>
@@ -55,8 +55,11 @@ namespace sym {
 
     template<Expression Lhs_, Expression Rhs_, fixed_string ID>
     constexpr auto gradient(const Div<Lhs_, Rhs_> &x, const Variable<ID> &d) {
-        return _GRADIENT_SIMPLIFY(
-                Div{Sub{Mul{gradient(x.lhs, d), x.rhs}, Mul{x.lhs, gradient(x.rhs, d)}}, Mul{x.rhs, x.rhs}});
+        auto l_nom = _GRADIENT_SIMPLIFY(Mul{gradient(x.lhs, d), x.rhs});
+        auto r_nom = _GRADIENT_SIMPLIFY(Mul{x.lhs, gradient(x.rhs, d)});
+        auto nom = _GRADIENT_SIMPLIFY(Sub{l_nom, r_nom});
+        auto denom = _GRADIENT_SIMPLIFY(Mul{x.rhs, x.rhs});
+        return _GRADIENT_SIMPLIFY(Div{nom, denom});
     }
 
     template<Expression Lhs_, Expression Rhs_>

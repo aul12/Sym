@@ -10,6 +10,7 @@
 #include <cmath>
 
 #include "../../Expression.hpp"
+#include "../../Simplifier/GradientSimplifcation.hpp"
 #include "../../Variable.hpp"
 
 namespace sym {
@@ -58,7 +59,8 @@ namespace sym {
 
     template<Expression Expr_, fixed_string ID>
     constexpr auto gradient(const Cos<Expr_> &x, const Variable<ID> &d) {
-        return Mul{Sub{CompiletimeConstant<int, 0>{}, Sin{x.expr}}, gradient(x.expr, d)};
+        auto sin = _GRADIENT_SIMPLIFY(Sub{CompiletimeConstant<int, 0>{}, Sin{x.expr}});
+        return _GRADIENT_SIMPLIFY(Mul{sin, gradient(x.expr, d)});
     }
 
     template<Expression Expr_>
@@ -73,6 +75,7 @@ namespace sym {
 } // namespace sym
 
 #include "../../CompiletimeConstant.hpp"
+#include "../../Simplifier/CompileTime.hpp"
 #include "Sin.hpp"
 #include "Symbolic/Operations/Mul.hpp"
 #include "Symbolic/Operations/Sub.hpp"

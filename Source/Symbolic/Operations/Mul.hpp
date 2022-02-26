@@ -49,15 +49,10 @@ namespace sym {
 
     template<Expression Lhs_, Expression Rhs_, fixed_string ID>
     constexpr auto gradient(const Mul<Lhs_, Rhs_> &x, const Variable<ID> &d) {
-        using lhs = decltype(x.lhs);
-        using rhs = decltype(x.rhs);
-        using lgrad = decltype(gradient(x.lhs, d));
-        using rgrad = decltype(gradient(x.rhs, d));
-        using lsum = Mul<lgrad, rhs>;
-        using rsum = Mul<rgrad, lhs>;
-        using dtype = Add<lsum, rsum>;
+        auto l = _GRADIENT_SIMPLIFY(Mul{gradient(x.lhs, d), x.rhs});
+        auto r = _GRADIENT_SIMPLIFY(Mul{gradient(x.rhs, d), x.lhs});
 
-        return _GRADIENT_SIMPLIFY(dtype{lsum{gradient(x.lhs, d), x.rhs}, rsum{gradient(x.rhs, d), x.lhs}});
+        return _GRADIENT_SIMPLIFY(Add{l, r});
     }
 
     template<Expression Lhs_, Expression Rhs_>
