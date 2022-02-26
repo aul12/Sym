@@ -15,11 +15,11 @@ namespace sym::simplifier {
     template<Expression Expr>
     auto simplifyWhileChangeImpl(Expr expr) {
         auto simplified = simplifyNodeCompileTime(expr);
-        if constexpr (std::is_same_v<decltype(simplified), std::remove_cvref_t<decltype(expr)>>) {
+        //if constexpr (std::is_same_v<decltype(simplified), std::remove_cvref_t<decltype(expr)>>) {
             return simplifyRuntime(simplified);
-        } else {
+        /*} else {
             return simplifyWhileChangeImpl(simplified);
-        }
+        }*/
     }
 
     template<Expression Expr>
