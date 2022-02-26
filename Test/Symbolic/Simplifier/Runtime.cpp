@@ -3,6 +3,7 @@
 #include <Symbolic/Simplifier/Runtime.hpp>
 #include <Symbolic/Simplifier/Simplifier.hpp>
 #include <Symbolic/Vector.hpp>
+#include <Symbolic/Operations/Functions/Functions.hpp>
 #include <gtest/gtest.h>
 
 TEST(Simplifier_Runtime, Simple) {
@@ -25,4 +26,12 @@ TEST(Simplifier_Runtime, Vector) {
     auto resolved = simplified.resolveAs<std::array<int, 2>>();
     EXPECT_EQ(resolved[0], 2);
     EXPECT_EQ(resolved[1], 3);
+}
+
+TEST(Simplifier_Runtime, ExpOfCompiletime) {
+    sym::CompiletimeConstant<int, 1> c;
+    auto exp = std::exp(c);
+    auto simplified = sym::simplifier::simplifyRuntime(exp);
+    EXPECT_TRUE((std::is_same_v< decltype(simplified), sym::RuntimeConstant<double>>));
+    EXPECT_DOUBLE_EQ(simplified.resolve(), std::exp(1));
 }
