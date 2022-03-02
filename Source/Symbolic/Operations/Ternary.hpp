@@ -14,7 +14,7 @@ namespace sym {
     template<Expression Cond, Expression TrueVal, Expression FalseVal>
     class Ternary {
       public:
-        Ternary(Cond cond, TrueVal trueVal, FalseVal falseVal) : cond{cond}, trueVal{trueVal}, falseVal{falseVal} {
+        constexpr Ternary(Cond cond, TrueVal trueVal, FalseVal falseVal) : cond{cond}, trueVal{trueVal}, falseVal{falseVal} {
         }
 
         template<typename... Bindings>
