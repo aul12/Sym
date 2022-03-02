@@ -55,7 +55,7 @@ namespace sym {
 
     template<Expression Lhs_, Expression Rhs_>
     auto toString(const Sub<Lhs_, Rhs_> &x) -> std::string {
-        return "(" + toString(x.lhs) + "-" + toString(x.rhs) + ")";
+        return "(" + toString(x.lhs) + ")-(" + toString(x.rhs) + ")";
     }
 
     template<Expression Lhs_, Expression Rhs_>

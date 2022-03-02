@@ -24,14 +24,6 @@ void distToSquareSym(benchmark::State &state) {
 
     auto dist = distanceToSquare(x, y, centreX, centreY, width, height);
 
-    sym::Variable<'z'> z;
-    auto d_dist = sym::gradient(dist, z);
-    auto dd_dist = sym::gradient(d_dist, z);
-
-    std::cout << sym::toString(d_dist) << std::endl;
-
-    std::cout << sym::toString(dd_dist) << std::endl;
-
     for (auto _ : state) {
         state.PauseTiming();
         double xVal = rand();
