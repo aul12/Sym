@@ -130,8 +130,9 @@ namespace std { // NOLINT everything is fine specialization for custom types is 
 
     template<sym::Expression Expr>
     constexpr auto abs(const Expr &expr) {
-        return sym::Mul{expr > sym::CompiletimeConstant<int, 0>{}, sym::CompiletimeConstant<int, 1>{},
-                        sym::CompiletimeConstant<int, -1>{}, expr};
+        return sym::Mul{sym::Ternary{expr > sym::CompiletimeConstant<int, 0>{}, sym::CompiletimeConstant<int, 1>{},
+                                     sym::CompiletimeConstant<int, -1>{}},
+                        expr};
     }
 } // namespace std
 
