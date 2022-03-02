@@ -7,7 +7,7 @@
 #ifndef SYM_FUNCTIONS_HPP
 #define SYM_FUNCTIONS_HPP
 
-#include "../../Operators.hpp"
+#include "../Greater.hpp"
 #include "../Ternary.hpp"
 #include "ArcCos.hpp"
 #include "ArcSin.hpp"
@@ -100,38 +100,38 @@ namespace std { // NOLINT everything is fine specialization for custom types is 
     // Ternary based
     template<sym::Expression Lhs, sym::Expression Rhs>
     constexpr auto max(const Lhs &lhs, const Rhs &rhs) {
-        return sym::Ternary{lhs > rhs, lhs, rhs};
+        return sym::Ternary{sym::Greater{lhs, rhs}, lhs, rhs};
     }
 
     template<sym::Expression Lhs, sym::Expression Rhs>
     constexpr auto min(const Lhs &lhs, const Rhs &rhs) {
-        return sym::Ternary{lhs < rhs, lhs, rhs};
+        return sym::Ternary{sym::Greater{rhs, lhs}, lhs, rhs};
     }
 
     template<sym::Expression Lhs, typename Rhs>
     constexpr auto max(const Lhs &lhs, const Rhs &rhs) {
-        return sym::Ternary{lhs > sym::RuntimeConstant{rhs}, lhs, sym::RuntimeConstant{rhs}};
+        return sym::Ternary{sym::Greater{lhs, sym::RuntimeConstant{rhs}}, lhs, sym::RuntimeConstant{rhs}};
     }
 
     template<sym::Expression Lhs, typename Rhs>
     constexpr auto min(const Lhs &lhs, const Rhs &rhs) {
-        return sym::Ternary{lhs < sym::RuntimeConstant{rhs}, lhs, sym::RuntimeConstant{rhs}};
+        return sym::Ternary{sym::Greater{sym::RuntimeConstant{rhs}, lhs}, lhs, sym::RuntimeConstant{rhs}};
     }
 
     template<typename Lhs, sym::Expression Rhs>
     constexpr auto max(const Lhs &lhs, const Rhs &rhs) {
-        return sym::Ternary{sym::RuntimeConstant{lhs} > rhs, sym::RuntimeConstant{lhs}, rhs};
+        return sym::Ternary{sym::Greater{sym::RuntimeConstant{lhs}, rhs}, sym::RuntimeConstant{lhs}, rhs};
     }
 
     template<typename Lhs, sym::Expression Rhs>
     constexpr auto min(const Lhs &lhs, const Rhs &rhs) {
-        return sym::Ternary{sym::RuntimeConstant{lhs} < rhs, sym::RuntimeConstant{lhs}, rhs};
+        return sym::Ternary{sym::Greater{rhs, sym::RuntimeConstant{lhs}}, sym::RuntimeConstant{lhs}, rhs};
     }
 
     template<sym::Expression Expr>
     constexpr auto abs(const Expr &expr) {
-        return sym::Mul{sym::Ternary{expr > sym::CompiletimeConstant<int, 0>{}, sym::CompiletimeConstant<int, 1>{},
-                                     sym::CompiletimeConstant<int, -1>{}},
+        return sym::Mul{sym::Ternary{sym::Greater{expr, sym::CompiletimeConstant<int, 0>{}},
+                                     sym::CompiletimeConstant<int, 1>{}, sym::CompiletimeConstant<int, -1>{}},
                         expr};
     }
 } // namespace std

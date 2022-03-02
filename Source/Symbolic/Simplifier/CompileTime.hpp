@@ -13,6 +13,7 @@
 #include "../Operations/Div.hpp"
 #include "../Operations/Mul.hpp"
 #include "../Operations/Sub.hpp"
+#include "../Operations/Ternary.hpp"
 #include "Util.hpp"
 
 
@@ -90,6 +91,28 @@ namespace sym::simplifier {
             return CompiletimeConstant<std::remove_const_t<decltype(val)>, val>{};
         } else {
             return div;
+        }
+    }
+
+    /*
+     * TERNARY
+     */
+    template<Expression Cond, Expression TrueVal, Expression FalseVal>
+    constexpr auto simplifyNodeCompileTime(Ternary<Cond, TrueVal, FalseVal> ternary) {
+        if constexpr (util::isCompileTimeConstant<Cond>) {
+            if constexpr (Cond::resolve()) {
+                return std::get<1>(getChildren(ternary));
+            } else {
+                return std::get<2>(getChildren(ternary));
+            }
+        } else if constexpr (util::isCompileTimeConstant<TrueVal> and util::isCompileTimeConstant<FalseVal>) {
+            if constexpr (TrueVal::resolve() == FalseVal::resolve()) {
+                return std::get<1>(getChildren(ternary));
+            } else {
+                return ternary;
+            }
+        } else {
+            return ternary;
         }
     }
 

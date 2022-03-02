@@ -132,3 +132,23 @@ TEST(Simplifier_CompileTime, DivMergeDisappearFromLhs) {
 
     EXPECT_TRUE((std::is_same_v<decltype(newSum), sym::CompiletimeConstant<int, 0>>) );
 }
+
+TEST(Simplifier_CompileTime, TernaryBothEqual) {
+    sym::CompiletimeConstant<int, 17> b;
+    sym::Variable<'a'> a;
+    auto tern = sym::Ternary{a, b, b};
+
+    auto newTern = sym::simplifier::simplifyNodeCompileTime(tern);
+
+    EXPECT_TRUE((std::is_same_v<decltype(newTern), sym::CompiletimeConstant<int, 17>>) );
+}
+
+TEST(Simplifier_CompileTime, TernaryCondConstant) {
+    sym::CompiletimeConstant<int, 1> b;
+    sym::Variable<'a'> a;
+    auto tern = sym::Ternary{b, a, b*a};
+
+    auto newTern = sym::simplifier::simplifyNodeCompileTime(tern);
+
+    EXPECT_TRUE((std::is_same_v<decltype(newTern), sym::Variable<'a'>>) );
+}

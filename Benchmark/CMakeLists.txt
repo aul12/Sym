@@ -7,6 +7,7 @@ if (GTest_FOUND)
 
         set(SOURCES
                 Symbolic/ComplexResolve.cpp
+                Symbolic/DistanceToSquare.cpp
                 Symbolic/ManyVariables.cpp
                 Symbolic/GradientResolve.cpp)
 
