@@ -57,12 +57,12 @@ namespace sym {
     };
 
     template<typename T>
-    auto wrapInTuple(T &&t) {
+    constexpr auto wrapInTuple(T &&t) {
         return std::make_tuple(std::forward<T>(t));
     }
 
     template<typename... Ts>
-    auto wrapInTuple(const std::tuple<Ts...> &tuple) {
+    constexpr auto wrapInTuple(const std::tuple<Ts...> &tuple) {
         return tuple;
     }
 

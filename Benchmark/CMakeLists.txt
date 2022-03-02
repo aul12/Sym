@@ -12,6 +12,7 @@ if (GTest_FOUND)
 
         add_executable(${PROJECT_NAME} main.cpp ${SOURCES})
         target_link_libraries(${PROJECT_NAME} PRIVATE benchmark::benchmark pthread Sym++)
+        target_compile_options(${PROJECT_NAME} PRIVATE -g -ggdb)
         set_property(TARGET ${PROJECT_NAME} PROPERTY RULE_LAUNCH_COMPILE "${CMAKE_COMMAND} -E time")
     else ()
         message(WARNING "benchmark not found")

@@ -19,9 +19,7 @@ namespace sym {
         }
 
         template<typename... Bindings>
-        constexpr auto resolve(const Bindings &...bindings) const {
-            return lhs.resolve(bindings...) > rhs.resolve(bindings...);
-        }
+        constexpr auto resolve(const Bindings &...bindings) const;
 
         template<Expression Lhs_, Expression Rhs_>
         friend auto toString(const Greater<Lhs_, Rhs_> &greater) -> std::string;
@@ -33,6 +31,13 @@ namespace sym {
         [[no_unique_address]] Lhs lhs;
         [[no_unique_address]] Rhs rhs;
     };
+
+
+    template<Expression Lhs, Expression Rhs>
+    template<typename... Bindings>
+    constexpr auto Greater<Lhs, Rhs>::resolve(const Bindings &...bindings) const {
+        return lhs.resolve(bindings...) > rhs.resolve(bindings...);
+    }
 
     template<Expression Lhs_, Expression Rhs_>
     auto toString(const Greater<Lhs_, Rhs_> &greater) -> std::string {
