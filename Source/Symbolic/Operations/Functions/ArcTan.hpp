@@ -23,7 +23,7 @@ namespace sym {
     template<Expression Lhs, Expression Rhs>
     class Add;
 
-    template<sym::Expression Expr>
+    template<Expression Expr>
     class ArcTan {
       public:
         explicit constexpr ArcTan(Expr expr);
@@ -44,11 +44,11 @@ namespace sym {
         [[no_unique_address]] Expr expr;
     };
 
-    template<sym::Expression Expr>
+    template<Expression Expr>
     constexpr ArcTan<Expr>::ArcTan(Expr expr) : expr{expr} {
     }
 
-    template<sym::Expression Expr>
+    template<Expression Expr>
     template<typename... Bindings>
     constexpr auto ArcTan<Expr>::resolve(Bindings &&...bindings) const {
         return std::atan(expr.resolve(std::forward<Bindings>(bindings)...));

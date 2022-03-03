@@ -24,7 +24,7 @@ namespace sym::simplifier {
         return ConstructWithNewTemplateArgs<T, OldArgs...>{};
     }
 
-    template<sym::Expression Expr, typename FEnter, typename FLeave>
+    template<Expression Expr, typename FEnter, typename FLeave>
     requires(IsExpression<decltype(std::declval<FEnter>()(std::declval<Expr>()))>::val and IsExpression<
              decltype(std::declval<FLeave>()(std::declval<Expr>()))>::val) auto traverseExpression(Expr &&expr,
                                                                                                    FEnter &&fEnter,

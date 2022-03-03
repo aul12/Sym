@@ -41,7 +41,7 @@ namespace sym {
 
     template<Expression Lhs_, Expression Rhs_>
     auto toString(const Greater<Lhs_, Rhs_> &greater) -> std::string {
-        return "(" + sym::toString(greater.lhs) + ")>(" + sym::toString(greater.rhs) + ")";
+        return "(" + toString(greater.lhs) + ")>(" + toString(greater.rhs) + ")";
     }
 
     template<Expression Lhs_, Expression Rhs_>

@@ -99,7 +99,7 @@ namespace sym {
         constexpr friend auto getChildren(const Vector<Expressions_...> &vec) -> std::tuple<Expressions_...>;
 
         template<fixed_string ID, Expression... Expressions_>
-        constexpr friend auto gradient(const Vector<Expressions_...> &vec, const sym::Variable<ID> &d);
+        constexpr friend auto gradient(const Vector<Expressions_...> &vec, const Variable<ID> &d);
 
         template<Expression Expr, fixed_string... IDs>
         constexpr friend auto gradient(const Expr &expr, const Vector<Variable<IDs>...> &ds);
@@ -152,14 +152,14 @@ namespace sym {
     }
 
     template<fixed_string ID, Expression... Expressions_>
-    constexpr auto gradient(const Vector<Expressions_...> &vec, const sym::Variable<ID> &d) {
+    constexpr auto gradient(const Vector<Expressions_...> &vec, const Variable<ID> &d) {
         auto grads = mapTuple(vec.expressions, [&d](Expression auto expression) { return gradient(expression, d); });
         return Vector{grads};
     }
 
     template<std::size_t index, typename Container, fixed_string id, fixed_string... ids>
     constexpr auto bindVectorFromContainerImpl(Container &&container) {
-        auto binding = std::make_tuple(sym::Variable<id>{} = container[index]);
+        auto binding = std::make_tuple(Variable<id>{} = container[index]);
         if constexpr (sizeof...(ids) > 0) {
             return std::tuple_cat(binding, bindVectorFromContainerImpl<index + 1, Container, ids...>(
                                                    std::forward<Container>(container)));

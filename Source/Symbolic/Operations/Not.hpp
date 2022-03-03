@@ -19,10 +19,10 @@ namespace sym {
         constexpr auto resolve(Bindings &&...bindings) const;
 
         template<Expression Expr_>
-        constexpr friend auto getChildren(const sym::Not<Expr_> &notExpr) -> std::tuple<Expr_>;
+        constexpr friend auto getChildren(const Not<Expr_> &notExpr) -> std::tuple<Expr_>;
 
         template<Expression Expr_>
-        friend auto toString(const sym::Not<Expr_> &notExpr) -> std::string;
+        friend auto toString(const Not<Expr_> &notExpr) -> std::string;
 
       private:
         [[no_unique_address]] Expr expr;
@@ -39,12 +39,12 @@ namespace sym {
     }
 
     template<Expression Expr_>
-    constexpr auto getChildren(const sym::Not<Expr_> &notExpr) -> std::tuple<Expr_> {
+    constexpr auto getChildren(const Not<Expr_> &notExpr) -> std::tuple<Expr_> {
         return std::tuple{notExpr.expr};
     }
 
     template<Expression Expr_>
-    auto toString(const sym::Not<Expr_> &notExpr) -> std::string {
+    auto toString(const Not<Expr_> &notExpr) -> std::string {
         return "not (" + toString(notExpr.expr) + ")";
     }
 } // namespace sym

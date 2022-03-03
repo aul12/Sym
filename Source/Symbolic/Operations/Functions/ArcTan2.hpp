@@ -26,7 +26,7 @@ namespace sym {
     template<Expression Lhs, Expression Rhs>
     class Sub;
 
-    template<sym::Expression Lhs, sym::Expression Rhs>
+    template<Expression Lhs, Expression Rhs>
     class ArcTan2 {
       public:
         explicit constexpr ArcTan2(Lhs lhs, Rhs rhs);
@@ -48,17 +48,17 @@ namespace sym {
         [[no_unique_address]] Rhs rhs;
     };
 
-    template<sym::Expression Lhs, sym::Expression Rhs>
+    template<Expression Lhs, Expression Rhs>
     constexpr ArcTan2<Lhs, Rhs>::ArcTan2(Lhs lhs, Rhs rhs) : lhs{lhs}, rhs{rhs} {
     }
 
-    template<sym::Expression Lhs, sym::Expression Rhs>
+    template<Expression Lhs, Expression Rhs>
     template<typename... Bindings>
     constexpr auto ArcTan2<Lhs, Rhs>::resolve(const Bindings &...bindings) const {
         return std::atan2(lhs.resolve(bindings...), rhs.resolve(bindings...));
     }
 
-    template<sym::Expression Lhs_, sym::Expression Rhs_, fixed_string ID>
+    template<Expression Lhs_, Expression Rhs_, fixed_string ID>
     constexpr auto gradient(const ArcTan2<Lhs_, Rhs_> &x, const Variable<ID> &d) {
         // https://www.wolframalpha.com/input?i=d%2Fdx+atan2%28f%28x%29%2C+g%28x%29%29
         auto f = x.lhs;
@@ -77,12 +77,12 @@ namespace sym {
         return _GRADIENT_SIMPLIFY(Div{nom, denom});
     }
 
-    template<sym::Expression Lhs_, sym::Expression Rhs_>
+    template<Expression Lhs_, Expression Rhs_>
     auto toString(const ArcTan2<Lhs_, Rhs_> &x) -> std::string {
         return "atan2(" + toString(x.lhs) + ", " + toString(x.rhs) + ")";
     }
 
-    template<sym::Expression Lhs_, sym::Expression Rhs_>
+    template<Expression Lhs_, Expression Rhs_>
     constexpr auto getChildren(const ArcTan2<Lhs_, Rhs_> &tan) -> std::tuple<Lhs_, Rhs_> {
         return std::tuple<Lhs_, Rhs_>(tan.lhs, tan.rhs);
     }

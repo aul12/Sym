@@ -14,7 +14,7 @@
 #include "../../Variable.hpp"
 
 namespace sym {
-    template<sym::Expression Lhs, sym::Expression Rhs>
+    template<Expression Lhs, Expression Rhs>
     class Div;
 
     template<Expression Expr>

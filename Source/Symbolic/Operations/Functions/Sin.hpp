@@ -17,7 +17,7 @@ namespace sym {
     template<Expression Expr>
     class Cos;
 
-    template<sym::Expression Lhs, sym::Expression Rhs>
+    template<Expression Lhs, Expression Rhs>
     class Mul;
 
     template<Expression Expr>

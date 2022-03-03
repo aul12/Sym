@@ -23,10 +23,10 @@ namespace sym {
     template<Expression Lhs, Expression Rhs>
     class Sub;
 
-    template<sym::Expression Expr>
+    template<Expression Expr>
     class Sqrt;
 
-    template<sym::Expression Expr>
+    template<Expression Expr>
     class ArcCos {
       public:
         explicit constexpr ArcCos(Expr expr);
@@ -47,11 +47,11 @@ namespace sym {
         [[no_unique_address]] Expr expr;
     };
 
-    template<sym::Expression Expr>
+    template<Expression Expr>
     constexpr ArcCos<Expr>::ArcCos(Expr expr) : expr{expr} {
     }
 
-    template<sym::Expression Expr>
+    template<Expression Expr>
     template<typename... Bindings>
     constexpr auto ArcCos<Expr>::resolve(Bindings &&...bindings) const {
         return std::acos(expr.resolve(std::forward<Bindings>(bindings)...));
