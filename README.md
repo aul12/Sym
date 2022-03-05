@@ -205,13 +205,14 @@ sym::Variable<'b'> b;
 
 auto prod = a * b;
 
-auto da_prod = sym::gradient(prod, a); // The actual expression is 1 * b + 0 * a
+auto da_prod = sym::gradient(prod, a); // The actual expression would be 1 * b + 0 * a
 auto da_prod_simplified = sym::simpifier::simplify(da_prod); // The simplified expression is now only b
 ```
 
 As simplification is done during compile time no overhead will incur on runtime, thus it is advisable to simplify the
 expression most of the time. One important drawback of the simplification is the fact that compile times increase
-massively, that is the reason why simplification needs to be done explicitly.
+massively. Thus there is an CMake-Option `SIMPLIFY_GRADIENTS` which defines if the gradients are directly simplified during calculation
+or if exlicit simplification is required. The default value is `ON`.
 
 ## Vectors
 
