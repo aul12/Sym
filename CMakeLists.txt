@@ -54,14 +54,14 @@ add_library(${PROJECT_NAME} INTERFACE)
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 target_include_directories(${PROJECT_NAME} INTERFACE Source)
 
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Source/Symbolic DESTINATION include)
-
 if (${SIMPLIFY_GRADIENTS})
     target_compile_definitions(${PROJECT_NAME} INTERFACE _GRADIENT_SIMPLIFICATION)
     message(STATUS "Gradient simplification")
 else ()
     message(STATUS "No Gradient simplification")
 endif ()
+
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Source/Symbolic DESTINATION include)
 
 if (BUILD_TESTS)
     add_subdirectory(Test)
