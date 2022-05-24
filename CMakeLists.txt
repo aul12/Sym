@@ -50,14 +50,12 @@ set(SOURCES
         Source/Symbolic/Vector.hpp
         )
 
-set(LIBS)
-
-add_library(${PROJECT_NAME} SHARED ${SOURCES})
+add_library(${PROJECT_NAME} INTERFACE)
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
-target_include_directories(${PROJECT_NAME} PUBLIC Source)
+target_include_directories(${PROJECT_NAME} INTERFACE Source)
 
 if (${SIMPLIFY_GRADIENTS})
-    target_compile_definitions(${PROJECT_NAME} PUBLIC _GRADIENT_SIMPLIFICATION)
+    target_compile_definitions(${PROJECT_NAME} INTERFACE _GRADIENT_SIMPLIFICATION)
     message(STATUS "Gradient simplification")
 else ()
     message(STATUS "No Gradient simplification")
