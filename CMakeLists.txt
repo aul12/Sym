@@ -50,26 +50,18 @@ set(SOURCES
         Source/Symbolic/Vector.hpp
         )
 
-set(LIBS)
-
-add_library(${PROJECT_NAME} SHARED ${SOURCES})
+add_library(${PROJECT_NAME} INTERFACE)
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
-target_include_directories(${PROJECT_NAME} PUBLIC Source)
+target_include_directories(${PROJECT_NAME} INTERFACE Source)
 
 if (${SIMPLIFY_GRADIENTS})
-    target_compile_definitions(${PROJECT_NAME} PUBLIC _GRADIENT_SIMPLIFICATION)
+    target_compile_definitions(${PROJECT_NAME} INTERFACE _GRADIENT_SIMPLIFICATION)
     message(STATUS "Gradient simplification")
 else ()
     message(STATUS "No Gradient simplification")
 endif ()
 
-#target_link_libraries(${PROJECT_NAME} ${LIBS})
-
-include(GNUInstallDirs)
-set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${SOURCES}")
-install(TARGETS ${PROJECT_NAME}
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Source/Symbolic DESTINATION include)
 
 if (BUILD_TESTS)
     add_subdirectory(Test)
