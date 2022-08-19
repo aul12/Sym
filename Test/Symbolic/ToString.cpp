@@ -99,8 +99,9 @@ TEST(ToString, Expression) {
     auto [description_s, value_s] = sum.resolve_named(a = 1, b = 2);
     EXPECT_EQ(description_s, "(a<1> + b<2>)<3>");
 
+    // TODO: Print function arguments?
     auto [description_complex, value_comples] = (a + sum_named(sum, b)).resolve_named(a = 1, b = 2);
-    EXPECT_EQ(description_complex, "(a<1> + b<2>)<3>");
+    EXPECT_EQ(description_complex, "(a<1> + (sum term)<5>)<6>");
 }
 
 TEST(ToString, Number) {
