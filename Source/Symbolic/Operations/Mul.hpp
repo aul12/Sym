@@ -23,6 +23,9 @@ namespace sym {
         template<typename... Bindings>
         constexpr auto resolve(const Bindings &...bindings) const;
 
+        template<typename... Bindings>
+        constexpr std::string resolve_named(const Bindings &...bindings) const;
+
         template<Expression Lhs_, Expression Rhs_, fixed_string ID>
         friend auto constexpr gradient(const Mul<Lhs_, Rhs_> &x, const Variable<ID> &d);
 
@@ -45,6 +48,13 @@ namespace sym {
     template<typename... Bindings>
     constexpr auto Mul<Lhs, Rhs>::resolve(const Bindings &...bindings) const {
         return lhs.resolve(bindings...) * rhs.resolve(bindings...);
+    }
+
+    template<Expression Lhs, Expression Rhs>
+    template<typename... Bindings>
+    constexpr std::string Mul<Lhs, Rhs>::resolve_named(const Bindings &...bindings) const {
+        return "(" + lhs.resolve_named(bindings...) + " * " + rhs.resolve_named(bindings...) + ")<" +
+               std::to_string(this->template resolve(bindings...)) + ">";
     }
 
     template<Expression Lhs_, Expression Rhs_, fixed_string ID>

@@ -24,6 +24,9 @@ namespace sym {
             return val_;
         }
 
+        template<typename... Bindings>
+        constexpr std::string resolve_named(const Bindings &...bindings) const;
+
         template<typename T_, T_ val0, fixed_string ID>
         friend constexpr auto gradient(const CompiletimeConstant<T_, val0> &, const Variable<ID> &);
 
@@ -33,6 +36,12 @@ namespace sym {
         template<typename T_, T_ val0>
         constexpr friend auto getChildren(const CompiletimeConstant<T_, val0> &x) -> std::tuple<>;
     };
+
+    template<typename T_, T_ val0>
+    template<typename... Bindings>
+    constexpr std::string CompiletimeConstant<T_, val0>::resolve_named(const Bindings &...) const {
+        return std::to_string(val0);
+    }
 
     template<typename T_, T_ val0, fixed_string ID>
     constexpr auto gradient(const CompiletimeConstant<T_, val0> &, const Variable<ID> &) {

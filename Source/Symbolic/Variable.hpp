@@ -82,7 +82,7 @@ namespace sym {
         constexpr auto resolve(Bindings &&...bindings) const;
 
         template<typename... Bindings>
-        constexpr auto resolve_named(Bindings &&...bindings) const;
+        constexpr std::string resolve_named(Bindings &&...bindings) const;
 
         template<typename... Bindings>
         constexpr auto resolve(const std::tuple<Bindings...> &tuple) const;
@@ -105,9 +105,8 @@ namespace sym {
 
     template<fixed_string ID>
     template<typename... Bindings>
-    constexpr auto Variable<ID>::resolve_named(Bindings &&...bindings) const {
-        return std::make_tuple(std::string{ID.data} + "<" + std::to_string(this->template resolve(bindings...)) + ">",
-                               this->template resolve(bindings...));
+    constexpr std::string Variable<ID>::resolve_named(Bindings &&...bindings) const {
+        return std::string{ID.data} + "<" + std::to_string(this->template resolve(bindings...)) + ">";
     }
 
     template<fixed_string ID>
