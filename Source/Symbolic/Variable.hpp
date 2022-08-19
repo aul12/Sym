@@ -82,6 +82,9 @@ namespace sym {
         constexpr auto resolve(Bindings &&...bindings) const;
 
         template<typename... Bindings>
+        constexpr auto resolve_named(Bindings &&...bindings) const;
+
+        template<typename... Bindings>
         constexpr auto resolve(const std::tuple<Bindings...> &tuple) const;
 
         template<typename T>
@@ -98,6 +101,13 @@ namespace sym {
         static_assert(index != -1, "No binding found!");
         static_assert(index != -2, "Multiple bindings for same variable found!");
         return std::get<index>(tuple).val;
+    }
+
+    template<fixed_string ID>
+    template<typename... Bindings>
+    constexpr auto Variable<ID>::resolve_named(Bindings &&...bindings) const {
+        return std::make_tuple(std::string{ID.data} + "<" + std::to_string(this->template resolve(bindings...)) + ">",
+                               this->template resolve(bindings...));
     }
 
     template<fixed_string ID>
