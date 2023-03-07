@@ -11,6 +11,11 @@ TEST(Variable, Resolve) {
     EXPECT_EQ(a.resolve(a = 42), 42);
 }
 
+TEST(Variable, ResolveByTuple) {
+    sym::Variable<'a'> a;
+    EXPECT_EQ(a.resolve(std::make_tuple(a = 1337)), 1337);
+}
+
 TEST(Variable, ToString) {
     sym::Variable<'a'> a;
     EXPECT_NO_THROW(sym::toString(a));

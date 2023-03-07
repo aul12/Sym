@@ -79,7 +79,7 @@ namespace sym {
         constexpr friend auto getChildren(const Variable<ID_> &x) -> std::tuple<>;
 
         template<typename... Bindings>
-        constexpr auto resolve(Bindings &&...bindings) const;
+        constexpr auto resolve(const Bindings &...bindings) const;
 
         template<typename... Bindings>
         constexpr auto resolve(const std::tuple<Bindings...> &tuple) const;
@@ -92,8 +92,8 @@ namespace sym {
 
     template<fixed_string ID>
     template<typename... Bindings>
-    constexpr auto Variable<ID>::resolve(Bindings &&...bindings) const {
-        auto tuple = std::tuple_cat(wrapInTuple(std::forward<Bindings>(bindings))...);
+    constexpr auto Variable<ID>::resolve(const Bindings &...bindings) const {
+        auto tuple = std::tuple_cat(wrapInTuple(bindings)...);
         constexpr auto index = findBinding<0, ID, decltype(tuple)>::val;
         static_assert(index != -1, "No binding found!");
         static_assert(index != -2, "Multiple bindings for same variable found!");
